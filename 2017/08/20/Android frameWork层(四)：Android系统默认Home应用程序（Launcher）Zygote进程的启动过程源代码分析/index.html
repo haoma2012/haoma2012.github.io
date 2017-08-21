@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="在前面一篇文章中，我们分析了Android系统在启动时安装应用程序的过程，这些应用程序安装好之后，还需要有一个Home应用程序来负责把它们在桌面上展示出来，在android系统中，这个默认的Home应用程序就是Launcher了，本文将详细分析Launcher应用程序的启动过程。 在Android系统中，所有的应用程序进程以及系统服务进程SystemServer都是由Zygote进程孕育（fork">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android frameWork层(四)： Android系统默认Home应用程序（Launcher）Zygote进程的启动过程源代码分析">
+<meta property="og:url" content="http://yoursite.com/2017/08/20/Android frameWork层(四)：Android系统默认Home应用程序（Launcher）Zygote进程的启动过程源代码分析/index.html">
+<meta property="og:site_name" content="紫阳的博客">
+<meta property="og:description" content="在前面一篇文章中，我们分析了Android系统在启动时安装应用程序的过程，这些应用程序安装好之后，还需要有一个Home应用程序来负责把它们在桌面上展示出来，在android系统中，这个默认的Home应用程序就是Launcher了，本文将详细分析Launcher应用程序的启动过程。 在Android系统中，所有的应用程序进程以及系统服务进程SystemServer都是由Zygote进程孕育（fork">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://hi.csdn.net/attachment/201109/11/0_1315757033NNGT.gif">
+<meta property="og:image" content="http://hi.csdn.net/attachment/201109/16/0_1316190384ZuU0.gif">
+<meta property="og:updated_time" content="2017-08-21T15:45:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android frameWork层(四)： Android系统默认Home应用程序（Launcher）Zygote进程的启动过程源代码分析">
+<meta name="twitter:description" content="在前面一篇文章中，我们分析了Android系统在启动时安装应用程序的过程，这些应用程序安装好之后，还需要有一个Home应用程序来负责把它们在桌面上展示出来，在android系统中，这个默认的Home应用程序就是Launcher了，本文将详细分析Launcher应用程序的启动过程。 在Android系统中，所有的应用程序进程以及系统服务进程SystemServer都是由Zygote进程孕育（fork">
+<meta name="twitter:image" content="http://hi.csdn.net/attachment/201109/11/0_1315757033NNGT.gif">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/08/20/Android frameWork层(四)：Android系统默认Home应用程序（Launcher）Zygote进程的启动过程源代码分析/"/>
+
+
+
+
+
+  <title>Android frameWork层(四)： Android系统默认Home应用程序（Launcher）Zygote进程的启动过程源代码分析 | 紫阳的博客</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">紫阳的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/20/Android frameWork层(四)：Android系统默认Home应用程序（Launcher）Zygote进程的启动过程源代码分析/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dehao@yang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1502346421&di=d5dddcc8504e58a709921075437056f6&imgtype=jpg&er=1&src=http%3A%2F%2Fww2.sinaimg.cn%2Fmw1024%2F64b5b174jw1esy5043qmtg206t07i7ol.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="紫阳的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android frameWork层(四)： Android系统默认Home应用程序（Launcher）Zygote进程的启动过程源代码分析</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-20T23:22:34+08:00">
+                2017-08-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/08/20/Android frameWork层(四)：Android系统默认Home应用程序（Launcher）Zygote进程的启动过程源代码分析/" class="leancloud_visitors" data-flag-title="Android frameWork层(四)： Android系统默认Home应用程序（Launcher）Zygote进程的启动过程源代码分析">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在前面一篇文章中，我们分析了Android系统在启动时安装应用程序的过程，这些应用程序安装好之后，还需要有一个Home应用程序来负责把它们在桌面上<br>展示出来，在android系统中，这个默认的Home应用程序就是Launcher了，本文将详细分析Launcher应用程序的启动过程。</p>
+<p>在Android系统中，所有的应用程序进程以及系统服务进程SystemServer都是由Zygote进程孕育（fork）出来的，这也许就是为什么要把它称为<br>Zygote（受精卵）的原因吧。由于Zygote进程在android系统中有着如此重要的地位，后面将详细分析它的启动过程。</p>
+<a id="more"></a>
+<p>在前面一篇文章中，我们分析了Android系统在启动时安装应用程序的过程，这些应用程序安装好之后，还需要有一个Home应用程序来负责把它们在桌面上展示出来，在android系统中，这个默认的Home应用程序就是Launcher了，本文将详细分析Launcher应用程序的启动过程。</p>
+<p><a href="http://blog.csdn.net/Luoshengyang/article/details/6767736" target="_blank" rel="external">Android系统默认Home应用程序（Launcher）的启动过程源代码分析</a></p>
+<p>Android系统的Home应用程序Launcher是由ActivityManagerService启动的，而ActivityManagerService和PackageManagerService一样，都是在开机时由SystemServer组件启动的，SystemServer组件首先是启动ePackageManagerService，由它来负责安装系统的应用程序，具体可以参考前面一篇文章<a href="https://haoma2012.github.io/2017/08/17/Android%20frameWork%E5%B1%82(%E4%B8%89" target="_blank" rel="external">Android应用程序安装过程源代码分析</a>%EF%BC%9AAndroid%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E5%AE%89%E8%A3%85%E8%BF%87%E7%A8%8BPMS%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/)，系统中的应用程序安装好了以后，SystemServer组件接下来就要通过ActivityManagerService来启动Home应用程序Launcher了，Launcher在启动的时候便会通过PackageManagerServic把系统中已经安装好的应用程序以快捷图标的形式展示在桌面上，这样用户就可以使用这些应用程序了，整个过程如下图所示：</p>
+<p><img src="http://hi.csdn.net/attachment/201109/11/0_1315757033NNGT.gif" alt="image"></p>
+<h4 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h4><ul>
+<li>1.SystemServer组件调用过程</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">1.SystemServer由Zygote进程fork出来的，管理系统所有的服务；</div><div class="line">2.创建SystemServiceManager管理系统服务；</div><div class="line">3.SystemServer.main方法里面子方法分别调用startBootstrapServices，</div><div class="line">startCoreServices，startOtherServices启动不同的服务；</div><div class="line">4.调用：获取AMS服务实例 Lifecycle是AMS的内部类</div><div class="line">mActivityManagerService = mSystemServiceManager.startService(</div><div class="line">ActivityManagerService.Lifecycle.class).getService();</div></pre></td></tr></table></figure>
+<ul>
+<li>2.分析ActivityManagerService的创建过程</li>
+</ul>
+<p>创建过程是在Lifecycle类的构造函数：new 一个ActivityManagerService实例；<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">public Lifecycle(Context context) &#123;</div><div class="line">super(context);</div><div class="line">mService = new ActivityManagerService(context);</div><div class="line">&#125;</div><div class="line"></div><div class="line">........</div><div class="line">//构造函数</div><div class="line">public ActivityManagerService(Context systemContext) &#123;</div><div class="line">mContext = systemContext;//context</div><div class="line">mFactoryTest = FactoryTest.getMode();</div><div class="line">mSystemThread = ActivityThread.currentActivityThread();//ActivityThread线程</div><div class="line">//</div><div class="line">mHandlerThread = new ServiceThread(TAG,</div><div class="line">android.os.Process.THREAD_PRIORITY_FOREGROUND, false /*allowIo*/);</div><div class="line">mHandlerThread.start();</div><div class="line">mHandler = new MainHandler(mHandlerThread.getLooper());</div><div class="line">mUiHandler = new UiHandler();</div><div class="line">........//电池状态服务实例</div><div class="line">mBatteryStatsService = new BatteryStatsService(systemDir, mHandler);</div><div class="line">mBatteryStatsService.getActiveStatistics().readLocked();</div><div class="line">mBatteryStatsService.scheduleWriteToDisk();</div><div class="line"></div><div class="line"></div><div class="line">&#125;</div><div class="line">.......</div></pre></td></tr></table></figure></p>
+<p>构造函数创建了mHandlerThread，MainHandler，UiHandler消息传递；保存信息：创建ProcessStatsService实例，procstats文件保存，AppOpsService实例：保存appops.xml文件等等</p>
+<ul>
+<li>3.PackageManagerService.main 创建PMS实例</li>
+</ul>
+<p>frameworks/base/services/java/com/android/server/PackageManagerService.java<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">//systemserver 类方法</div><div class="line">private void startBootstrapServices() &#123;</div><div class="line">.......</div><div class="line">mPackageManagerService = PackageManagerService.main(mSystemContext, installer,</div><div class="line">mFactoryTestMode != FactoryTest.FACTORY_TEST_OFF, mOnlyCore);</div><div class="line">mFirstBoot = mPackageManagerService.isFirstBoot();</div><div class="line">mPackageManager = mSystemContext.getPackageManager();</div><div class="line">.......</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>PackageManagerService.java文件主要功能就是扫描Android系统安装apk文件目录，并解析apk文件的manifest文件获取package信息保存到PMS中；执行完这一步之后，系统中的应用程序的所有信息都保存在PackageManagerService中了，后面Home应用程序Launcher启动起来后，就会把PackageManagerService中的应用程序信息取出来，然后以快捷图标的形式展示在桌面上，后面我们将会看到这个过程。</p>
+<ul>
+<li><ol>
+<li>ActivityManagerService.setSystemProcess</li>
+</ol>
+</li>
+</ul>
+<p>这个函数定义在frameworks/base/services/java/com/android/server/am/ActivityManagerServcie.java文件中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">public final class ActivityManagerService extends ActivityManagerNative  </div><div class="line">implements Watchdog.Monitor, BatteryStatsImpl.BatteryCallback &#123;  </div><div class="line">......  </div><div class="line">public void setSystemProcess() &#123;</div><div class="line">try &#123;</div><div class="line">ServiceManager.addService(Context.ACTIVITY_SERVICE, this, true);</div><div class="line">ServiceManager.addService(ProcessStats.SERVICE_NAME, mProcessStats);</div><div class="line">ServiceManager.addService(&quot;meminfo&quot;, new MemBinder(this));</div><div class="line">ServiceManager.addService(&quot;gfxinfo&quot;, new GraphicsBinder(this));</div><div class="line">ServiceManager.addService(&quot;dbinfo&quot;, new DbBinder(this));</div><div class="line">if (MONITOR_CPU_USAGE) &#123;</div><div class="line">ServiceManager.addService(&quot;cpuinfo&quot;, new CpuBinder(this));</div><div class="line">&#125;</div><div class="line">ServiceManager.addService(&quot;permission&quot;, new PermissionController(this));</div><div class="line">ServiceManager.addService(&quot;processinfo&quot;, new ProcessInfoService(this));</div><div class="line"></div><div class="line">ApplicationInfo info = mContext.getPackageManager().getApplicationInfo(</div><div class="line">&quot;android&quot;, STOCK_PM_FLAGS);</div><div class="line">//把应用程序框架层的android包加载进来</div><div class="line">mSystemThread.installSystemApplicationInfo(info, getClass().getClassLoader());</div><div class="line"></div><div class="line">synchronized (this) &#123;</div><div class="line">ProcessRecord app = newProcessRecordLocked(info, info.processName, false, 0);</div><div class="line">app.persistent = true;</div><div class="line">app.pid = MY_PID;</div><div class="line">app.maxAdj = ProcessList.SYSTEM_ADJ;</div><div class="line">app.makeActive(mSystemThread.getApplicationThread(), mProcessStats);</div><div class="line">synchronized (mPidsSelfLocked) &#123;</div><div class="line">mPidsSelfLocked.put(app.pid, app);</div><div class="line">&#125;</div><div class="line">updateLruProcessLocked(app, false, null);</div><div class="line">updateOomAdjLocked();</div><div class="line">&#125;</div><div class="line">&#125; catch (PackageManager.NameNotFoundException e) &#123;</div><div class="line">throw new RuntimeException(</div><div class="line">&quot;Unable to find android system package&quot;, e);</div><div class="line">&#125;</div><div class="line">&#125;</div><div class="line">.......</div></pre></td></tr></table></figure>
+<p>这个函数首先是将这个ActivityManagerService实例添加到ServiceManager中去托管，这样其它地方就可以通过ServiceManager.getService接口来访问这个全局唯一的ActivityManagerService实例了，接着又通过调用mSystemThread.installSystemApplicationInfo函数来把应用程序框架层下面的android包加载进来，这里的mSystemThread是一个ActivityThread类型的实例变量,在前面步骤创建，后面就是一些其它的初始化工作了。</p>
+<ul>
+<li>5.ActivityManagerService.systemReady 最后启动home activity</li>
+</ul>
+<p>系统中的一系列服务都初始化完毕之后才调用的，它定义在frameworks/base/services/java/com/android/server/am/ActivityManagerServcie.java文件中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">public final class ActivityManagerService extends ActivityManagerNative  </div><div class="line">implements Watchdog.Monitor, BatteryStatsImpl.BatteryCallback &#123;  </div><div class="line">......  </div><div class="line"></div><div class="line">public void systemReady(final Runnable goingCallback) &#123;  </div><div class="line">......  </div><div class="line"></div><div class="line">synchronized (this) &#123;  </div><div class="line">......  </div><div class="line">// Start up initial activity.</div><div class="line">mBooting = true;</div><div class="line">startHomeActivityLocked(mCurrentUserId, &quot;systemReady&quot;);</div><div class="line">......</div><div class="line"></div><div class="line">mStackSupervisor.resumeTopActivitiesLocked();  </div><div class="line">&#125;  </div><div class="line">&#125;  </div><div class="line"></div><div class="line">......  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这个函数的内容比较多，这里省去无关的部分，主要关心启动Home应用程序的逻辑，这里就是通过<br>一：调用startHomeActivityLocked（）函数来启动Home应用程序的，<br>二：mStackSupervisor.resumeTopActivitiesLocked()了，mStackSupervisor类ActivityStackSupervisor是运行所有的ActivityStacks，activity堆栈；</p>
+<ul>
+<li>6.ActivityManagerService.startHomeActivityLocked</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div></pre></td><td class="code"><pre><div class="line">boolean startHomeActivityLocked(int userId, String reason) &#123;</div><div class="line">.......</div><div class="line">//1.获取home的 intent</div><div class="line">Intent intent = getHomeIntent();</div><div class="line">ActivityInfo aInfo =</div><div class="line">resolveActivityInfo(intent, STOCK_PM_FLAGS, userId);</div><div class="line">if (aInfo != null) &#123;</div><div class="line">intent.setComponent(new ComponentName(</div><div class="line">aInfo.applicationInfo.packageName, aInfo.name));</div><div class="line">// Don&apos;t do this if the home app is currently being</div><div class="line">// instrumented.</div><div class="line">aInfo = new ActivityInfo(aInfo);</div><div class="line">aInfo.applicationInfo = getAppInfoForUser(aInfo.applicationInfo, userId);</div><div class="line">ProcessRecord app = getProcessRecordLocked(aInfo.processName,</div><div class="line">aInfo.applicationInfo.uid, true);</div><div class="line">if (app == null || app.instrumentationClass == null) &#123;</div><div class="line">intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NEW_TASK);</div><div class="line">//调用startHomeActivity打开home</div><div class="line">mStackSupervisor.startHomeActivity(intent, aInfo, reason);</div><div class="line">&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">return true;</div><div class="line">&#125;</div><div class="line"></div><div class="line">....</div><div class="line"></div><div class="line">Intent getHomeIntent() &#123;</div><div class="line">Intent intent = new Intent(mTopAction, mTopData != null ? Uri.parse(mTopData) : null);</div><div class="line">intent.setComponent(mTopComponent);</div><div class="line">if (mFactoryTest != FactoryTest.FACTORY_TEST_LOW_LEVEL) &#123;</div><div class="line">intent.addCategory(Intent.CATEGORY_HOME);</div><div class="line">&#125;</div><div class="line">return intent;</div><div class="line">&#125;</div><div class="line"></div><div class="line">......</div><div class="line">private ActivityInfo resolveActivityInfo(Intent intent, int flags, int userId) &#123;</div><div class="line">ActivityInfo ai = null;</div><div class="line">ComponentName comp = intent.getComponent();</div><div class="line">try &#123;</div><div class="line">if (comp != null) &#123;</div><div class="line">// Factory test.</div><div class="line">ai = AppGlobals.getPackageManager().getActivityInfo(comp, flags, userId);</div><div class="line">&#125; else &#123;</div><div class="line">ResolveInfo info = AppGlobals.getPackageManager().resolveIntent(</div><div class="line">intent,</div><div class="line">intent.resolveTypeIfNeeded(mContext.getContentResolver()),</div><div class="line">flags, userId);</div><div class="line"></div><div class="line">if (info != null) &#123;</div><div class="line">ai = info.activityInfo;</div><div class="line">&#125;</div><div class="line">&#125;</div><div class="line">&#125; catch (RemoteException e) &#123;</div><div class="line">// ignore</div><div class="line">&#125;</div><div class="line"></div><div class="line">return ai;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>函数首先创建一个CATEGORY_HOME类型的Intent，然后通过Intent.resolveActivityInfo函数向PackageManagerService查询Category类型为HOME的Activity，最后调用 mStackSupervisor.startHomeActivity(intent, aInfo, reason);这里我们假设只有系统自带的Launcher应用程序注册了HOME类型的Activity（见packages/apps/Launcher2/AndroidManifest.xml文件）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">&lt;manifest  </div><div class="line">xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;  </div><div class="line">package=&quot;com.android.launcher&quot;  </div><div class="line">android:sharedUserId=&quot;@string/sharedUserId&quot;  </div><div class="line">&gt;  </div><div class="line"></div><div class="line">......  </div><div class="line"></div><div class="line">&lt;application  </div><div class="line">android:name=&quot;com.android.launcher2.LauncherApplication&quot;  </div><div class="line">android:process=&quot;@string/process&quot;  </div><div class="line">android:label=&quot;@string/application_name&quot;  </div><div class="line">android:icon=&quot;@drawable/ic_launcher_home&quot;&gt;  </div><div class="line"></div><div class="line">&lt;activity  </div><div class="line">android:name=&quot;com.android.launcher2.Launcher&quot;  </div><div class="line">android:launchMode=&quot;singleTask&quot;  </div><div class="line">android:clearTaskOnLaunch=&quot;true&quot;  </div><div class="line">android:stateNotNeeded=&quot;true&quot;  </div><div class="line">android:theme=&quot;@style/Theme&quot;  </div><div class="line">android:screenOrientation=&quot;nosensor&quot;  </div><div class="line">android:windowSoftInputMode=&quot;stateUnspecified|adjustPan&quot;&gt;  </div><div class="line">&lt;intent-filter&gt;  </div><div class="line">&lt;action android:name=&quot;android.intent.action.MAIN&quot; /&gt;  </div><div class="line">&lt;category android:name=&quot;android.intent.category.HOME&quot; /&gt;  </div><div class="line">&lt;category android:name=&quot;android.intent.category.DEFAULT&quot; /&gt;  </div><div class="line">&lt;category android:name=&quot;android.intent.category.MONKEY&quot;/&gt;  </div><div class="line">&lt;/intent-filter&gt;  </div><div class="line">&lt;/activity&gt;  </div><div class="line"></div><div class="line">......  </div><div class="line">&lt;/application&gt;  </div><div class="line">&lt;/manifest&gt;</div></pre></td></tr></table></figure>
+<p>因此，这里就返回com.android.launcher2.Launcher这个Activity了。由于是第一次启动这个Activity，接下来调用函数getProcessRecordLocked返回来的ProcessRecord值为null，于是，就调用mStackSupervisor.startHomeActivity(intent, aInfo, reason);函数启动com.android.launcher2.Launcher这个Activity了，这里的mStackSupervisor是一个管理所有ActivityStack类型的成员变量。执行Launcher的onCreate方法</p>
+<p>1.mContext变量中获得PackageManagerService；<br>2.PackageManagerService.queryIntentActivities接口来取回所有Action类型为Intent.ACTION_MAIN，并且Category类型为Intent.CATEGORY_LAUNCHER的Activity了<br>3.函数setApps首先清空mAllAppsList列表，然后调用addApps函数来为上一步得到的每一个应用程序创建一个ApplicationInfo实例了，有了这些ApplicationInfo实例之后，就可以在桌面上展示系统中所有的应用程序了。<br>4.系统默认的Home应用程序Launcher就把PackageManagerService中的应用程序加载进来了，当我们在屏幕上点击home这个图标时，就会把刚才加载好的应用程序以图标的形式展示出来了；</p>
+<ul>
+<li><a href="http://blog.csdn.net/Luoshengyang/article/details/6768304" target="_blank" rel="external">Android系统进程Zygote启动过程的源代码分析</a></li>
+</ul>
+<p>1.在Android系统中，所有的应用程序进程以及系统服务进程SystemServer都是由Zygote进程孕育（fork）出来的，这也许就是为什么要把它称为Zygote（受精卵）的原因吧。由于Zygote进程在android系统中有着如此重要的地位，本文将详细分析它的启动过程。</p>
+<p>2.分析前面的文章知道：当ActivityManagerService启动一个应用程序的时候，就会通过Socket与Zygote进程进行通信，请求它fork一个子进程出来作为这个即将要启动的应用程序的进程；而系统中的两个重要服务PackageManagerService和ActivityManagerService，都是由SystemServer进程来负责启动的，而SystemServer进程本身是Zygote进程在启动的过程中fork出来的。</p>
+<p>3.Android系统是基于Linux内核的，而在linux系统中，所有的进程都是init进程的子孙进程，也就是说，所有的进程都是直接或者间接地由init进程fork出来的。Zygote进程也不例外，它是在系统启动的过程，由init进程创建的。在系统启动脚本system/core/rootdir/init.rc文件中，我们可以看到启动Zygote进程的脚本命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">service zygote /system/bin/app_process -Xzygote /system/bin --zygote --start-system-server  </div><div class="line">socket zygote stream 666  </div><div class="line">onrestart write /sys/android_power/request_state wake  </div><div class="line">onrestart write /sys/power/state on  </div><div class="line">onrestart restart media  </div><div class="line">onrestart restart netd  </div><div class="line">最后的一系列onrestart关键字表示这个zygote进程重启时需要执行的命令。</div></pre></td></tr></table></figure>
+<p>前面的关键字service告诉init进程创建一个名为”zygote”的进程，这个zygote进程要执行的程序是/system/bin/app_process，后面是要传给app_process的参数。接下来的socket关键字表示这个zygote进程需要一个名称为”zygote”的socket资源，这样，系统启动后，我们就可以在/dev/socket目录下看到有一个名为zygote的文件。这里定义的socket的类型为unix domain socket，它是用来作本地进程间通信用的，ActivityManagerService就是通这个socket来和zygote进程通信请求fork一个应用程序进程的了。</p>
+<p><img src="http://hi.csdn.net/attachment/201109/16/0_1316190384ZuU0.gif" alt="image"></p>
+<ol>
+<li>app_process.main创建一个AppRuntime变量，然后调用它的start成员函数</li>
+<li>AndroidRuntime.start这个函数的作用是启动Android系统运行时库，它主要做了三件事情，一是调用函数startVM启动虚拟机，二是调用函数startReg注册JNI方法，三是调用了com.android.internal.os.ZygoteInit类的main函数。</li>
+<li>ZygoteInit.main它主要作了三件事情，一个调用registerZygoteSocket函数创建了一个socket接口，用来和ActivityManagerService通讯，二是调用startSystemServer函数来启动SystemServer组件，三是调用runSelectLoopMode函数进入一个无限循环在前面创建的socket接口上等待ActivityManagerService请求创建新的应用程序进程。</li>
+<li>ActivityManagerService是通过Process.start函数来创建一个新的进程的，而Process.start函数会首先通过Socket连接到Zygote进程中，最终由Zygote进程来完成创建新的应用程序进程，而Process类是通过openZygoteSocketIfNeeded函数来连接到Zygote进程中的Socket的；</li>
+<li>ZygoteInit.startSystemServer，Zygote进程通过Zygote.forkSystemServer函数来创建一个新的进程来启动SystemServer组件，返回值pid等0的地方就是新的进程要执行的路径，即新创建的进程会执行handleSystemServerProcess函数。</li>
+<li>ZygoteInit.handleSystemServerProcess调用RuntimeInit.zygoteInit函数来进一步执行启动SystemServer组件的操作。</li>
+<li>RuntimeInit.zygoteInit一个是调用zygoteInitNative函数来执行一个Binder进程间通信机制的初始化工作，这个工作完成之后，这个进程中的Binder对象就可以方便地进行进程间通信了，另一个是调用上面Step5传进来的com.android.server.SystemServer类的main函数。</li>
+<li>RuntimeInit.zygoteInitNative native方法初始化</li>
+<li>ZygoteInit.runSelectLoopMode等待ActivityManagerService来连接这个Socket，然后调用ZygoteConnection.runOnce函数来创建新的应用程序</li>
+</ol>
+<h4 id="汇总"><a href="#汇总" class="headerlink" title="汇总"></a>汇总</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">1. 系统启动时init进程会创建Zygote进程，Zygote进程负责后续</div><div class="line">Android应用程序框架层的其它进程的创建和启动工作。</div><div class="line">2. Zygote进程会首先创建一个SystemServer进程，SystemServer</div><div class="line">进程负责启动系统的关键服务，如包管理服务PackageManagerService和应用程序组件管理服务ActivityManagerService。</div><div class="line">3. 当我们需要启动一个Android应用程序时，ActivityManagerService</div><div class="line">会通过Socket进程间通信机制，通知Zygote进程为这个应用程序创建一个新的进程。</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/17/Android frameWork层(三)：Android应用程序安装过程PMS源码分析/" rel="next" title="Android frameWork层——Android应用程序安装过程源码分析">
+                <i class="fa fa-chevron-left"></i> Android frameWork层——Android应用程序安装过程源码分析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1502346421&di=d5dddcc8504e58a709921075437056f6&imgtype=jpg&er=1&src=http%3A%2F%2Fww2.sinaimg.cn%2Fmw1024%2F64b5b174jw1esy5043qmtg206t07i7ol.gif"
+               alt="dehao@yang" />
+          <p class="site-author-name" itemprop="name">dehao@yang</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#源码分析"><span class="nav-number">1.</span> <span class="nav-text">源码分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#汇总"><span class="nav-number">2.</span> <span class="nav-text">汇总</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dehao@yang</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Gemini
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("SQRi8Ar8YCn4c3G97nJ9JsoK-gzGzoHsz", "Hu3hKNQdfDQNJ6zYikQwidIj");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
