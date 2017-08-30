@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="在Android系统中，有两种操作会引发Activity的启动，一种用户点击应用程序图标时，Launcher会为我们启动应用程序的主Activity；应用程序的默认Activity启动起来后，它又可以在内部通过调用startActvity接口启动新的Activity，依此类推，每一个Activity都可以在内部启动新的Activity。通过这种连锁反应，按需启动Activity，从而完成应用程序的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android frameWork层(六)：Android应用程序的Activity启动过程简要介绍和源码分析">
+<meta property="og:url" content="http://yoursite.com/2017/08/28/Android frameWork层(六)：Android应用程序的Activity启动过程简要介绍和源码分析/index.html">
+<meta property="og:site_name" content="紫阳的博客">
+<meta property="og:description" content="在Android系统中，有两种操作会引发Activity的启动，一种用户点击应用程序图标时，Launcher会为我们启动应用程序的主Activity；应用程序的默认Activity启动起来后，它又可以在内部通过调用startActvity接口启动新的Activity，依此类推，每一个Activity都可以在内部启动新的Activity。通过这种连锁反应，按需启动Activity，从而完成应用程序的">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://hi.csdn.net/attachment/201108/14/0_1313305334OkCc.gif">
+<meta property="og:image" content="http://img.my.csdn.net/uploads/201108/18/0_1313675675dBp4.gif">
+<meta property="og:image" content="http://hi.csdn.net/attachment/201108/19/0_13137647026lR7.gif">
+<meta property="og:image" content="http://hi.csdn.net/attachment/201108/23/0_13141106978dkE.gif">
+<meta property="og:updated_time" content="2017-08-30T14:51:25.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android frameWork层(六)：Android应用程序的Activity启动过程简要介绍和源码分析">
+<meta name="twitter:description" content="在Android系统中，有两种操作会引发Activity的启动，一种用户点击应用程序图标时，Launcher会为我们启动应用程序的主Activity；应用程序的默认Activity启动起来后，它又可以在内部通过调用startActvity接口启动新的Activity，依此类推，每一个Activity都可以在内部启动新的Activity。通过这种连锁反应，按需启动Activity，从而完成应用程序的">
+<meta name="twitter:image" content="http://hi.csdn.net/attachment/201108/14/0_1313305334OkCc.gif">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/08/28/Android frameWork层(六)：Android应用程序的Activity启动过程简要介绍和源码分析/"/>
+
+
+
+
+
+  <title>Android frameWork层(六)：Android应用程序的Activity启动过程简要介绍和源码分析 | 紫阳的博客</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">紫阳的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/28/Android frameWork层(六)：Android应用程序的Activity启动过程简要介绍和源码分析/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dehao@yang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1502346421&di=d5dddcc8504e58a709921075437056f6&imgtype=jpg&er=1&src=http%3A%2F%2Fww2.sinaimg.cn%2Fmw1024%2F64b5b174jw1esy5043qmtg206t07i7ol.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="紫阳的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android frameWork层(六)：Android应用程序的Activity启动过程简要介绍和源码分析</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-28T22:02:21+08:00">
+                2017-08-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/08/28/Android frameWork层(六)：Android应用程序的Activity启动过程简要介绍和源码分析/" class="leancloud_visitors" data-flag-title="Android frameWork层(六)：Android应用程序的Activity启动过程简要介绍和源码分析">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在Android系统中，有两种操作会引发Activity的启动，一种用户点击应用程序图标时，Launcher会为我们启动应用程序的主Activity；应用程序的默<br>认Activity启动起来后，它又可以在内部通过调用startActvity接口启动新的Activity，依此类推，每一个Activity都可以在内部启动新的<br>Activity。通过这种连锁反应，按需启动Activity，从而完成应用程序的功能。</p>
+<a id="more"></a>
+<h4 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h4><p>在Android系统中，Activity和Service是应用程序的核心组件，它们以松藕合的方式组合在一起构成了一个完整的应用程序，这得益于应用程序框架层提<br>供了一套完整的机制来协助应用程序启动这些Activity和Service，以及提供Binder机制帮助它们相互间进行通信。</p>
+<p>在Android系统中，有两种操作会引发Activity的启动，一种用户点击应用程序图标时，Launcher会为我们启动应用程序的主Activity；应用程序的默<br>认Activity启动起来后，它又可以在内部通过调用startActvity接口启动新的Activity，依此类推，每一个Activity都可以在内部启动新的<br>Activity。通过这种连锁反应，按需启动Activity，从而完成应用程序的功能。</p>
+<p>Activity的启动方式有两种，一种是显式的，一种是隐式的，隐式启动可以使得Activity之间的藕合性更加松散，因此，这里只关注隐式启动Activity<br>的方法。</p>
+<ul>
+<li>1.显示调用</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Intent intent1 = new Intent(getActivity(), CoinMallActivity.class);</div><div class="line">startActivity(intent1);</div></pre></td></tr></table></figure>
+<ul>
+<li>2.隐式调用</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">String strAction = &quot;com.meiyou.ui.CoinMallActivity&quot;;</div><div class="line">Intent intent = new Intent(strAction);</div><div class="line">startActivity(intent);</div></pre></td></tr></table></figure>
+<p>无论是通过点击应用程序图标来启动Activity，还是通过Activity内部调用startActivity接口来启动新的Activity，都要借助于应用程序框架层的ActivityManagerService服务进程。而AMS服务都是由进程SystemServer统一管理的,ActivityManagerService是一个非常重要的类，它不但负责启动Activity和Service，还负责管理Activity和Service。<br>Android应用程序框架层中的ActivityManagerService启动Activity的过程大致如下图所示：<br><img src="http://hi.csdn.net/attachment/201108/14/0_1313305334OkCc.gif" alt="image"></p>
+<p>在这个图中，ActivityManagerService和ActivityStack位于同一个进程中，而ApplicationThread和ActivityThread位于另一个进程中。其中，ActivityManagerService是负责管理Activity的生命周期的，ActivityManagerService还借助ActivityStack是来把所有的Activity按照后进先出的顺序放在一个堆栈中；对于每一个应用程序来说，都有一个ActivityThread来表示应用程序的主进程，而每一个ActivityThread都包含有一个ApplicationThread实例，它是一个Binder对象，负责和其它进程进行通信。</p>
+<p>下面简要介绍一下启动的过程：</p>
+<ul>
+<li><p>Step 1. 无论是通过Launcher来启动Activity，还是通过Activity内部调用startActivity接口来启动新的Activity，都通过Binder进程间通信进入到ActivityManagerService进程中，并且调用ActivityManagerService.startActivity接口； </p>
+</li>
+<li><p>Step 2. ActivityManagerService调用ActivityStack.startActivityMayWait来做准备要启动的Activity的相关信息；</p>
+</li>
+<li><p>Step 3. ActivityStack通知ApplicationThread要进行Activity启动调度了，这里的ApplicationThread代表的是调用ActivityManagerService.startActivity接口的进程，对于通过点击应用程序图标的情景来说，这个进程就是Launcher了，而对于通过在Activity内部调用startActivity的情景来说，这个进程就是这个Activity所在的进程了；</p>
+</li>
+<li><p>Step 4. ApplicationThread不执行真正的启动操作，它通过调用ActivityManagerService.activityPaused接口进入到ActivityManagerService进程中，看看是否需要创建新的进程来启动Activity；</p>
+</li>
+<li><p>Step 5. 对于通过点击应用程序图标来启动Activity的情景来说，ActivityManagerService在这一步中，会调用startProcessLocked来创建一个新的进程，而对于通过在Activity内部调用startActivity来启动新的Activity来说，这一步是不需要执行的，因为新的Activity就在原来的Activity所在的进程中进行启动；</p>
+</li>
+<li><p>Step 6. ActivityManagerServic调用ApplicationThread.scheduleLaunchActivity接口，通知相应的进程执行启动Activity的操作；</p>
+</li>
+<li><p>Step 7. ApplicationThread把这个启动Activity的操作转发给ActivityThread，ActivityThread通过ClassLoader导入相应的Activity类，然后把它启动起来。</p>
+</li>
+</ul>
+<p><a href="http://blog.csdn.net/luoshengyang/article/details/6689748" target="_blank" rel="external">Android应用程序启动过程源代码分析</a></p>
+<p><a href="http://blog.csdn.net/luoshengyang/article/details/6689748" target="_blank" rel="external">Android应用程序启动过程源代码分析</a></p>
+<p><a href="http://blog.csdn.net/luoshengyang/article/details/6703247" target="_blank" rel="external">Android应用程序内部启动Activity过程（startActivity）的源代码分析</a></p>
+<p><a href="http://blog.csdn.net/luoshengyang/article/details/6720261" target="_blank" rel="external">Android应用程序在新的进程中启动新的Activity的方法和过程分析</a></p>
+<p><a href="http://blog.csdn.net/luoshengyang/article/details/6714543" target="_blank" rel="external">解开Android应用程序组件Activity的”singleTask”之谜</a></p>
+<h4 id="点击launcher进程图标启动新的进程，新进程启动默认Activity"><a href="#点击launcher进程图标启动新的进程，新进程启动默认Activity" class="headerlink" title="点击launcher进程图标启动新的进程，新进程启动默认Activity"></a>点击launcher进程图标启动新的进程，新进程启动默认Activity</h4><p><img src="http://img.my.csdn.net/uploads/201108/18/0_1313675675dBp4.gif" alt="image"></p>
+<ul>
+<li>1.Intent.FLAG_ACTIVITY_NEW_TASK表示要在一个新的Task中启动这个Activity，注意，Task是Android系统中的概念，它不同于进程Process的概念。简单地说，一个Task是一系列Activity的集合，这个集合是以堆栈的形式来组织的，遵循后进先出的原则。</li>
+<li>2.经过一系列调用在Instrumentation.execStartActivity,内部有ActivityManagerNative.getDefault返回ActivityManagerService的远程接口，即ActivityManagerProxy接口</li>
+<li><ol>
+<li>ActivityManagerProxy.startActivity代理类启动Activity，Binder使他们之间交互的纽带</li>
+</ol>
+</li>
+<li><ol>
+<li>ActivityManagerService.startActivity会启用ActivityStack，就是Activity的堆栈，调用一系列方法之后创建即将要启动的Activity的相关信息，并保存在ActivityRecord变量中；启动Activity先创建新的Task，并且保存起来</li>
+</ol>
+</li>
+<li>5.调用Activity.resumeTopActivityLocked得到栈顶Activity，就是启动的默认mainActivity，而我们的resumeActivity呢将会调用startPausingLocked函数把Launcher推入Paused状态去了</li>
+<li>6.ActivityStack.startPausingLocked通过调用一个ApplicationThread对象的远程接口schedulePauseActivity来通知Launcher进入Paused状态。通过binder通信机制会调用Handler message消息传递</li>
+<li>7.ActivityThread.handlePauseActivity函数首先将Binder引用token转换成ActivityRecord的远程接口ActivityClientRecord，然后做了三个事情：1. 如果userLeaving为true，则通过调用performUserLeavingActivity函数来调用Activity.onUserLeaveHint通知Activity，用户要离开它了；2. 调用performPauseActivity函数来调用Activity.onPause函数，我们知道，在Activity的生命周期中，当它要让位于其它的Activity时，系统就会调用它的onPause函数；3. 它通知ActivityManagerService，这个Activity已经进入Paused状态了，ActivityManagerService现在可以完成未竟的事情，即启动MainActivity了。</li>
+<li>8.ActivityManagerProxy.activityPaused通过Binder进程间通信机制就进入到ActivityManagerService.activityPaused函数中去了。接着又会调用ActivityStack.activityPaused使其launcher进入pause状态；在ActivityStack又会执行管理Activity的所有生命周期</li>
+<li>9.最终会执行ActivityManagerService.startProcessLocked内部调用Process.start接口来创建一个新的进程，新的进程会导入android.app.ActivityThread类，并且执行它的main函数，这就是为什么我们前面说每一个应用程序都有一个ActivityThread实例来对应的原因。</li>
+<li>10.ActivityThread.main创建一个ActivityThread实例，然后调用它的attach函数，接着就进入消息循环了，直到最后进程退出；函数attach最终调用了ActivityManagerService的远程接口ActivityManagerProxy的attachApplication函数，传入的参数是mAppThread，这是一个ApplicationThread类型的Binder对象，它的作用是用来进行进程间通信的。</li>
+<li>11.ActivityManagerService.attachApplication经过一系列调用最终会调用 ApplicationThreadProxy.scheduleLaunchActivity最终通过Binder驱动程序进入到ApplicationThread的scheduleLaunchActivity函数中。</li>
+<li>12.ActivityThread.handleLaunchActivity；ActivityThread.performLaunchActivity</li>
+</ul>
+<p><strong>总结五步：</strong><br>整个应用程序的启动过程要执行很多步骤，但是整体来看，主要分为以下五个阶段：</p>
+<p>一. Step1 - Step 11：Launcher通过Binder进程间通信机制通知ActivityManagerService，它要启动一个Activity；</p>
+<p>二. Step 12 - Step 16：ActivityManagerService通过Binder进程间通信机制通知Launcher进入Paused状态；</p>
+<p>三. Step 17 - Step 24：Launcher通过Binder进程间通信机制通知ActivityManagerService，它已经准备就绪进入Paused状态，于是ActivityManagerService就创建一个新的进程，用来启动一个ActivityThread实例，即将要启动的Activity就是在这个ActivityThread实例中运行；</p>
+<p>四. Step 25 - Step 27：ActivityThread通过Binder进程间通信机制将一个ApplicationThread类型的Binder对象传递给ActivityManagerService，以便以后ActivityManagerService能够通过这个Binder对象和它进行通信；</p>
+<p>五. Step 28 - Step 35：ActivityManagerService通过Binder进程间通信机制通知ActivityThread，现在一切准备就绪，它可以真正执行Activity的启动操作了。</p>
+<p><strong>应用程序内隐式调用启动activity</strong><br><img src="http://hi.csdn.net/attachment/201108/19/0_13137647026lR7.gif" alt="image"></p>
+<h4 id="解开Android应用程序组件Activity的”singleTask”之谜"><a href="#解开Android应用程序组件Activity的”singleTask”之谜" class="headerlink" title="解开Android应用程序组件Activity的”singleTask”之谜"></a>解开Android应用程序组件Activity的”singleTask”之谜</h4><p>在Android应用程序中，可以配置Activity以四种方式来启动，其中最令人迷惑的就是”singleTask”这种方式了，官方文档称以这种方式启动的Activity总是属于一个任务的根Activity。</p>
+<p>在解开这个谜之前，我们先来简单了解一下在Android应用程序中，任务（Task）是个什么样的概念。我们知道，Activity是Android应用程序的基础组件之一，在应用程序运行时，每一个Activity代表一个用户操作。用户为了完成某个功能而执行的一系列操作就形成了一个Activity序列，这个序列在Android应用程序中就称之为任务，它是从用户体验的角度出发，把一组相关的Activity组织在一起而抽象出来的概念。</p>
+<p>以”singleTask”方式启动的Activity，全局只有唯一个实例存在，因此，当我们第一次启动这个Activity时，系统便会创建一个新的任务，并且初始化一个这样的Activity的实例，放在新任务的底部，如果下次再启动这个Activity时，系统发现已经存在这样的Activity实例，就会调用这个Activity实例的onNewIntent成员函数，从而把它激活起来。从这句话就可以推断出，以”singleTask”方式启动的Activity总是属于一个任务的根Activity。</p>
+<p><img src="http://hi.csdn.net/attachment/201108/23/0_13141106978dkE.gif" alt="image"></p>
+<p>至此，我们总结一下，设置了”singleTask”启动模式的Activity的特点：</p>
+<ul>
+<li><ol>
+<li>设置了”singleTask”启动模式的Activity，它在启动的时候，会先在系统中查找属性值affinity等于它的属性值taskAffinity的任务存在；如果存在这样的任务，它就会在这个任务中启动，否则就会在新任务中启动。因此，如果我们想要设置了”singleTask”启动模式的Activity在新的任务中启动，就要为它设置一个独立的taskAffinity属性值。</li>
+</ol>
+</li>
+<li><ol>
+<li>如果设置了”singleTask”启动模式的Activity不是在新的任务中启动时，它会在已有的任务中查看是否已经存在相应的Activity实例，如果存在，就会把位于这个Activity实例上面的Activity全部结束掉，即最终这个Activity实例会位于任务的堆栈顶端中。</li>
+</ol>
+</li>
+</ul>
+<h4 id="分析汇总"><a href="#分析汇总" class="headerlink" title="分析汇总"></a>分析汇总</h4><p><strong>1.Android 系统两种操作引起Activity启动</strong></p>
+<ul>
+<li>用户点击应用程序图标时，Launcher会为我们启动应用程序的主Activity；</li>
+<li>应用程序的默认Activity启动起来后，它又可以在内部通过调用startActvity接口启动新的Activity，依此类推，每一个Activity都可以在内部启动新的Activity。</li>
+</ul>
+<p>无论是通过点击应用程序图标来启动Activity，还是通过Activity内部调用startActivity接口来启动新的Activity，都要借助于应用程序框架层的ActivityManagerService服务。（Service也是由ActivityManagerService来启动的。）在Android应用程序框架层中，ActivityManagerService是一个非常重要的接口，它不但负责启动Activity和Service，还负责管理Activity和Service。</p>
+<p><strong>Activity启动的过程</strong></p>
+<ul>
+<li>Step 1. 无论是通过Launcher来启动Activity，还是通过Activity内部调用startActivity接口来启动新的Activity，都通过Binder进程间通信进入到ActivityManagerService进程中，并且调用ActivityManagerService.startActivity接口；</li>
+<li>Step 2. ActivityManagerService调用ActivityStack.startActivityMayWait来做准备要启动的Activity的相关信息；</li>
+<li>Step 3. ActivityStack通知ApplicationThread要进行Activity启动调度了，这里的ApplicationThread代表的是调用ActivityManagerService.startActivity接口的进程，对于通过点击应用程序图标的情景来说，这个进程就是Launcher了，而对于通过在Activity内部调用startActivity的情景来说，这个进程就是这个Activity所在的进程了；</li>
+<li>Step 4. ApplicationThread不执行真正的启动操作，它通过调用ActivityManagerService.activityPaused接口进入到ActivityManagerService进程中，看看是否需要创建新的进程来启动Activity；</li>
+<li>Step 5. 对于通过点击应用程序图标来启动Activity的情景来说，ActivityManagerService在这一步中，会调用startProcessLocked来创建一个新的进程；而对于通过在Activity内部调用startActivity来启动新的Activity来说，这一步是不需要执行的，因为新的Activity就在原来的Activity所在的进程中进行启动；</li>
+<li>Step 6. ActivityManagerServic调用ApplicationThread.scheduleLaunchActivity接口，通知相应的进程执行启动Activity的操作；</li>
+<li>Step 7. ApplicationThread把这个启动Activity的操作转发给ActivityThread，ActivityThread通过ClassLoader导入相应的Activity类，然后把它启动起来。</li>
+</ul>
+<p><strong>Android应用程序启动过程（点击应用程序图标）</strong></p>
+<ul>
+<li>一. Launcher通过Binder进程间通信机制通知ActivityManagerService，它要启动一个Activity；</li>
+<li>二. ActivityManagerService通过Binder进程间通信机制通知Launcher进入Paused状态；</li>
+<li>三. Launcher通过Binder进程间通信机制通知ActivityManagerService，它已经准备就绪进入Paused状态，于是ActivityManagerService就创建一个新的进程，用来启动一个ActivityThread实例，即将要启动的Activity就是在这个ActivityThread实例中运行；</li>
+<li>四. ActivityThread通过Binder进程间通信机制将一个ApplicationThread类型的Binder对象传递给ActivityManagerService，以便以后ActivityManagerService能够通过这个Binder对象和它进行通信；</li>
+<li>五. ActivityManagerService通过Binder进程间通信机制通知ActivityThread，现在一切准备就绪，它可以真正执行Activity的启动操作了。</li>
+</ul>
+<p><strong>Android应用程序内部启动Activity过程（startActivity）</strong></p>
+<ul>
+<li>一. 应用程序的MainActivity通过Binder进程间通信机制通知ActivityManagerService，它要启动一个新的Activity；</li>
+<li>二. ActivityManagerService通过Binder进程间通信机制通知MainActivity进入Paused状态；</li>
+<li>三. MainActivity通过Binder进程间通信机制通知ActivityManagerService，它已经准备就绪进入Paused状态，于是ActivityManagerService就准备要在MainActivity所在的进程和任务中启动新的Activity了；</li>
+<li>四. ActivityManagerService通过Binder进程间通信机制通知MainActivity所在的ActivityThread，现在一切准备就绪，它可以真正执行Activity的启动操作了。</li>
+</ul>
+<p><a href="http://blog.csdn.net/liuhe688/article/details/6733407" target="_blank" rel="external">Android 基础总结：Activity的生命周期</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/23/Android frameWork层(五)：Android硬件抽象层(HAL)学习/" rel="next" title="Android frameWork层(五)：Android硬件抽象层(HAL)学习">
+                <i class="fa fa-chevron-left"></i> Android frameWork层(五)：Android硬件抽象层(HAL)学习
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1502346421&di=d5dddcc8504e58a709921075437056f6&imgtype=jpg&er=1&src=http%3A%2F%2Fww2.sinaimg.cn%2Fmw1024%2F64b5b174jw1esy5043qmtg206t07i7ol.gif"
+               alt="dehao@yang" />
+          <p class="site-author-name" itemprop="name">dehao@yang</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#点击launcher进程图标启动新的进程，新进程启动默认Activity"><span class="nav-number">2.</span> <span class="nav-text">点击launcher进程图标启动新的进程，新进程启动默认Activity</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#解开Android应用程序组件Activity的”singleTask”之谜"><span class="nav-number">3.</span> <span class="nav-text">解开Android应用程序组件Activity的”singleTask”之谜</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分析汇总"><span class="nav-number">4.</span> <span class="nav-text">分析汇总</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dehao@yang</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Gemini
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("SQRi8Ar8YCn4c3G97nJ9JsoK-gzGzoHsz", "Hu3hKNQdfDQNJ6zYikQwidIj");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
