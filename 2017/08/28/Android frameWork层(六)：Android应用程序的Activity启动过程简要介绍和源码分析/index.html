@@ -105,7 +105,7 @@
 <meta property="og:image" content="http://img.my.csdn.net/uploads/201108/18/0_1313675675dBp4.gif">
 <meta property="og:image" content="http://hi.csdn.net/attachment/201108/19/0_13137647026lR7.gif">
 <meta property="og:image" content="http://hi.csdn.net/attachment/201108/23/0_13141106978dkE.gif">
-<meta property="og:updated_time" content="2017-08-30T14:51:25.000Z">
+<meta property="og:updated_time" content="2017-08-30T14:55:30.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android frameWork层(六)：Android应用程序的Activity启动过程简要介绍和源码分析">
 <meta name="twitter:description" content="在Android系统中，有两种操作会引发Activity的启动，一种用户点击应用程序图标时，Launcher会为我们启动应用程序的主Activity；应用程序的默认Activity启动起来后，它又可以在内部通过调用startActvity接口启动新的Activity，依此类推，每一个Activity都可以在内部启动新的Activity。通过这种连锁反应，按需启动Activity，从而完成应用程序的">
@@ -348,7 +348,6 @@
         <p>在Android系统中，有两种操作会引发Activity的启动，一种用户点击应用程序图标时，Launcher会为我们启动应用程序的主Activity；应用程序的默<br>认Activity启动起来后，它又可以在内部通过调用startActvity接口启动新的Activity，依此类推，每一个Activity都可以在内部启动新的<br>Activity。通过这种连锁反应，按需启动Activity，从而完成应用程序的功能。</p>
 <a id="more"></a>
 <h4 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h4><p>在Android系统中，Activity和Service是应用程序的核心组件，它们以松藕合的方式组合在一起构成了一个完整的应用程序，这得益于应用程序框架层提<br>供了一套完整的机制来协助应用程序启动这些Activity和Service，以及提供Binder机制帮助它们相互间进行通信。</p>
-<p>在Android系统中，有两种操作会引发Activity的启动，一种用户点击应用程序图标时，Launcher会为我们启动应用程序的主Activity；应用程序的默<br>认Activity启动起来后，它又可以在内部通过调用startActvity接口启动新的Activity，依此类推，每一个Activity都可以在内部启动新的<br>Activity。通过这种连锁反应，按需启动Activity，从而完成应用程序的功能。</p>
 <p>Activity的启动方式有两种，一种是显式的，一种是隐式的，隐式启动可以使得Activity之间的藕合性更加松散，因此，这里只关注隐式启动Activity<br>的方法。</p>
 <ul>
 <li>1.显示调用</li>
@@ -491,6 +490,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2017/08/30/Android frameWork层(七)：Android应用程序的Service启动过程简要介绍和源码分析/" rel="prev" title="Android frameWork层(七)：  Android应用程序的Service启动过程简要介绍和源码分析">
+                Android frameWork层(七)：  Android应用程序的Service启动过程简要介绍和源码分析 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -566,7 +569,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-count">9</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
