@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="前端,微信小程序," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="HTML 超文本标记语言 基础学习，涉及基本语法、标签使用，CSS基本样式定义，JavaScript使用；">
+<meta name="keywords" content="前端,微信小程序">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前端基础知识(一):Html&amp;Html5">
+<meta property="og:url" content="http://yoursite.com/2018/04/16/前端基础知识(一)/index.html">
+<meta property="og:site_name" content="紫阳的博客">
+<meta property="og:description" content="HTML 超文本标记语言 基础学习，涉及基本语法、标签使用，CSS基本样式定义，JavaScript使用；">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-04-17T10:35:56.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="前端基础知识(一):Html&amp;Html5">
+<meta name="twitter:description" content="HTML 超文本标记语言 基础学习，涉及基本语法、标签使用，CSS基本样式定义，JavaScript使用；">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/04/16/前端基础知识(一)/"/>
+
+
+
+
+
+  <title>前端基础知识(一):Html&Html5 | 紫阳的博客</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">紫阳的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/16/前端基础知识(一)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dehao@yang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1502346421&di=d5dddcc8504e58a709921075437056f6&imgtype=jpg&er=1&src=http%3A%2F%2Fww2.sinaimg.cn%2Fmw1024%2F64b5b174jw1esy5043qmtg206t07i7ol.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="紫阳的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">前端基础知识(一):Html&Html5</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-16T20:55:23+08:00">
+                2018-04-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/微信小程序/" itemprop="url" rel="index">
+                    <span itemprop="name">微信小程序</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/04/16/前端基础知识(一)/" class="leancloud_visitors" data-flag-title="前端基础知识(一):Html&Html5">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>HTML 超文本标记语言 基础学习，涉及基本语法、标签使用，CSS基本样式定义，JavaScript使用；<br><a id="more"></a></p>
+<h2 id="HTML-基础学习"><a href="#HTML-基础学习" class="headerlink" title="HTML 基础学习"></a>HTML 基础学习</h2><ul>
+<li><a href="http://www.runoob.com/html/html-tutorial.html" target="_blank" rel="external">菜鸟教程</a></li>
+<li><a href="">W3C</a></li>
+</ul>
+<blockquote>
+<p>1.超文本标记语言（英语：HyperText Markup Language，简称：HTML）是一种用于创建网页的标准标记语言。</p>
+<p>2.您可以使用 HTML 来建立自己的 WEB 站点，HTML 运行在浏览器上，由浏览器来解析。</p>
+</blockquote>
+<p><strong>基础标签</strong></p>
+<ul>
+<li>1.HTML 标题Heading是通过h1-h6标签来定义的.</li>
+<li>2.HTML 段落是通过标签 <p> 来定义的.</p></li>
+<li>3.HTML 链接是通过标签 <a> 来定义的.使用 target 属性，你可以定义被链接的文档在何处显示。</a></li>
+<li>4.HTML 图像是通过标签 <img> 来定义的,源属性（Src）,alt 属性用来为图像定义一串预备的可替换的文本。</li>
+<li>5.hr标签在 HTML 页面中创建水平线。</li>
+<li>6.HTML 使用标签 <b>(“bold”) 与 <i>(“italic”) 对输出的文本进行格式, 如：粗体 or 斜体；通常标签 <strong> 替换加粗标签 <b> 来使用, <em> 替换 <i>标签使用。</i></em></b></strong></i></b></li>
+<li>7.HTML 样式标签<style></li>
+<li>8.表格由 <table> 标签来定义。每个表格均有若干行（由 <tr> 标签定义），每行被分割为若干单元格（由 td 标签定义）。字母 td 指表格数据（table data）表格的表头使用 th 标签进行定义。</li>
+<li>9.HTML 支持有序、无序和定义列表:无序列表使用 ul 标签,有序列表始于 ol 标签</li>
+<li>10.HTML 可以通过 div 和 span将元素组合起来。</li>
+<li>11.定义一个内联的iframe</li>
+<li>12.JavaScript 使 HTML 页面具有更强的动态和交互性。</li>
+</ul>
+<p><a href="http://www.runoob.com/html/html-colornames.html">HTML 颜色查询</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div></pre></td><td class="code"><pre><div class="line">&lt;a href=&quot;http://www.runoob.com&quot;&gt;这是一个链接&lt;/a&gt;</div><div class="line">&lt;img src=&quot;URL&quot; alt=&quot;替换文本&quot; height=&quot;42&quot; width=&quot;42&quot;&gt;</div><div class="line"></div><div class="line">文本格式化：</div><div class="line">&lt;b&gt;粗体文本&lt;/b&gt;</div><div class="line">&lt;code&gt;计算机代码&lt;/code&gt;</div><div class="line">&lt;em&gt;强调文本&lt;/em&gt;</div><div class="line">&lt;i&gt;斜体文本&lt;/i&gt;</div><div class="line">&lt;kbd&gt;键盘输入&lt;/kbd&gt; </div><div class="line">&lt;pre&gt;预格式化文本&lt;/pre&gt;</div><div class="line">&lt;small&gt;更小的文本&lt;/small&gt;</div><div class="line">&lt;strong&gt;重要的文本&lt;/strong&gt;</div><div class="line"> </div><div class="line">&lt;abbr&gt; （缩写）</div><div class="line">&lt;address&gt; （联系信息）</div><div class="line">&lt;bdo&gt; （文字方向）</div><div class="line">&lt;blockquote&gt; （从另一个源引用的部分）</div><div class="line">&lt;cite&gt; （工作的名称）</div><div class="line">&lt;del&gt; （删除的文本）</div><div class="line">&lt;ins&gt; （插入的文本）</div><div class="line">&lt;sub&gt; （下标文本）</div><div class="line">&lt;sup&gt; （上标文本）</div><div class="line"></div><div class="line">样式区块：</div><div class="line">&lt;style type=&quot;text/css&quot;&gt;</div><div class="line">h1 &#123;color:red;&#125;</div><div class="line">p &#123;color:blue;&#125;</div><div class="line">&lt;/style&gt;</div><div class="line">&lt;div&gt;文档中的块级元素&lt;/div&gt;</div><div class="line">&lt;span&gt;文档中的内联元素&lt;/span&gt;</div><div class="line"></div><div class="line">列表：</div><div class="line">无序列表：</div><div class="line">&lt;ul&gt;</div><div class="line">    &lt;li&gt;项目&lt;/li&gt;</div><div class="line">    &lt;li&gt;项目&lt;/li&gt;</div><div class="line">&lt;/ul&gt;</div><div class="line"></div><div class="line">有序列表</div><div class="line">&lt;ol&gt;</div><div class="line">    &lt;li&gt;第一项&lt;/li&gt;</div><div class="line">    &lt;li&gt;第二项&lt;/li&gt;</div><div class="line">&lt;/ol&gt;</div><div class="line"></div><div class="line">定义列表</div><div class="line">&lt;dl&gt;</div><div class="line">  &lt;dt&gt;项目 1&lt;/dt&gt;</div><div class="line">    &lt;dd&gt;描述项目 1&lt;/dd&gt;</div><div class="line">  &lt;dt&gt;项目 2&lt;/dt&gt;</div><div class="line">    &lt;dd&gt;描述项目 2&lt;/dd&gt;</div><div class="line">&lt;/dl&gt;</div><div class="line"></div><div class="line">表单：</div><div class="line">&lt;form action=&quot;demo_form.php&quot; method=&quot;post/get&quot;&gt;</div><div class="line">&lt;input type=&quot;text&quot; name=&quot;email&quot; size=&quot;40&quot; maxlength=&quot;50&quot;&gt;</div><div class="line">&lt;input type=&quot;password&quot;&gt;</div><div class="line">&lt;input type=&quot;checkbox&quot; checked=&quot;checked&quot;&gt;</div><div class="line">&lt;input type=&quot;radio&quot; checked=&quot;checked&quot;&gt;</div><div class="line">&lt;input type=&quot;submit&quot; value=&quot;Send&quot;&gt;</div><div class="line">&lt;input type=&quot;reset&quot;&gt;</div><div class="line">&lt;input type=&quot;hidden&quot;&gt;</div><div class="line">&lt;select&gt;</div><div class="line">&lt;option&gt;苹果&lt;/option&gt;</div><div class="line">&lt;option selected=&quot;selected&quot;&gt;香蕉&lt;/option&gt;</div><div class="line">&lt;option&gt;樱桃&lt;/option&gt;</div><div class="line">&lt;/select&gt;</div><div class="line">&lt;textarea name=&quot;comment&quot; rows=&quot;60&quot; cols=&quot;20&quot;&gt;&lt;/textarea&gt;</div><div class="line"> </div><div class="line">&lt;/form&gt;</div><div class="line"></div><div class="line">Html字符实体：</div><div class="line">1.小于号：&amp;lt; 或 &amp;#60; 或 &amp;#060;</div><div class="line">2.HTML 中的常用字符实体是不间断空格(&amp;nbsp;)。</div></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>标签</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><head></td>
+<td>定义了文档的信息</td>
+</tr>
+<tr>
+<td><title></td>
+<td>定义了文档的标题</td>
+</tr>
+<tr>
+<td><base></td>
+<td>定义了页面链接标签的默认链接地址</td>
+</tr>
+<tr>
+<td><link></td>
+<td>定义了一个文档和外部资源之间的关系</td>
+</tr>
+<tr>
+<td><meta></td>
+<td>定义了HTML文档中的元数据</td>
+</tr>
+<tr>
+<td><script></td>
+<td>定义了客户端的脚本文件</td>
+</tr>
+<tr>
+<td><style></td>
+<td>定义了HTML文档的样式文件</td>
+</tr>
+</tbody>
+</table>
+<p><strong>HTMl语法</strong></p>
+<blockquote>
+<p>HTML 元素以开始标签起始<br>HTML 元素以结束标签终止<br>元素的内容是开始标签与结束标签之间的内容<br>某些 HTML 元素具有空内容（empty content）<br>空元素在开始标签中进行关闭（以开始标签的结束而结束）<br>大多数 HTML 元素可拥有属性</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">HTML 元素可以设置属性</div><div class="line">属性可以在元素中添加附加信息</div><div class="line">属性一般描述于开始标签</div><div class="line">属性总是以名称/值对的形式出现，比如：name=&quot;value&quot;。</div><div class="line">如：&lt;a href=&quot;http://www.runoob.com&quot;&gt;这是一个链接&lt;/a&gt;</div></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>class</td>
+<td>为html元素定义一个或多个类名（classname）(类名从样式文件引入)</td>
+</tr>
+<tr>
+<td>id</td>
+<td>定义元素的唯一id</td>
+</tr>
+<tr>
+<td>style</td>
+<td>规定元素的行内样式（inline style）</td>
+</tr>
+<tr>
+<td>title</td>
+<td>描述了元素的额外信息 (作为工具条使用)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>统一资源定位符URL</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">scheme://host.domain:port/path/filename</div></pre></td></tr></table></figure>
+<p>说明:</p>
+<ul>
+<li>scheme - 定义因特网服务的类型。最常见的类型是 http</li>
+<li>host - 定义域主机（http 的默认主机是 www）</li>
+<li>domain - 定义因特网域名，比如 runoob.com</li>
+<li>:port - 定义主机上的端口号（http 的默认端口号是 80）</li>
+<li>path - 定义服务器上的路径（如果省略，则文档必须位于网站的根目录中）。</li>
+<li>filename - 定义文档/资源的名称</li>
+</ul>
+<h2 id="HTML5基础学习"><a href="#HTML5基础学习" class="headerlink" title="HTML5基础学习"></a>HTML5基础学习</h2><p>HTML5 的改进</p>
+<ul>
+<li>新元素</li>
+<li>新属性</li>
+<li>完全支持 CSS3</li>
+<li>Video 和 Audio</li>
+<li>2D/3D 制图</li>
+<li>本地存储</li>
+<li>本地 SQL 数据</li>
+<li>Web 应用</li>
+</ul>
+<p><strong>HTML5新元素</strong></p>
+<table>
+<thead>
+<tr>
+<th>标签</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><canvas></td>
+<td>标签定义图形，比如图表和其他图像。该标签基于 JavaScript 的绘图 API</td>
+</tr>
+<tr>
+<td><audio></td>
+<td>定义音频内容</td>
+</tr>
+<tr>
+<td><video></td>
+<td>定义视频（video 或者 movie）</td>
+</tr>
+<tr>
+<td><source></td>
+<td>定义多媒体资源 <video> 和 <audio></td>
+</tr>
+<tr>
+<td><embed></td>
+<td>定义嵌入的内容，比如插件。</td>
+</tr>
+<tr>
+<td><track></td>
+<td>为诸如 <video> 和 <audio> 元素之类的媒介规定外部文本轨道。</td>
+</tr>
+<tr>
+<td><datalist></td>
+<td>定义选项列表。请与 input 元素配合使用该元素，来定义 input 可能的值。</td>
+</tr>
+<tr>
+<td><keygen></td>
+<td>规定用于表单的密钥对生成器字段。</td>
+</tr>
+<tr>
+<td><output></td>
+<td>定义不同类型的输出，比如脚本的输出。</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">canvas 元素本身是没有绘图能力的。所有的绘制工作必</div><div class="line">须在 JavaScript 内部完成：</div><div class="line">&lt;canvas id=&quot;myCanvas&quot; width=&quot;200&quot; height=&quot;100&quot;</div><div class="line">style=&quot;border:1px solid #000000;&quot;&gt;</div><div class="line">&lt;/canvas&gt;</div><div class="line"></div><div class="line">var c=document.getElementById(&quot;myCanvas&quot;);</div><div class="line">var ctx=c.getContext(&quot;2d&quot;);</div><div class="line">ctx.fillStyle=&quot;#FF0000&quot;;</div><div class="line">ctx.fillRect(0,0,150,75);</div><div class="line"></div><div class="line">绘制线</div><div class="line">ctx.moveTo(0,0);</div><div class="line">ctx.lineTo(200,100);</div><div class="line">ctx.stroke();</div><div class="line"></div><div class="line">绘制圆形：arc(x,y,r,start,stop)</div><div class="line">ctx.beginPath();</div><div class="line">ctx.arc(95,50,40,0,2*Math.PI);</div><div class="line">ctx.stroke();</div><div class="line"></div><div class="line"></div><div class="line">绘制文本：font - 定义字体</div><div class="line">fillText(text,x,y) - 在 canvas 上绘制实心的文本</div><div class="line">strokeText(text,x,y) - 在 canvas 上绘制空心的文本</div><div class="line">ctx.font=&quot;30px Arial&quot;;</div><div class="line">ctx.fillText(&quot;Hello World&quot;,10,50);</div></pre></td></tr></table></figure>
+<p><strong>HTML5 支持内联 SVG。</strong></p>
+<ul>
+<li>SVG 指可伸缩矢量图形 (Scalable Vector Graphics)</li>
+<li>SVG 用于定义用于网络的基于矢量的图形</li>
+<li>SVG 使用 XML 格式定义图形</li>
+<li>SVG 图像在放大或改变尺寸的情况下其图形质量不会有损失</li>
+<li>SVG 是万维网联盟的标准</li>
+</ul>
+<p><a href="http://www.runoob.com/html/html5-audio.html">Html5 音频视频Video&amp;Audio</a></p>
+<p><strong>HTML5 新的 Input 类型</strong></p>
+<ul>
+<li>Input 类型: color</li>
+</ul>
+<blockquote>
+<input type="color" name="favcolor">
+
+</blockquote>
+<ul>
+<li>date 类型允许你从一个日期选择器选择一个日期。</li>
+</ul>
+<blockquote>
+<input type="date" name="bday">
+
+</blockquote>
+<ul>
+<li>Input 类型: datetime<blockquote>
+<p>生日 (日期和时间): <input type="datetime" name="bdaytime"></p>
+</blockquote>
+</li>
+<li><p>Input 类型: datetime-local</p>
+<blockquote>
+<input type="datetime-local" name="bdaytime">
+</blockquote>
+</li>
+<li><p>Input 类型: email</p>
+</li>
+<li>Input 类型: month</li>
+<li>Input 类型: search</li>
+<li>Input 类型: tel</li>
+</ul>
+<p><strong>HTML5 新的表单元素</strong></p>
+<ol>
+<li>HTML5 <datalist> 元素</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">&lt;datalist&gt; 元素规定输入域的选项列表。</div><div class="line">&lt;datalist&gt; 属性规定 form 或 input 域应该拥有自动完成功能。当用户在自动完成域中</div><div class="line">开始输入时，浏览器应该在该域中显示填写的选项：</div><div class="line"></div><div class="line">&lt;input list=&quot;browsers&quot;&gt;</div><div class="line"> </div><div class="line">&lt;datalist id=&quot;browsers&quot;&gt;</div><div class="line">  &lt;option value=&quot;Internet Explorer&quot;&gt;</div><div class="line">  &lt;option value=&quot;Firefox&quot;&gt;</div><div class="line">  &lt;option value=&quot;Chrome&quot;&gt;</div><div class="line">  &lt;option value=&quot;Opera&quot;&gt;</div><div class="line">  &lt;option value=&quot;Safari&quot;&gt;</div><div class="line">&lt;/datalist&gt;</div></pre></td></tr></table></figure>
+<ol>
+<li><p>HTML5 <keygen> 元素作用是提供一种验证用户的可靠方法。</p>
+</li>
+<li><p>HTML5 <output> 元素:用于不同类型的输出，比如计算或脚本输出：</p>
+</li>
+</ol>
+<p><a href="http://www.runoob.com/html/html5-form-attributes.html">HTML5 表单属性</a></p>
+<p><strong>HTML5 Web 存储</strong></p>
+<blockquote>
+<p>HTML5 web 存储,一个比cookie更好的本地存储方式。使用localStorage 和 sessionStorage </p>
+</blockquote>
+<ul>
+<li>localStorage：没有时间限制的数据存储</li>
+<li>sessionStorage：针对一个 session 的数据存储</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">localStorage.sitename=&quot;菜鸟教程&quot;;</div><div class="line">使用 key=&quot;sitename&quot; 和 value=&quot;菜鸟教程&quot; 创建一个 localStorage 键/值对。</div><div class="line"></div><div class="line">sessionStorage&amp;localStorage API</div><div class="line">保存数据：localStorage.setItem(key,value);</div><div class="line">读取数据：localStorage.getItem(key);</div><div class="line">删除单个数据：localStorage.removeItem(key);</div><div class="line">删除所有数据：localStorage.clear();</div><div class="line">得到某个索引的key：localStorage.key(index);</div></pre></td></tr></table></figure>
+<p><a href="http://www.runoob.com/html/html-media.html">HTML 多媒体</a></p>
+<blockquote>
+<p>Web 上的多媒体指的是音效、音乐、视频和动画。</p>
+</blockquote>
+<p><a href="http://www.runoob.com/tags/html-reference.html">HTML 参考手册- (HTML5 标准)</a></p>
+<img src="/2018/04/16/前端基础知识(一)/page1.png" alt="[demo图片]" title="[demo图片]">
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html&gt;</div><div class="line">&lt;html&gt;</div><div class="line">&lt;head&gt;</div><div class="line">&lt;meta charset=&quot;utf-8&quot;&gt;</div><div class="line">&lt;title&gt;菜鸟教程&lt;/title&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">&lt;h1&gt;我是第一个标题&lt;/h1&gt;</div><div class="line">&lt;a href=&quot;http://www.baidu.com&quot;&gt; 百度一下&lt;/a&gt;</div><div class="line">&lt;br/&gt;</div><div class="line">&lt;img src=&quot;/images.logo.png&quot; width=&quot;200&quot; height=&quot;200&quot; alt=&quot;图片加载失败&quot;&gt;&lt;/img&gt;</div><div class="line">&lt;hr&gt;</div><div class="line">&lt;p&gt;我是第一个段落！&lt;/p&gt;</div><div class="line"></div><div class="line">&lt;hr&gt;</div><div class="line">&lt;b style=&quot;background-color: red&quot;&gt;这是加粗文本！&lt;/b&gt;</div><div class="line">&lt;big&gt;放大文本字体&lt;/big&gt; &lt;i&gt;这个文本是斜体的&lt;/i&gt;</div><div class="line">&lt;em&gt;这个文本是斜体的&lt;/em&gt;</div><div class="line">这个&lt;sup&gt;文本&lt;/sup&gt;包含&lt;sub&gt;下标&lt;/sub&gt;</div><div class="line"></div><div class="line">&lt;!-- 有序无序列表 --&gt;</div><div class="line">&lt;ul&gt;</div><div class="line">	&lt;li&gt;Chiness&lt;/li&gt;</div><div class="line">	&lt;li&gt;English&lt;/li&gt;</div><div class="line">	&lt;li&gt;Canada&lt;/li&gt;</div><div class="line">&lt;/ul&gt;</div><div class="line"></div><div class="line">&lt;form&gt;</div><div class="line">	用户名:&lt;input type=&quot;text&quot; name=&quot;userName&quot;&gt;&lt;/br&gt;</div><div class="line">	密&amp;nbsp;&amp;nbsp;&amp;nbsp;码:&lt;input type=&quot;password&quot; name=&quot;pwd&quot;&gt;&lt;/br&gt;</div><div class="line">	性&amp;nbsp;&amp;nbsp;&amp;nbsp;别:&lt;input type=&quot;radio&quot; name=&quot;sex&quot; value=&quot;男&quot;&gt; 男 </div><div class="line">	&lt;input type=&quot;radio&quot; name=&quot;sex&quot; value=&quot;女&quot;&gt;女 &lt;/br&gt;</div><div class="line">	&lt;input type=&quot;submit&quot; name=&quot;Submit&quot;&gt;</div><div class="line">&lt;/form&gt;</div><div class="line"></div><div class="line">&lt;canvas id=&quot;myCanvas&quot; width=&quot;200&quot; height=&quot;200&quot; style=&quot;border: 1px solid #000000;&quot;&gt;&lt;/canvas&gt;</div><div class="line"></div><div class="line"></div><div class="line">&lt;script&gt;</div><div class="line"></div><div class="line">var c = document.getElementById(&quot;myCanvas&quot;);</div><div class="line">var ctx=c.getContext(&quot;2d&quot;);</div><div class="line">ctx.fillStyle=&quot;#ffff00&quot;;</div><div class="line">ctx.fillRect(0,0,150,75);</div><div class="line"></div><div class="line">ctx.moveTo(0,0);</div><div class="line">ctx.lineTo(150,75);</div><div class="line">ctx.stroke();</div><div class="line"></div><div class="line">ctx.beginPath();</div><div class="line">ctx.arc(95,50,40,0,2*Math.PI);</div><div class="line">ctx.stroke();</div><div class="line"></div><div class="line">ctx.font=&quot;30px Arial&quot;;</div><div class="line">ctx.fillText(&quot;Hello World&quot;, 10, 50);</div><div class="line"></div><div class="line">ctx.strokeText(&quot;Hello World&quot;, 40, 90);</div><div class="line"></div><div class="line">&lt;/script&gt;</div><div class="line">&lt;hr&gt;</div><div class="line">&lt;!--检查是否支持数据存储--&gt;</div><div class="line">&lt;script type=&quot;text/javascript&quot;&gt;</div><div class="line">	 </div><div class="line">&lt;/script&gt;</div><div class="line"></div><div class="line">&lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure>
+</style></li></ul>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/前端/" rel="tag"># 前端</a>
+          
+            <a href="/tags/微信小程序/" rel="tag"># 微信小程序</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/15/微信小程序开发(一)入门篇/" rel="next" title="微信小程序开发(一):入门篇">
+                <i class="fa fa-chevron-left"></i> 微信小程序开发(一):入门篇
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1502346421&di=d5dddcc8504e58a709921075437056f6&imgtype=jpg&er=1&src=http%3A%2F%2Fww2.sinaimg.cn%2Fmw1024%2F64b5b174jw1esy5043qmtg206t07i7ol.gif"
+               alt="dehao@yang" />
+          <p class="site-author-name" itemprop="name">dehao@yang</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#HTML-基础学习"><span class="nav-number">1.</span> <span class="nav-text">HTML 基础学习</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dehao@yang</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Gemini
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("SQRi8Ar8YCn4c3G97nJ9JsoK-gzGzoHsz", "Hu3hKNQdfDQNJ6zYikQwidIj");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
