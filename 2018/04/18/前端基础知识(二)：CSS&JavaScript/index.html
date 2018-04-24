@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="前端,微信小程序," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="学习前端CSS样式&amp;amp;JavaScript基础语法学习；">
+<meta name="keywords" content="前端,微信小程序">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前端基础知识二:CSS&amp;JavaScript">
+<meta property="og:url" content="http://yoursite.com/2018/04/18/前端基础知识(二)：CSS&JavaScript/index.html">
+<meta property="og:site_name" content="紫阳的博客">
+<meta property="og:description" content="学习前端CSS样式&amp;amp;JavaScript基础语法学习；">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-04-24T13:31:52.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="前端基础知识二:CSS&amp;JavaScript">
+<meta name="twitter:description" content="学习前端CSS样式&amp;amp;JavaScript基础语法学习；">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/04/18/前端基础知识(二)：CSS&JavaScript/"/>
+
+
+
+
+
+  <title>前端基础知识二:CSS&JavaScript | 紫阳的博客</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">紫阳的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/18/前端基础知识(二)：CSS&JavaScript/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dehao@yang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1502346421&di=d5dddcc8504e58a709921075437056f6&imgtype=jpg&er=1&src=http%3A%2F%2Fww2.sinaimg.cn%2Fmw1024%2F64b5b174jw1esy5043qmtg206t07i7ol.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="紫阳的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">前端基础知识二:CSS&JavaScript</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-18T20:43:51+08:00">
+                2018-04-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/微信小程序/" itemprop="url" rel="index">
+                    <span itemprop="name">微信小程序</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/04/18/前端基础知识(二)：CSS&JavaScript/" class="leancloud_visitors" data-flag-title="前端基础知识二:CSS&JavaScript">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>学习前端CSS样式&amp;JavaScript基础语法学习；</p>
+<a id="more"></a>
+<h2 id="前端基础CSS样式"><a href="#前端基础CSS样式" class="headerlink" title="前端基础CSS样式"></a>前端基础CSS样式</h2><ul>
+<li><a href="http://www.runoob.com/html/html-tutorial.html" target="_blank" rel="external">菜鸟教程</a></li>
+<li><a href="http://www.runoob.com/css/css-tutorial.html" target="_blank" rel="external">CSS教程</a></li>
+</ul>
+<blockquote>
+<p>通过使用 CSS 我们可以大大提升网页开发的工作效率！使用 CSS可以 同时控制多重网页的样式和布局。</p>
+</blockquote>
+<p><strong>id &amp; class选择器</strong></p>
+<ul>
+<li>HTML元素以id属性来设置id选择器,CSS 中 id 选择器以 “#” 来定义。</li>
+<li>class 选择器在HTML中以class属性表示, 在 CSS 中，类选择器以一个点”.”号显示；</li>
+</ul>
+<p>插入样式表的方法有三种:</p>
+<ul>
+<li><p>外部样式表(External style sheet)：每个页面使用 <link> 标签链接到样式表。 <link> 标签在（文档的）头部</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;head&gt;</div><div class="line">&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;mystyle.css&quot;&gt;</div><div class="line">&lt;/head&gt;</div></pre></td></tr></table></figure>
+</li>
+<li><p>内部样式表(Internal style sheet):使用 <style> 标签在文档头部定义内部样式表</p>
+</li>
+<li>内联样式(Inline style)</li>
+</ul>
+<p>CSS 属性定义背景效果:</p>
+<ul>
+<li>background-color:背景色</li>
+<li>background-image：背景图片</li>
+<li>background-repeat：图像平铺</li>
+<li>background-attachment：背景图像是否固定或者随着页面的其余部分滚动。</li>
+<li>background-position：设置定位</li>
+</ul>
+<p><a href="http://www.runoob.com/cssref/css-reference.html">CSS属性大全：查找&amp;使用</a></p>
+<p><strong>CSS 文本格式 基本属性</strong></p>
+<ul>
+<li>文本颜色：Color</li>
+<li>文本的对齐方式:text-align</li>
+<li>文本修饰:</li>
+<li><p>文本缩进:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">h1 &#123;text-decoration:overline;&#125;</div><div class="line">h2 &#123;text-decoration:line-through;&#125;</div><div class="line">h3 &#123;text-decoration:underline;&#125;</div><div class="line"></div><div class="line">p &#123;text-indent:50px;&#125;</div><div class="line">对齐方式：</div><div class="line">vertical-align:text-top;</div><div class="line">字符间隔：</div><div class="line">letter-spacing:2px;</div><div class="line">行间距：</div><div class="line">line-height:70%;</div></pre></td></tr></table></figure>
+</li>
+<li><p>CSS字体属性定义字体，加粗，大小，文字样式。</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">font-family 属性设置文本的字体系列。</div><div class="line">p&#123;font-family:&quot;Times New Roman&quot;, Times, serif;&#125;</div><div class="line"></div><div class="line">字体样式：</div><div class="line">正常 - 正常显示文本</div><div class="line">斜体 - 以斜体字显示的文字</div><div class="line">倾斜的文字 - 文字向一边倾斜（和斜体非常类似，但不太支持）</div><div class="line">p.normal &#123;font-style:normal;&#125;</div><div class="line">p.italic &#123;font-style:italic;&#125;</div><div class="line">p.oblique &#123;font-style:oblique;&#125;</div><div class="line">设置字体大小像素：font-size:40px;</div><div class="line">用em来设置字体大小，1em的默认大小是16px。可以通过公式将像素转换为em：px/16=em</div></pre></td></tr></table></figure>
+<p>所有CSS字体属性：</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>描述 </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>font</td>
+<td>在一个声明中设置所有的字体属性</td>
+</tr>
+<tr>
+<td>font-family</td>
+<td>指定文本的字体系列</td>
+</tr>
+<tr>
+<td>font-size</td>
+<td>指定文本的字体大小</td>
+</tr>
+<tr>
+<td>font-style</td>
+<td>指定文本的字体样式</td>
+</tr>
+<tr>
+<td>font-variant</td>
+<td>以小型大写字体或者正常字体显示文本。</td>
+</tr>
+<tr>
+<td>font-weight</td>
+<td>指定字体的粗细。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>链接样式</strong></p>
+<ul>
+<li>a:link - 正常，未访问过的链接</li>
+<li>a:visited - 用户已访问过的链接</li>
+<li>a:hover - 当用户鼠标放在链接上时</li>
+<li>a:active - 链接被点击的那一刻</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">a:link &#123;color:#000000;&#125;      /* 未访问链接*/</div><div class="line">a:visited &#123;color:#00FF00;&#125;  /* 已访问链接 */</div><div class="line">a:hover &#123;color:#FF00FF;&#125;  /* 鼠标移动到链接上 */</div><div class="line">a:active &#123;color:#0000FF;&#125;  /* 鼠标点击时 */</div></pre></td></tr></table></figure>
+<p><strong>CSS 盒子模型(Box Model)</strong><br><img src="http://www.runoob.com/images/box-model.gif" alt="image"></p>
+<ul>
+<li>Margin(外边距) - 清除边框外的区域，外边距是透明的。</li>
+<li>Border(边框) - 围绕在内边距和内容外的边框。</li>
+<li>Padding(内边距) - 清除内容周围的区域，内边距是透明的。</li>
+<li>Content(内容) - 盒子的内容，显示文本和图像。</li>
+</ul>
+<p><strong>CSS 边框</strong></p>
+<p>CSS边框属性允许你指定一个元素边框的样式和颜色。border-style属性用来定义边框的样式</p>
+<ul>
+<li>none: 默认无边框</li>
+<li>dotted: 定义一个点线边框</li>
+<li>dashed: 定义一个虚线边框</li>
+<li>solid: 定义实线边框</li>
+<li>double: 定义两个边框。 两个边框的宽度和 border-width 的值相同</li>
+<li>groove: 定义3D沟槽边框。效果取决于边框的颜色值</li>
+<li>ridge: 定义3D脊边框。效果取决于边框的颜色值</li>
+<li>inset:定义一个3D的嵌入边框。效果取决于边框的颜色值</li>
+<li>outset: 定义一个3D突出边框。 效果取决于边框的颜色值</li>
+</ul>
+<p><strong>CSS 分组 和 嵌套 选择器</strong></p>
+<ul>
+<li>Grouping Selectors在样式表中有很多具有相同样式的元素,为了尽量减少代码，你可以使用分组选择器。每个选择器用逗号分隔.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">h1,h2,p</div><div class="line">&#123;</div><div class="line">color:green;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>嵌套选择器,它可能适用于选择器内部的选择器的样式。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">1.为所有p元素指定一个样式</div><div class="line">2.为所有class=&quot;marked&quot;的元素指定一个样式</div><div class="line">3.为所有class=&quot;marked&quot;元素内的p元素指定一个样式</div><div class="line"></div><div class="line">p</div><div class="line">&#123;</div><div class="line">color:blue;</div><div class="line">text-align:center;</div><div class="line">&#125;</div><div class="line">.marked</div><div class="line">&#123;</div><div class="line">background-color:red;</div><div class="line">&#125;</div><div class="line">.marked p</div><div class="line">&#123;</div><div class="line">color:white;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>隐藏元素 - display:none或visibility:hidden;visibility:hidden可以隐藏某个元素，但隐藏的元素仍需占用与未隐藏之前一样的空间。也就是说，该元素虽然被隐藏了，但仍然会影响布局。</li>
+</ul>
+<p><strong>CSS Float(浮动)</strong></p>
+<p>CSS 的 Float（浮动），会使元素向左或向右移动，其周围的元素也会重新排列。<br>Float（浮动），往往是用于图像，但它在布局时一样非常有用。使用 float 属性：</p>
+<p><strong>CSS 导航栏</strong></p>
+<p>熟练使用导航栏，对于任何网站都非常重要。使用CSS你可以转换成好看的导航栏而不是枯燥的HTML菜单。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">&lt;ul&gt;</div><div class="line">&lt;li&gt;&lt;a href=&quot;#home&quot;&gt;主页&lt;/a&gt;&lt;/li&gt;</div><div class="line">&lt;li&gt;&lt;a href=&quot;#news&quot;&gt;新闻&lt;/a&gt;&lt;/li&gt;</div><div class="line">&lt;li&gt;&lt;a href=&quot;#contact&quot;&gt;联系&lt;/a&gt;&lt;/li&gt;</div><div class="line">&lt;li&gt;&lt;a href=&quot;#about&quot;&gt;关于&lt;/a&gt;&lt;/li&gt;</div><div class="line">&lt;/ul&gt;</div><div class="line"></div><div class="line">样式：</div><div class="line">ul</div><div class="line">&#123;</div><div class="line">	list-style-type:none;</div><div class="line">	margin:0;</div><div class="line">	padding:0;</div><div class="line">&#125;</div><div class="line">a:link,a:visited</div><div class="line">&#123;</div><div class="line">	display:block;</div><div class="line">	font-weight:bold;</div><div class="line">	color:#FFFFFF;</div><div class="line">	background-color:#98bf21;</div><div class="line">	width:120px;</div><div class="line">	text-align:center;</div><div class="line">	padding:4px;</div><div class="line">	text-decoration:none;</div><div class="line">	text-transform:uppercase;</div><div class="line">&#125;</div><div class="line">a:hover,a:active</div><div class="line">&#123;</div><div class="line">	background-color:#7A991A;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>下拉菜单：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">我们可以使用任何的 HTML 元素来打开下拉菜单，如：&lt;span&gt;, 或 a &lt;button&gt; 元素。</div><div class="line"></div><div class="line">使用容器元素 (如： &lt;div&gt;) 来创建下拉菜单的内容，并放在任何你想放的位置上。</div><div class="line"></div><div class="line">使用 &lt;div&gt; 元素来包裹这些元素，并使用 CSS 来设置下拉内容的样式。</div></pre></td></tr></table></figure>
+<h2 id="JavaScript教程"><a href="#JavaScript教程" class="headerlink" title="JavaScript教程"></a>JavaScript教程</h2><ul>
+<li><a href="https://www.liaoxuefeng.com/wiki/001434446689867b27157e896e74d51a89c25cc8b43bdb3000">JavaScript教程</a></li>
+<li><a href="http://www.runoob.com/js">JavaScript 菜鸟教程</a></li>
+</ul>
+<blockquote>
+<p>JavaScript是一种运行在浏览器中的解释型的编程语言。新兴的Node.js把JavaScript引入到了服务器端，JavaScript已经变成了全能型选手。</p>
+</blockquote>
+<p><strong>JavaScript快速入门</strong></p>
+<p>通过可编程的对象模型，JavaScript 获得了足够的能力来创建动态的 HTML。</p>
+<ul>
+<li>JavaScript 能够改变页面中的所有 HTML 元素</li>
+<li>JavaScript 能够改变页面中的所有 HTML 属性</li>
+<li>JavaScript 能够改变页面中的所有 CSS 样式</li>
+<li>JavaScript 能够对页面中的所有事件做出反应</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">HTML 定义了网页的内容</div><div class="line">CSS 描述了网页的布局</div><div class="line">JavaScript 网页的行为</div></pre></td></tr></table></figure>
+<p><strong>JavaScript 显示数据</strong></p>
+<ul>
+<li>使用 window.alert() 弹出警告框。</li>
+<li>使用 document.write() 方法将内容写到 HTML 文档中。</li>
+<li>使用 innerHTML 写入到 HTML 元素。</li>
+<li>使用 console.log() 写入到浏览器的控制台。</li>
+<li></li>
+</ul>
+<p><a href="http://www.runoob.com/jsref/dom-obj-event.html">Html dom 事件汇总</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">1.通过id找元素；</div><div class="line">var x=document.getElementById(&quot;intro&quot;);</div><div class="line">getElementsByTagName(&quot;p&quot;);通过标签名查找 HTML 元素</div><div class="line"></div><div class="line">2.</div><div class="line">修改 HTML 内容的最简单的方法时使用 innerHTML 属性。</div><div class="line">document.getElementById(&quot;p1&quot;).innerHTML=&quot;新文本!&quot;;</div><div class="line"></div><div class="line">3.改变 HTML 样式</div><div class="line">document.getElementById(id).style.property=新样式</div><div class="line"></div><div class="line">4.HTML DOM 允许我们通过触发事件来执行代码。</div><div class="line">向 button 元素分配 onclick 事件：</div><div class="line">&lt;button onclick=&quot;displayDate()&quot;&gt;点这里&lt;/button&gt;</div><div class="line"></div><div class="line">onload 和 onunload 事件:会在用户进入或离开页面时被触发。</div><div class="line">onload 和 onunload 事件可用于处理 cookie。</div><div class="line"></div><div class="line">onchange 事件常结合对输入字段的验证来使用。</div><div class="line"></div><div class="line">onmouseover 和 onmouseout 事件可用于在用户的鼠标移至 HTML 元素上方或移出元素时触发函数。</div><div class="line"></div><div class="line">addEventListener() 方法用于向指定元素添加事件句柄。</div></pre></td></tr></table></figure></p>
+<p>在 JavaScript 中有 5 种不同的数据类型：</p>
+<ul>
+<li>string</li>
+<li>number</li>
+<li>boolean</li>
+<li>object</li>
+<li><p>function<br>3 种对象类型：</p>
+</li>
+<li><p>Object</p>
+</li>
+<li>Date</li>
+<li><p>Array<br>2 个不包含任何值的数据类型：</p>
+</li>
+<li><p>null</p>
+</li>
+<li>undefined</li>
+</ul>
+<p><strong>函数定义</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">function abs(x) &#123;</div><div class="line">    if (x &gt;= 0) &#123;</div><div class="line">        return x;</div><div class="line">    &#125; else &#123;</div><div class="line">        return -x;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>function指出这是一个函数定义；</li>
+<li>abs是函数的名称；</li>
+<li>(x)括号内列出函数的参数，多个参数以,分隔；</li>
+<li>{ … }之间的代码是函数体，可以包含若干语句，甚至可以没有任何语句。</li>
+</ul>
+<p><strong>高阶函数</strong></p>
+<ul>
+<li>Map()：我们有一个函数f(x)=x2，要把这个函数作用在一个数组[1, 2, 3, 4, 5, 6, 7, 8, 9]上，就可以用map</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">function pow(x) &#123;</div><div class="line">    return x * x;</div><div class="line">&#125;</div><div class="line"></div><div class="line">var arr = [1, 2, 3, 4, 5, 6, 7, 8, 9];</div><div class="line">var results = arr.map(pow); // [1, 4, 9, 16, 25, 36, 49, 64, 81]</div><div class="line">console.log(results);</div></pre></td></tr></table></figure>
+<ul>
+<li>reduce():Array的reduce()把一个函数作用在这个Array的[x1, x2, x3…]上，这个函数必须接收两个参数，reduce()把结果继续和序列的下一个元素做累积计算</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[x1, x2, x3, x4].reduce(f) = f(f(f(x1, x2), x3), x4)</div><div class="line">var arr = [1, 3, 5, 7, 9];</div><div class="line">arr.reduce(function (x, y) &#123;</div><div class="line">    return x + y;</div><div class="line">&#125;); // 25</div></pre></td></tr></table></figure>
+<blockquote>
+<p>在JavaScript的世界里，一切都是对象。为了区分对象的类型，我们用typeof操作符获取对象的类型，它总是返回一个字符串</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">typeof 123; // &apos;number&apos;</div><div class="line">typeof NaN; // &apos;number&apos;</div><div class="line">typeof &apos;str&apos;; // &apos;string&apos;</div><div class="line">typeof true; // &apos;boolean&apos;</div><div class="line">typeof undefined; // &apos;undefined&apos;</div><div class="line">typeof Math.abs; // &apos;function&apos;</div><div class="line">typeof null; // &apos;object&apos;</div><div class="line">typeof []; // &apos;object&apos;</div><div class="line">typeof &#123;&#125;; // &apos;object&apos;</div></pre></td></tr></table></figure>
+<p><strong>浏览器对象</strong></p>
+<ul>
+<li>由于HTML文档被浏览器解析后就是一棵DOM树，要改变HTML的结构，就需要通过JavaScript来操作DOM。始终记住DOM是一个树形结构。</li>
+<li>window对象不但充当全局作用域，而且表示浏览器窗口。innerWidth和innerHeight属性，可以获取浏览器窗口的内部宽度和高度。内部宽高是指除去菜单栏、工具栏、边框等占位元素后，用于显示网页的净宽高。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">navigator对象表示浏览器的信息;</div><div class="line">navigator.appName：浏览器名称；</div><div class="line">navigator.appVersion：浏览器版本；</div><div class="line">navigator.language：浏览器设置的语言；</div><div class="line">navigator.platform：操作系统类型；</div><div class="line">navigator.userAgent：浏览器设定的User-Agent字符串。</div><div class="line"></div><div class="line">screen对象表示屏幕的信息;</div><div class="line">screen.width：屏幕宽度，以像素为单位；</div><div class="line">screen.height：屏幕高度，以像素为单位；</div><div class="line">screen.colorDepth：返回颜色位数，如8、16、24。</div><div class="line"></div><div class="line">location对象表示当前页面的URL信息;</div><div class="line">比如：http://www.example.com:8080/path/index.html?a=1&amp;b=2#TOP</div><div class="line">location.protocol; // &apos;http&apos;</div><div class="line">location.host; // &apos;www.example.com&apos;</div><div class="line">location.port; // &apos;8080&apos;</div><div class="line">location.pathname; // &apos;/path/index.html&apos;</div><div class="line">location.search; // &apos;?a=1&amp;b=2&apos;</div><div class="line">location.hash; // &apos;TOP&apos;</div><div class="line"></div><div class="line">history对象保存了浏览器的历史记录，JavaScript可以</div><div class="line">调用history对象的back()或forward()，相当于用户点击了</div><div class="line">浏览器的“后退”或“前进”按钮。</div></pre></td></tr></table></figure>
+<p><strong>Ajax:JavaScript执行异步网络请求。</strong></p>
+<blockquote>
+<p>这就是Web的运作原理：一次HTTP请求对应一个页面。AJAX请求是异步执行的，也就是说，要通过回调函数获得响应。</p>
+</blockquote>
+<p><strong>JavaScript 库</strong></p>
+<ul>
+<li>jQuery:它使用 CSS 选择器来访问和操作网页上的 HTML 元素（DOM 对象）</li>
+<li>Prototype 是一种库，提供用于执行常见 web 任务的简单 API。</li>
+<li>MooTools 也是一个框架，提供了可使常见的 JavaScript 编程更为简单的 API。</li>
+</ul>
+</style></p></li></ul>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/前端/" rel="tag"># 前端</a>
+          
+            <a href="/tags/微信小程序/" rel="tag"># 微信小程序</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/16/前端基础知识(一)/" rel="next" title="前端基础知识(一):Html&Html5">
+                <i class="fa fa-chevron-left"></i> 前端基础知识(一):Html&Html5
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1502346421&di=d5dddcc8504e58a709921075437056f6&imgtype=jpg&er=1&src=http%3A%2F%2Fww2.sinaimg.cn%2Fmw1024%2F64b5b174jw1esy5043qmtg206t07i7ol.gif"
+               alt="dehao@yang" />
+          <p class="site-author-name" itemprop="name">dehao@yang</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前端基础CSS样式"><span class="nav-number">1.</span> <span class="nav-text">前端基础CSS样式</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dehao@yang</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Gemini
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("SQRi8Ar8YCn4c3G97nJ9JsoK-gzGzoHsz", "Hu3hKNQdfDQNJ6zYikQwidIj");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
