@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android进阶," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="Android 的 classLoader 在加载 APK 的时候限制了class.dex 包含的 Java 方法数，其总数不能超过65535（64k)解决方案">
+<meta name="keywords" content="Android进阶">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android Multidex分包体验">
+<meta property="og:url" content="http://yoursite.com/2018/05/15/Android-Multidex分包体验/index.html">
+<meta property="og:site_name" content="紫阳的博客">
+<meta property="og:description" content="Android 的 classLoader 在加载 APK 的时候限制了class.dex 包含的 Java 方法数，其总数不能超过65535（64k)解决方案">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/4267785-d5af831c696a6127.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/4267785-cb3e8ce06232bb89.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2018-05-15T03:19:13.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android Multidex分包体验">
+<meta name="twitter:description" content="Android 的 classLoader 在加载 APK 的时候限制了class.dex 包含的 Java 方法数，其总数不能超过65535（64k)解决方案">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/4267785-d5af831c696a6127.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/05/15/Android-Multidex分包体验/"/>
+
+
+
+
+
+  <title>Android Multidex分包体验 | 紫阳的博客</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">紫阳的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/15/Android-Multidex分包体验/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dehao@yang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1502346421&di=d5dddcc8504e58a709921075437056f6&imgtype=jpg&er=1&src=http%3A%2F%2Fww2.sinaimg.cn%2Fmw1024%2F64b5b174jw1esy5043qmtg206t07i7ol.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="紫阳的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android Multidex分包体验</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-15T11:13:19+08:00">
+                2018-05-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android进阶/" itemprop="url" rel="index">
+                    <span itemprop="name">Android进阶</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/05/15/Android-Multidex分包体验/" class="leancloud_visitors" data-flag-title="Android Multidex分包体验">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Android 的 <code>classLoader</code> 在加载 APK 的时候限制了<code>class.dex</code> 包含的 Java 方法数，其总数不能超过65535（64k)解决方案</p>
+<a id="more"></a>
+<blockquote>
+<p>Android 的 <code>classLoader</code> 在加载 APK 的时候限制了<code>class.dex</code> 包含的 Java 方法数，其总数不能超过65535（64K，<strong>不要再说成 65K</strong> 了，1K = 2^10 = 1024 , 64 * 1024 = 65535），Google 官方给出的解决方案是使用 <a href="https://developer.android.com/studio/build/multidex.html" target="_blank" rel="external">Multidex</a> 。</p>
+</blockquote>
+<p>1.修改gradle脚本来产生多dex。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">defaultConfig &#123;</div><div class="line">        applicationId &quot;com.ebmob.testluaview&quot;</div><div class="line">        minSdkVersion 14</div><div class="line">        targetSdkVersion 26</div><div class="line">        versionCode 1</div><div class="line">        versionName &quot;1.0&quot;</div><div class="line">        testInstrumentationRunner &quot;android.support.test.runner.AndroidJUnitRunner&quot;</div><div class="line">        multiDexEnabled true</div><div class="line">        ndk &#123;</div><div class="line">            abiFilters &quot;armeabi-v7a&quot;, &quot;armeabi&quot;, &quot;x86&quot;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">dependencies &#123;</div><div class="line">    ...</div><div class="line">    ...</div><div class="line">   //multidex 分包</div><div class="line">    implementation &apos;com.android.support:multidex:1.0.2&apos;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>2.修改manifest 使用MulitDexApplication 或者重写attachBaseContext。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">protected void attachBaseContext(Context base) &#123;</div><div class="line">    super.attachBaseContext(base);</div><div class="line">    MultiDex.install(this);     </div><div class="line"> </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>MultiDex带来的问题</strong></p>
+<blockquote>
+<p>1.在冷启动时因为需要安装DEX文件，如果DEX文件过大时，处理时间过长，很容易引发ANR（Application Not Responding）；<br>2.采用MultiDex方案的应用可能不能在低于Android 4.0 (API level 14) 机器上启动，这个主要是因为Dalvik linearAlloc的一个bug (<a href="http://b.android.com/22586" target="_blank" rel="external">Issue 22586</a>);</p>
+<ol>
+<li>采用MultiDex方案的应用因为需要申请一个很大的内存，在运行时可能导致程序的崩溃，这个主要是因为Dalvik linearAlloc 的一个限制(<a href="http://b.android.com/78035" target="_blank" rel="external">Issue 78035</a>). 这个限制在 Android 4.0 (API level 14)已经增加了, 应用也有可能在低于 Android 5.0 (API level 21)版本的机器上触发这个限制；</li>
+</ol>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">MultiDex的基本原理是把通过DexFile来加载Secondary DEX，并存放在</div><div class="line">BaseDexClassLoader的DexPathList中。</div></pre></td></tr></table></figure>
+<ul>
+<li><a href="http://yydcdut.com/2016/03/20/split-dex/" target="_blank" rel="external">Android Dex分包之旅</a></li>
+</ul>
+<blockquote>
+<p>INSTALL_FAILED_DEXOPT 出现的原因大部分都是两种，一种是 65536 了，另外一种是 LinearAlloc 太小了。两者的限制不同，但是原因却是相似，那就是App太大了，导致没办法安装到手机上。</p>
+</blockquote>
+<p><em>为什么是65536</em><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">是因为 Dalvik 的 invoke-kind 指令集中，method reference index 只留了 </div><div class="line">16 bits，最多能引用 65535 个方法</div></pre></td></tr></table></figure></p>
+<p><strong>解决 LinearAlloc</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">afterEvaluate &#123; </div><div class="line">  tasks.matching &#123; </div><div class="line">    it.name.startsWith(&apos;dex&apos;) </div><div class="line">  &#125;.each &#123; dx -&gt; </div><div class="line">    if (dx.additionalParameters == null) &#123; </div><div class="line">      dx.additionalParameters = []</div><div class="line">    &#125;  </div><div class="line">    dx.additionalParameters += &apos;--set-max-idx-number=48000&apos; </div><div class="line">  &#125; </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>–set-max-idx-number= 用于控制每一个 dex 的最大方法个数。</p>
+<p><strong>dexopt &amp;&amp; dex2oat</strong><br><img src="http://upload-images.jianshu.io/upload_images/4267785-d5af831c696a6127.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<h4 id="dexopt"><a href="#dexopt" class="headerlink" title="dexopt"></a>dexopt</h4><blockquote>
+<p>当 Android 系统安装一个应用的时候，有一步是对 Dex 进行优化，这个过程有一个专门的工具来处理，叫 DexOpt。DexOpt 是在第一次加载 Dex 文件的时候执行的，将 dex 的依赖库文件和一些辅助数据打包成 odex 文件，即 Optimised Dex，存放在 cache/dalvik_cache 目录下。保存格式为 apk路径 @ apk名 @ classes.dex 。执行 ODEX 的效率会比直接执行 Dex 文件的效率要高很多。<br>首次启动时Dalvik虚拟机会对classes.dex执行dexopt操作，生成ODEX文件，这个过程非常耗时，而执行MultiDex.install()必然会再次对classes2.dex执行dexopt等操作，所有这些操作必须在5秒内完成，否则就ANR给你看！</p>
+</blockquote>
+<p>更多可查看 <a href="http://www.netmite.com/android/mydroid/dalvik/docs/dexopt.html" target="_blank" rel="external">Dalvik Optimization and Verification With <em>dexopt</em></a> 。</p>
+<h4 id="dex2oat"><a href="#dex2oat" class="headerlink" title="dex2oat"></a>dex2oat</h4><blockquote>
+<p>Android Runtime 的 dex2oat 是将 dex 文件编译成 oat 文件。而 oat 文件是 elf 文件，是可以在本地执行的文件，而 Android Runtime 替换掉了虚拟机读取的字节码转而用本地可执行代码，这就被叫做 AOT(ahead-of-time)。dex2oat 对所有 apk 进行编译并保存在 dalvik-cache 目录里。PackageManagerService 会持续扫描安装目录，如果有新的 App 安装则马上调用 dex2oat 进行编译。</p>
+</blockquote>
+<p>更多可查看 <a href="http://blog.csdn.net/luoshengyang/article/details/39256813" target="_blank" rel="external">Android运行时ART简要介绍和学习计划</a> 。</p>
+<blockquote>
+<p>Multidex的实现原理是将class编译进不同的classes.dex文件中，一般情况下，一个APK文件中只包含了一个classes.dex文件。分包之后就存在一个主的classes.dex，多个副的classes2.dex，classes3.dex，以此类推。通过查看MultiDex的源码，可以发现MultiDex在冷启动时，因为会同步的反射安装Dex文件，进行IO操作，容易导致ANR</p>
+</blockquote>
+<p>1.在冷启动时因为需要安装Dex文件，如果Dex文件过大时，处理时间过长，很容易引发ANR<br>2.采用MultiDex方案的应用因为linearAlloc的BUG，可能不能在2.x设备上启动</p>
+<p><em>看下Multidex的编译过程，它由三个不同的gradle task组成:</em></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">1.collect&#123;variant&#125;MultiDexComponents task:</div><div class="line">读取项目的AndroidManifest.xml文件中注册的application、Activity、service、receiver、provider、</div><div class="line">instrumentation相关类，并将其class文件路径写到文件</div><div class="line">buidl/intermediates/multi-dex/$&#123;variant.dirName&#125;/manifest_keep.txt中</div><div class="line"></div><div class="line">2.shrink&#123;variant&#125;MultiDexComponents task:</div><div class="line">调用ProGuard并根据上一步生成的manifest_keep.txt文件内容去压缩class，剔除没有用到的class，</div><div class="line">生成一个精简的jar包buidl/intermediates/multi-dex/$&#123;variant.dirName&#125;/componentClasses.jar</div><div class="line"></div><div class="line">3.create&#123;variant&#125;MainDexClassList task:</div><div class="line">根据上一步生成的componentClasses.jar去寻找这里面的各个class文字中依赖的class，比如一个class中有一成员变量X，那么X就是依赖的class，</div><div class="line">componentClasses.jar中所有的class和依赖的class路径都会被写入到文件buidl/intermediates/multi-dex/$&#123;variant.dirName&#125;/maindexlist.txt中，</div><div class="line">这个文件中的类都会被编译进主的classes.dex中去。</div><div class="line"></div><div class="line">编译成功后可以查看到：</div><div class="line">componentClasses.jar</div><div class="line">components.flags</div><div class="line">manifest_keep.txt</div><div class="line">maindexlist.txt</div></pre></td></tr></table></figure>
+<h4 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h4><ul>
+<li><a href="http://www.jcodecraeer.com/a/anzhuokaifa/androidkaifa/2015/1218/3789.html" target="_blank" rel="external">其实你不知道MultiDex到底有多坑</a></li>
+<li><p><a href="https://blog.csdn.net/amazing_alex/article/details/52064837" target="_blank" rel="external">Android傻瓜式分包插件</a></p>
+</li>
+<li><p><a href="http://tech.meituan.com/mt-android-auto-split-dex.html" target="_blank" rel="external">美团多dex拆包方案</a></p>
+</li>
+</ul>
+<blockquote>
+<p>精简主dex+异步加载secondary.dex 。对异步化执行速度的不确定性，他们的解决方案是重写Instrumentation execStartActivity 方法，hook跳转Activity的总入口做判断，如果当前secondary.dex 还没有加载完成，就弹一个loading Activity等待加载完成</p>
+</blockquote>
+<p>FB的解决思路特别赞，让Launcher Activity在另外一个进程启动！当然这个Launcher Activity就是用来load dex 的 ，load完成就启动Main Activity。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"> class LoadDexTask extends AsyncTask &#123;</div><div class="line"></div><div class="line">        @Override</div><div class="line">        protected void onPreExecute() &#123;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        @Override</div><div class="line">        protected Object doInBackground(Object[] params) &#123;</div><div class="line">            try &#123;</div><div class="line">                Log.d(&quot;loadDex&quot;, &quot;install start&quot;);</div><div class="line">                MultiDex.install(getApplication());</div><div class="line">                Log.d(&quot;loadDex&quot;, &quot;install finish&quot;);</div><div class="line">                //((LinganApplication)getApplication()).installFinish(getApplication());</div><div class="line"></div><div class="line">                LinganApplicationTinker.installFinish(getApplication());</div><div class="line">            &#125; catch (Exception e) &#123;</div><div class="line">                Log.e(&quot;loadDex&quot;, e.getLocalizedMessage());</div><div class="line">            &#125;</div><div class="line">            return null;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        @Override</div><div class="line">        protected void onPostExecute(Object o) &#123;</div><div class="line">            Log.d(&quot;loadDex&quot;, &quot;get install finish&quot;);</div><div class="line">            finish();</div><div class="line">            System.exit(0);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">android:process=&quot;:mini&quot;注册</div></pre></td></tr></table></figure></p>
+<p><em>Android的打包流程示意图：</em><br><img src="http://upload-images.jianshu.io/upload_images/4267785-cb3e8ce06232bb89.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="打包流程"></p>
+<p><a href="https://juejin.im/entry/58d54e2d44d90400686856f3" target="_blank" rel="external">百转千回的 too many classes in –main-dex-list
+</a></p>
+<ul>
+<li>1.首先是manifest_keep.txt大小的控制:collect task任务进行拦截和替换</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">afterEvaluate &#123;</div><div class="line">        android.applicationVariants.each &#123;</div><div class="line">            variant -&gt;</div><div class="line">                def collectTask = tasks.findByName(&quot;collect$&#123;variant.name.capitalize()&#125;MultiDexComponents&quot;)//collectZroTestDebugMultiDexComponents</div><div class="line">                if (collectTask != null) &#123;</div><div class="line">                    List&lt;Action&lt;? super Task&gt;&gt; list = new ArrayList&lt;&gt;()</div><div class="line">                    list.add(new Action&lt;Task&gt;() &#123;</div><div class="line">                        @Override</div><div class="line">                        void execute(Task task) &#123;</div><div class="line">                            println &quot;collect$&#123;variant.name.capitalize()&#125;MultiDexComponents action execute!---------XXXXXXX mini main dex生效了!!!!$projectDir&quot;</div><div class="line">                            def dir = new File(&quot;$projectDir/build/intermediates/multi-dex/$&#123;variant.dirName&#125;&quot;);</div><div class="line">                            if (!dir.exists()) &#123;</div><div class="line">                                println &quot;$dir 不存在,进行创建&quot;</div><div class="line">                                dir.mkdirs()</div><div class="line">                            &#125;</div><div class="line">                            def manifestkeep = new File(dir.getAbsolutePath() + &quot;/manifest_keep.txt&quot;)</div><div class="line">                            manifestkeep.delete()</div><div class="line">                            manifestkeep.createNewFile()</div><div class="line">                            println &quot;先删除,后创建manifest_keep&quot;</div><div class="line">                            def backManifestListFile = new File(&quot;$projectDir/manifest_keep.txt&quot;)</div><div class="line">                            backManifestListFile.eachLine &#123;</div><div class="line">                                line -&gt;</div><div class="line">                                    manifestkeep &lt;&lt; line &lt;&lt; &apos;\n&apos;</div><div class="line">                            &#125;</div><div class="line">                        &#125;</div><div class="line">                    &#125;)</div><div class="line">                    collectTask.setActions(list)</div><div class="line">                &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>2.然后在本地的projectDir/manifest_keep.txt配置最精简的主dex所需要依赖的类：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">-keep class com.ebmob.framework.ui.LoadResActivity &#123; &lt;init&gt;(); &#125;</div><div class="line">-keep class com.lingan.seeyou.messagein.NotificationTranslucentActivity&#123; &lt;init&gt;(); &#125;</div><div class="line">-keep class com.j256.ormlite.field.**</div><div class="line">-keep class com.ebmob.testluaview.LuaViewApplication &#123;</div><div class="line">    *;</div><div class="line">&#125;</div><div class="line">-keep class com.ebmob.framework.ui.LinganApplicationTinker &#123;</div><div class="line">    *;</div><div class="line">&#125;</div><div class="line">保留了application和启动页之类的入口；</div></pre></td></tr></table></figure>
+<ul>
+<li><p>3.使用了一个可以干预maindexlist.txt文件内容的项目<a href="https://juejin.im/entry/58d54e2d44d90400686856f3" title="https://github.com/ceabie/DexKnifePlugin" target="_blank" rel="external">DexKnifePlugin</a><br>配置如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"># 全局过滤, 如果没设置 -filter-suggest 并不会应用到 建议的maindexlist.</div><div class="line"># 如果你想要某个已被排除的包路径在maindex中，则使用 -keep 选项，即使他已经在分包的路径中.</div><div class="line"># 注意，没有split只用keep时，miandexlist将仅包含keep指定的类。</div><div class="line">#-keep android.support.v4.view.**</div><div class="line"># 这条配置可以指定这个包下类在第二dex中.（注意，未指定的类会在被认为在maindexlist中）</div><div class="line">#android.support.v?.**</div><div class="line">#</div><div class="line"># 使用.class后缀，代表单个类.</div><div class="line">#-keep android.support.v7.app.AppCompatDialogFragment.class</div><div class="line">#</div><div class="line"># 不包含Android gradle 插件自动生成的miandex列表.</div><div class="line">#-donot-use-suggest</div><div class="line">#</div><div class="line"># 将 全局过滤配置应用到 建议的maindexlist中, 但 -donot-use-suggest 要关闭.</div><div class="line">-filter-suggest</div><div class="line"># 不进行dex分包， 直到 dex 的id数量超过 65536.</div><div class="line">-auto-maindex</div><div class="line"># dex 扩展参数, 例如 --set-max-idx-number=50000</div><div class="line"># 如果出现 DexException: Too many classes in --main-dex-list, main dex capacity exceeded，则需要调大数值</div><div class="line">#-dex-param --set-max-idx-number=48000</div><div class="line"># 显示miandex的日志.</div><div class="line">-log-mainlist</div><div class="line">#过滤日志。Recommend：在maindexlist中（由推荐列表确定）；Global：在maindexlist中，由全局过滤确定；true，前两者都成立的；false，不在maindexlist中</div><div class="line">-log-filter</div></pre></td></tr></table></figure>
+</li>
+<li><p><a href="https://blog.csdn.net/ceabie/article/details/55271161" target="_blank" rel="external">Intellij / Android Studio 调试 Gradle Plugin</a></p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">1.创建remote调试任务：</div><div class="line">2.打开Terminal窗口输入：</div><div class="line">./gradlew(or gradle) assembleDebug -Dorg.gradle.daemon=false -Dorg.gradle.debug=true。</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android进阶/" rel="tag"># Android进阶</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/26/Android进阶笔记（一）/" rel="next" title="Android进阶笔记（一）">
+                <i class="fa fa-chevron-left"></i> Android进阶笔记（一）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1502346421&di=d5dddcc8504e58a709921075437056f6&imgtype=jpg&er=1&src=http%3A%2F%2Fww2.sinaimg.cn%2Fmw1024%2F64b5b174jw1esy5043qmtg206t07i7ol.gif"
+               alt="dehao@yang" />
+          <p class="site-author-name" itemprop="name">dehao@yang</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#dexopt"><span class="nav-number">1.</span> <span class="nav-text">dexopt</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#dex2oat"><span class="nav-number">2.</span> <span class="nav-text">dex2oat</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#参考文章"><span class="nav-number">3.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dehao@yang</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Gemini
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("SQRi8Ar8YCn4c3G97nJ9JsoK-gzGzoHsz", "Hu3hKNQdfDQNJ6zYikQwidIj");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
