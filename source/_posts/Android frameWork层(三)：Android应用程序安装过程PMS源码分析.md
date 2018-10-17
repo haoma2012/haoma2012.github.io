@@ -1,19 +1,16 @@
 ---
-title: 'Android frameWork层(二):Android应用程序安装过程PMS源代码分析'
-date: 2017-08-09 22:10:37
-tags:
-description： PMS:PackageManagerService 包管理服务类，保存了apk相关信息，安装过程会扫描apk目录，使用PackageParse解析apk的
-manifest文件，并保存Package信息;
+title: Android frameWork层——Android应用程序安装过程源码分析
+date: 2017-08-17 09:24:57
+tags: 
+description: PMS(PackageManagerService)包管理服务类,保存了apk相关信息，安装过程会扫描apk目录，使用PackageParse解析；
 ---
 
 <!-- more -->
-
 - [Android应用程序安装过程源代码分析](http://blog.csdn.net/luoshengyang/article/details/6766010)
 
 Android系统在启动的过程中，会启动一个应用程序管理服务PackageManagerService，这个服务负责扫描系统中特定的目录，找到里面的应用程序文
 件，即以Apk为后缀的文件，然后对这些文件进解析，得到应用程序的相关信息。（其实最主要的是解析应用程序配置文件：AndroidManifest.xml的过
 程）应用程序管理服务PackageManagerService是系统启动的时候由SystemServer组件启动的，启后它就会执行应用程序安装的过程
-
 
 #### 1.源码分析
 

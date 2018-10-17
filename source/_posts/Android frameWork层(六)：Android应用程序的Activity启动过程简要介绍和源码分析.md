@@ -1,0 +1,156 @@
+---
+title: Android frameWork层(六)：Android应用程序的Activity启动过程简要介绍和源码分析
+date: 2017-08-28 22:02:21
+tags:
+---
+
+在Android系统中，有两种操作会引发Activity的启动，一种用户点击应用程序图标时，Launcher会为我们启动应用程序的主Activity；应用程序的默
+认Activity启动起来后，它又可以在内部通过调用startActvity接口启动新的Activity，依此类推，每一个Activity都可以在内部启动新的
+Activity。通过这种连锁反应，按需启动Activity，从而完成应用程序的功能。
+
+<!-- more -->
+
+
+#### 简介
+
+在Android系统中，Activity和Service是应用程序的核心组件，它们以松藕合的方式组合在一起构成了一个完整的应用程序，这得益于应用程序框架层提
+供了一套完整的机制来协助应用程序启动这些Activity和Service，以及提供Binder机制帮助它们相互间进行通信。
+
+Activity的启动方式有两种，一种是显式的，一种是隐式的，隐式启动可以使得Activity之间的藕合性更加松散，因此，这里只关注隐式启动Activity
+的方法。
+
+
+- 1.显示调用
+
+```
+Intent intent1 = new Intent(getActivity(), CoinMallActivity.class);
+startActivity(intent1);
+```
+
+- 2.隐式调用
+
+```
+String strAction = "com.meiyou.ui.CoinMallActivity";
+Intent intent = new Intent(strAction);
+startActivity(intent);
+```
+无论是通过点击应用程序图标来启动Activity，还是通过Activity内部调用startActivity接口来启动新的Activity，都要借助于应用程序框架层的ActivityManagerService服务进程。而AMS服务都是由进程SystemServer统一管理的,ActivityManagerService是一个非常重要的类，它不但负责启动Activity和Service，还负责管理Activity和Service。
+Android应用程序框架层中的ActivityManagerService启动Activity的过程大致如下图所示：
+![image](http://hi.csdn.net/attachment/201108/14/0_1313305334OkCc.gif)
+
+在这个图中，ActivityManagerService和ActivityStack位于同一个进程中，而ApplicationThread和ActivityThread位于另一个进程中。其中，ActivityManagerService是负责管理Activity的生命周期的，ActivityManagerService还借助ActivityStack是来把所有的Activity按照后进先出的顺序放在一个堆栈中；对于每一个应用程序来说，都有一个ActivityThread来表示应用程序的主进程，而每一个ActivityThread都包含有一个ApplicationThread实例，它是一个Binder对象，负责和其它进程进行通信。
+
+下面简要介绍一下启动的过程：
+
+- Step 1. 无论是通过Launcher来启动Activity，还是通过Activity内部调用startActivity接口来启动新的Activity，都通过Binder进程间通信进入到ActivityManagerService进程中，并且调用ActivityManagerService.startActivity接口； 
+
+- Step 2. ActivityManagerService调用ActivityStack.startActivityMayWait来做准备要启动的Activity的相关信息；
+
+- Step 3. ActivityStack通知ApplicationThread要进行Activity启动调度了，这里的ApplicationThread代表的是调用ActivityManagerService.startActivity接口的进程，对于通过点击应用程序图标的情景来说，这个进程就是Launcher了，而对于通过在Activity内部调用startActivity的情景来说，这个进程就是这个Activity所在的进程了；
+
+- Step 4. ApplicationThread不执行真正的启动操作，它通过调用ActivityManagerService.activityPaused接口进入到ActivityManagerService进程中，看看是否需要创建新的进程来启动Activity；
+
+- Step 5. 对于通过点击应用程序图标来启动Activity的情景来说，ActivityManagerService在这一步中，会调用startProcessLocked来创建一个新的进程，而对于通过在Activity内部调用startActivity来启动新的Activity来说，这一步是不需要执行的，因为新的Activity就在原来的Activity所在的进程中进行启动；
+
+- Step 6. ActivityManagerServic调用ApplicationThread.scheduleLaunchActivity接口，通知相应的进程执行启动Activity的操作；
+
+- Step 7. ApplicationThread把这个启动Activity的操作转发给ActivityThread，ActivityThread通过ClassLoader导入相应的Activity类，然后把它启动起来。
+
+[Android应用程序启动过程源代码分析](http://blog.csdn.net/luoshengyang/article/details/6689748)
+
+[Android应用程序启动过程源代码分析](http://blog.csdn.net/luoshengyang/article/details/6689748)
+
+[Android应用程序内部启动Activity过程（startActivity）的源代码分析](http://blog.csdn.net/luoshengyang/article/details/6703247)
+
+[Android应用程序在新的进程中启动新的Activity的方法和过程分析](http://blog.csdn.net/luoshengyang/article/details/6720261)
+
+[解开Android应用程序组件Activity的"singleTask"之谜](http://blog.csdn.net/luoshengyang/article/details/6714543)
+
+
+#### 点击launcher进程图标启动新的进程，新进程启动默认Activity
+
+![image](http://img.my.csdn.net/uploads/201108/18/0_1313675675dBp4.gif)
+
+- 1.Intent.FLAG_ACTIVITY_NEW_TASK表示要在一个新的Task中启动这个Activity，注意，Task是Android系统中的概念，它不同于进程Process的概念。简单地说，一个Task是一系列Activity的集合，这个集合是以堆栈的形式来组织的，遵循后进先出的原则。
+- 2.经过一系列调用在Instrumentation.execStartActivity,内部有ActivityManagerNative.getDefault返回ActivityManagerService的远程接口，即ActivityManagerProxy接口
+- 3. ActivityManagerProxy.startActivity代理类启动Activity，Binder使他们之间交互的纽带
+- 4. ActivityManagerService.startActivity会启用ActivityStack，就是Activity的堆栈，调用一系列方法之后创建即将要启动的Activity的相关信息，并保存在ActivityRecord变量中；启动Activity先创建新的Task，并且保存起来
+- 5.调用Activity.resumeTopActivityLocked得到栈顶Activity，就是启动的默认mainActivity，而我们的resumeActivity呢将会调用startPausingLocked函数把Launcher推入Paused状态去了
+- 6.ActivityStack.startPausingLocked通过调用一个ApplicationThread对象的远程接口schedulePauseActivity来通知Launcher进入Paused状态。通过binder通信机制会调用Handler message消息传递
+- 7.ActivityThread.handlePauseActivity函数首先将Binder引用token转换成ActivityRecord的远程接口ActivityClientRecord，然后做了三个事情：1. 如果userLeaving为true，则通过调用performUserLeavingActivity函数来调用Activity.onUserLeaveHint通知Activity，用户要离开它了；2. 调用performPauseActivity函数来调用Activity.onPause函数，我们知道，在Activity的生命周期中，当它要让位于其它的Activity时，系统就会调用它的onPause函数；3. 它通知ActivityManagerService，这个Activity已经进入Paused状态了，ActivityManagerService现在可以完成未竟的事情，即启动MainActivity了。
+- 8.ActivityManagerProxy.activityPaused通过Binder进程间通信机制就进入到ActivityManagerService.activityPaused函数中去了。接着又会调用ActivityStack.activityPaused使其launcher进入pause状态；在ActivityStack又会执行管理Activity的所有生命周期
+- 9.最终会执行ActivityManagerService.startProcessLocked内部调用Process.start接口来创建一个新的进程，新的进程会导入android.app.ActivityThread类，并且执行它的main函数，这就是为什么我们前面说每一个应用程序都有一个ActivityThread实例来对应的原因。
+- 10.ActivityThread.main创建一个ActivityThread实例，然后调用它的attach函数，接着就进入消息循环了，直到最后进程退出；函数attach最终调用了ActivityManagerService的远程接口ActivityManagerProxy的attachApplication函数，传入的参数是mAppThread，这是一个ApplicationThread类型的Binder对象，它的作用是用来进行进程间通信的。
+- 11.ActivityManagerService.attachApplication经过一系列调用最终会调用 ApplicationThreadProxy.scheduleLaunchActivity最终通过Binder驱动程序进入到ApplicationThread的scheduleLaunchActivity函数中。
+- 12.ActivityThread.handleLaunchActivity；ActivityThread.performLaunchActivity
+
+**总结五步：**
+整个应用程序的启动过程要执行很多步骤，但是整体来看，主要分为以下五个阶段：
+
+一. Step1 - Step 11：Launcher通过Binder进程间通信机制通知ActivityManagerService，它要启动一个Activity；
+
+二. Step 12 - Step 16：ActivityManagerService通过Binder进程间通信机制通知Launcher进入Paused状态；
+
+三. Step 17 - Step 24：Launcher通过Binder进程间通信机制通知ActivityManagerService，它已经准备就绪进入Paused状态，于是ActivityManagerService就创建一个新的进程，用来启动一个ActivityThread实例，即将要启动的Activity就是在这个ActivityThread实例中运行；
+
+四. Step 25 - Step 27：ActivityThread通过Binder进程间通信机制将一个ApplicationThread类型的Binder对象传递给ActivityManagerService，以便以后ActivityManagerService能够通过这个Binder对象和它进行通信；
+
+五. Step 28 - Step 35：ActivityManagerService通过Binder进程间通信机制通知ActivityThread，现在一切准备就绪，它可以真正执行Activity的启动操作了。
+
+**应用程序内隐式调用启动activity**
+![image](http://hi.csdn.net/attachment/201108/19/0_13137647026lR7.gif)
+
+
+#### 解开Android应用程序组件Activity的"singleTask"之谜
+在Android应用程序中，可以配置Activity以四种方式来启动，其中最令人迷惑的就是"singleTask"这种方式了，官方文档称以这种方式启动的Activity总是属于一个任务的根Activity。
+
+在解开这个谜之前，我们先来简单了解一下在Android应用程序中，任务（Task）是个什么样的概念。我们知道，Activity是Android应用程序的基础组件之一，在应用程序运行时，每一个Activity代表一个用户操作。用户为了完成某个功能而执行的一系列操作就形成了一个Activity序列，这个序列在Android应用程序中就称之为任务，它是从用户体验的角度出发，把一组相关的Activity组织在一起而抽象出来的概念。
+
+以"singleTask"方式启动的Activity，全局只有唯一个实例存在，因此，当我们第一次启动这个Activity时，系统便会创建一个新的任务，并且初始化一个这样的Activity的实例，放在新任务的底部，如果下次再启动这个Activity时，系统发现已经存在这样的Activity实例，就会调用这个Activity实例的onNewIntent成员函数，从而把它激活起来。从这句话就可以推断出，以"singleTask"方式启动的Activity总是属于一个任务的根Activity。
+
+![image](http://hi.csdn.net/attachment/201108/23/0_13141106978dkE.gif)
+
+
+至此，我们总结一下，设置了"singleTask"启动模式的Activity的特点：
+
+- 1. 设置了"singleTask"启动模式的Activity，它在启动的时候，会先在系统中查找属性值affinity等于它的属性值taskAffinity的任务存在；如果存在这样的任务，它就会在这个任务中启动，否则就会在新任务中启动。因此，如果我们想要设置了"singleTask"启动模式的Activity在新的任务中启动，就要为它设置一个独立的taskAffinity属性值。
+
+- 2. 如果设置了"singleTask"启动模式的Activity不是在新的任务中启动时，它会在已有的任务中查看是否已经存在相应的Activity实例，如果存在，就会把位于这个Activity实例上面的Activity全部结束掉，即最终这个Activity实例会位于任务的堆栈顶端中。
+
+
+#### 分析汇总
+
+**1.Android 系统两种操作引起Activity启动**
+
+- 用户点击应用程序图标时，Launcher会为我们启动应用程序的主Activity；
+- 应用程序的默认Activity启动起来后，它又可以在内部通过调用startActvity接口启动新的Activity，依此类推，每一个Activity都可以在内部启动新的Activity。
+
+
+无论是通过点击应用程序图标来启动Activity，还是通过Activity内部调用startActivity接口来启动新的Activity，都要借助于应用程序框架层的ActivityManagerService服务。（Service也是由ActivityManagerService来启动的。）在Android应用程序框架层中，ActivityManagerService是一个非常重要的接口，它不但负责启动Activity和Service，还负责管理Activity和Service。
+
+**Activity启动的过程**
+
+- Step 1. 无论是通过Launcher来启动Activity，还是通过Activity内部调用startActivity接口来启动新的Activity，都通过Binder进程间通信进入到ActivityManagerService进程中，并且调用ActivityManagerService.startActivity接口；
+- Step 2. ActivityManagerService调用ActivityStack.startActivityMayWait来做准备要启动的Activity的相关信息；
+- Step 3. ActivityStack通知ApplicationThread要进行Activity启动调度了，这里的ApplicationThread代表的是调用ActivityManagerService.startActivity接口的进程，对于通过点击应用程序图标的情景来说，这个进程就是Launcher了，而对于通过在Activity内部调用startActivity的情景来说，这个进程就是这个Activity所在的进程了；
+- Step 4. ApplicationThread不执行真正的启动操作，它通过调用ActivityManagerService.activityPaused接口进入到ActivityManagerService进程中，看看是否需要创建新的进程来启动Activity；
+- Step 5. 对于通过点击应用程序图标来启动Activity的情景来说，ActivityManagerService在这一步中，会调用startProcessLocked来创建一个新的进程；而对于通过在Activity内部调用startActivity来启动新的Activity来说，这一步是不需要执行的，因为新的Activity就在原来的Activity所在的进程中进行启动；
+- Step 6. ActivityManagerServic调用ApplicationThread.scheduleLaunchActivity接口，通知相应的进程执行启动Activity的操作；
+- Step 7. ApplicationThread把这个启动Activity的操作转发给ActivityThread，ActivityThread通过ClassLoader导入相应的Activity类，然后把它启动起来。
+
+**Android应用程序启动过程（点击应用程序图标）**
+
+- 一. Launcher通过Binder进程间通信机制通知ActivityManagerService，它要启动一个Activity；
+-  二. ActivityManagerService通过Binder进程间通信机制通知Launcher进入Paused状态；
+-  三. Launcher通过Binder进程间通信机制通知ActivityManagerService，它已经准备就绪进入Paused状态，于是ActivityManagerService就创建一个新的进程，用来启动一个ActivityThread实例，即将要启动的Activity就是在这个ActivityThread实例中运行；
+-  四. ActivityThread通过Binder进程间通信机制将一个ApplicationThread类型的Binder对象传递给ActivityManagerService，以便以后ActivityManagerService能够通过这个Binder对象和它进行通信；
+-  五. ActivityManagerService通过Binder进程间通信机制通知ActivityThread，现在一切准备就绪，它可以真正执行Activity的启动操作了。
+
+**Android应用程序内部启动Activity过程（startActivity）**
+
+-  一. 应用程序的MainActivity通过Binder进程间通信机制通知ActivityManagerService，它要启动一个新的Activity；
+-   二. ActivityManagerService通过Binder进程间通信机制通知MainActivity进入Paused状态；
+-  三. MainActivity通过Binder进程间通信机制通知ActivityManagerService，它已经准备就绪进入Paused状态，于是ActivityManagerService就准备要在MainActivity所在的进程和任务中启动新的Activity了；
+-  四. ActivityManagerService通过Binder进程间通信机制通知MainActivity所在的ActivityThread，现在一切准备就绪，它可以真正执行Activity的启动操作了。
+
+[Android 基础总结：Activity的生命周期](http://blog.csdn.net/liuhe688/article/details/6733407)
