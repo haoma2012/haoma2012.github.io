@@ -96,7 +96,7 @@
 
 <meta property="og:type" content="website">
 <meta property="og:title" content="紫阳的博客">
-<meta property="og:url" content="http://yoursite.com/tags/android/index.html">
+<meta property="og:url" content="http://yoursite.com/tags/Android/index.html">
 <meta property="og:site_name" content="紫阳的博客">
 <meta property="og:locale" content="zh-Hans">
 <meta name="twitter:card" content="summary">
@@ -129,13 +129,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/tags/android/"/>
+  <link rel="canonical" href="http://yoursite.com/tags/Android/"/>
 
 
 
 
 
-  <title>标签: android | 紫阳的博客</title>
+  <title>标签: Android | 紫阳的博客</title>
   
 
 
@@ -251,7 +251,7 @@
 
     <div id="posts" class="posts-collapse">
       <div class="collection-title">
-        <h1>android<small>标签</small>
+        <h1>Android<small>标签</small>
         </h1>
       </div>
 
@@ -263,9 +263,9 @@
 
       <h2 class="post-title">
         
-            <a class="post-title-link" href="/2019/01/08/Android-NDK开发汇总篇/" itemprop="url">
+            <a class="post-title-link" href="/2018/10/17/Android开发技术周报（一）/" itemprop="url">
               
-                <span itemprop="name">Android NDK开发汇总篇</span>
+                <span itemprop="name">Android开发技术周报(一)</span>
               
             </a>
         
@@ -273,9 +273,37 @@
 
       <div class="post-meta">
         <time class="post-time" itemprop="dateCreated"
-              datetime="2019-01-08T18:05:11+08:00"
-              content="2019-01-08" >
-          01-08
+              datetime="2018-10-17T21:37:29+08:00"
+              content="2018-10-17" >
+          10-17
+        </time>
+      </div>
+
+    </header>
+  </article>
+
+
+      
+        
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <h2 class="post-title">
+        
+            <a class="post-title-link" href="/2018/04/26/Android进阶笔记（一）/" itemprop="url">
+              
+                <span itemprop="name">Android进阶笔记（一）</span>
+              
+            </a>
+        
+      </h2>
+
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated"
+              datetime="2018-04-26T20:49:51+08:00"
+              content="2018-04-26" >
+          04-26
         </time>
       </div>
 
@@ -357,7 +385,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-count">7</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -630,45 +658,6 @@
             newcounter.save(null, {
               success: function(newcounter) {
                 var $element = $(document.getElementById(url));
-                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
-              },
-              error: function(newcounter, error) {
-                console.log('Failed to create');
-              }
-            });
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
-    }
-
-    $(function() {
-      var Counter = AV.Object.extend("Counter");
-      if ($('.leancloud_visitors').length == 1) {
-        addCount(Counter);
-      } else if ($('.post-title-link').length > 1) {
-        showTime(Counter);
-      }
-    });
-  </script>
-
-
-
-  
-
-  
-
-  
-
-  
-
-  
-
-</body>
-</html>
-l));
                 $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
               },
               error: function(newcounter, error) {
