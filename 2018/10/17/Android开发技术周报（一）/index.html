@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="深入理解Http请求和DNS解析Http 协议详解 1.什么是HTTP协议？  HTTP协议是Hyper Text Transfer Protocol（超文本传输协议）的缩写,是用于从万维网（WWW:World Wide Web ）服务器传输超文本到本地浏览器的传送协议。HTTP是一个基于TCP/IP通信协议来传递数据（HTML 文件, 图片文件, 查询结果等）。HTTP是一个属于应用层的面向对">
+<meta name="keywords" content="Android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android开发技术周报(一)">
+<meta property="og:url" content="http://yoursite.com/2018/10/17/Android开发技术周报（一）/index.html">
+<meta property="og:site_name" content="紫阳的博客">
+<meta property="og:description" content="深入理解Http请求和DNS解析Http 协议详解 1.什么是HTTP协议？  HTTP协议是Hyper Text Transfer Protocol（超文本传输协议）的缩写,是用于从万维网（WWW:World Wide Web ）服务器传输超文本到本地浏览器的传送协议。HTTP是一个基于TCP/IP通信协议来传递数据（HTML 文件, 图片文件, 查询结果等）。HTTP是一个属于应用层的面向对">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/2964446-5a35e17f298a48e1.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/551/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/2964446-fdfb1a8fce8de946.png">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/2964446-1c4cab46f270d8ee.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/2964446-aa923712d5218eeb.png">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/2964446-2b9562b3a8b72fb2.png">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/2964446-1fd7a0f3216c0530.jpg">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2017/9/14/faff9bb6a46a8114d87de846342e3e9c?imageView2/0/w/1280/h/960/format/webp/ignore-error/1">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2017/9/14/1d9dc24ad200fb1e8e08a628c028928a?imageView2/0/w/1280/h/960/format/webp/ignore-error/1">
+<meta property="og:updated_time" content="2018-11-30T13:43:57.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android开发技术周报(一)">
+<meta name="twitter:description" content="深入理解Http请求和DNS解析Http 协议详解 1.什么是HTTP协议？  HTTP协议是Hyper Text Transfer Protocol（超文本传输协议）的缩写,是用于从万维网（WWW:World Wide Web ）服务器传输超文本到本地浏览器的传送协议。HTTP是一个基于TCP/IP通信协议来传递数据（HTML 文件, 图片文件, 查询结果等）。HTTP是一个属于应用层的面向对">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/2964446-5a35e17f298a48e1.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/551/format/webp">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/10/17/Android开发技术周报（一）/"/>
+
+
+
+
+
+  <title>Android开发技术周报(一) | 紫阳的博客</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">紫阳的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/17/Android开发技术周报（一）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dehao@yang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1502346421&di=d5dddcc8504e58a709921075437056f6&imgtype=jpg&er=1&src=http%3A%2F%2Fww2.sinaimg.cn%2Fmw1024%2F64b5b174jw1esy5043qmtg206t07i7ol.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="紫阳的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android开发技术周报(一)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-17T21:37:29+08:00">
+                2018-10-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android进阶汇总/" itemprop="url" rel="index">
+                    <span itemprop="name">Android进阶汇总</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/10/17/Android开发技术周报（一）/" class="leancloud_visitors" data-flag-title="Android开发技术周报(一)">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <a id="more"></a>
+<h2 id="深入理解Http请求和DNS解析"><a href="#深入理解Http请求和DNS解析" class="headerlink" title="深入理解Http请求和DNS解析"></a>深入理解Http请求和DNS解析</h2><p><a href="https://www.jianshu.com/p/80e25cb1d81a" target="_blank" rel="external">Http 协议详解</a></p>
+<p>1.什么是HTTP协议？</p>
+<blockquote>
+<p>HTTP协议是Hyper Text Transfer Protocol（超文本传输协议）的缩写,是用于从万维网（WWW:World Wide Web ）服务器传输超文本到本地浏览器的传送协议。<br>HTTP是一个基于TCP/IP通信协议来传递数据（HTML 文件, 图片文件, 查询结果等）。HTTP是一个属于应用层的面向对象的协议，由于其简捷、快速的方式，适用于分布式超媒体信息系统。<br>HTTP协议工作于客户端-服务端架构为上。浏览器作为HTTP客户端通过URL向HTTP服务端即WEB服务器发送所有请求。Web服务器根据接收到的请求后，向客户端发送响应信息。</p>
+</blockquote>
+<p><img src="https://upload-images.jianshu.io/upload_images/2964446-5a35e17f298a48e1.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/551/format/webp" alt="client-server"></p>
+<p>2.主要特点：</p>
+<ul>
+<li>1.简单快速：客户端向服务器请求服务时，只需传送请求方法和路径。请求方法常用的有GET、HEAD、POST。每种方法规定了客户与服务器联系的类型不同。由于HTTP协议简单，使得HTTP服务器的程序规模小，因而通信速度很快。</li>
+<li>2.灵活：HTTP允许传输任意类型的数据对象。正在传输的类型由Content-Type加以标记。</li>
+<li>3.无连接：无连接的含义是限制每次连接只处理一个请求。服务器处理完客户的请求，并收到客户的应答后，即断开连接。采用这种方式可以节省传输时间。</li>
+<li>4.无状态：HTTP协议是无状态协议。无状态是指协议对于事务处理没有记忆能力。缺少状态意味着如果后续处理需要前面的信息，则它必须重传，这样可能导致每次连接传送的数据量增大。另一方面，在服务器不需要先前信息时它的应答就较快。</li>
+<li>5、支持B/S及C/S模式。</li>
+</ul>
+<p>3.<br>HTTP使用统一资源标识符（Uniform Resource Identifiers, URI）来传输数据和建立连接。URL是一种特殊类型的URI，包含了用于查找某个资源的足够的信息</p>
+<p>URL,全称是UniformResourceLocator, 中文叫统一资源定位符,是互联网上用来标识某一处资源的地址。以下面这个URL为例，介绍下普通URL的各部分组成：</p>
+<p>4.URL 统一资源定位符：<br>一个完整的URL包括以下几部分：</p>
+<ul>
+<li>1.协议部分：该URL的协议部分为“http：”，这代表网页使用的是HTTP协议。在Internet中可以使用多种协议，如HTTP，FTP等等本例中使用的是HTTP协议。在”HTTP”后面的“//”为分隔符</li>
+<li>2.域名部分：该URL的域名部分为“www.aspxfans.com”。一个URL中，也可以使用IP地址作为域名使用</li>
+<li>3.端口部分：跟在域名后面的是端口，域名和端口之间使用“:”作为分隔符。端口不是一个URL必须的部分，如果省略端口部分，将采用默认端口</li>
+<li>4.虚拟目录部分：从域名后的第一个“/”开始到最后一个“/”为止，是虚拟目录部分。虚拟目录也不是一个URL必须的部分。本例中的虚拟目录是“/news/”</li>
+<li>5.文件名部分：从域名后的最后一个“/”开始到“？”为止，是文件名部分，如果没有“?”,则是从域名后的最后一个“/”开始到“#”为止，是文件部分，如果没有“？”和“#”，那么从域名后的最后一个“/”开始到结束，都是文件名部分。本例中的文件名是“index.asp”。文件名部分也不是一个URL必须的部分，如果省略该部分，则使用默认的文件名</li>
+<li>6.锚部分：从“#”开始到最后，都是锚部分。本例中的锚部分是“name”。锚部分也不是一个URL必须的部分</li>
+<li>7.参数部分：从“？”开始到“#”为止之间的部分为参数部分，又称搜索部分、查询部分。本例中的参数部分为“boardID=5&amp;ID=24618&amp;page=1”。参数可以允许有多个参数，参数与参数之间用“&amp;”作为分隔符。</li>
+</ul>
+<blockquote>
+<p>URI和URL的区别:URI是以一种抽象的，高层次概念定义统一资源标识，而URL和URN则是具体的资源标识的方式。URL和URN都是一种URI。笼统地说，每个URL 都是 URI，但不一定每个 URI 都是 URL。这是因为 URI 还包括一个子类，即统一资源名称 (URN)，它命名资源但不指定如何定位资源。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">1.URI，是uniform resource identifier，统一资源标识符，用来唯一的标识一个资源。</div><div class="line">URI一般由三部组成：</div><div class="line">①访问资源的命名机制</div><div class="line">②存放资源的主机名</div><div class="line">③资源自身的名称，由路径表示，着重强调于资源。</div><div class="line"></div><div class="line">2.URL是uniform resource locator，统一资源定位器，它是一种具体的URI，</div><div class="line">即URL可以用来标识一个资源，而且还指明了如何locate这个资源。</div><div class="line">URL一般由三部组成：</div><div class="line">①协议(或称为服务方式)</div><div class="line">②存有该资源的主机IP地址(有时也包括端口号)</div><div class="line">③主机资源的具体地址。如目录和文件名等</div><div class="line"></div><div class="line">3.URN，uniform resource name，统一资源命名，是通过名字来标识资源，比如mailto:java-net@java.sun.com。</div></pre></td></tr></table></figure>
+<p>5.HTTP之请求消息Request：</p>
+<p>客户端发送一个HTTP请求到服务器的请求消息包括以下格式：</p>
+<p><strong>请求行（request line）、请求头部（header）、空行和请求数据四个部分组成。</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/2964446-fdfb1a8fce8de946.png" alt="Http 请求消息结构"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">GET /562f25980001b1b106000338.jpg HTTP/1.1  // get请求 url http协议版本</div><div class="line">Host    img.mukewang.com</div><div class="line">User-Agent  Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36</div><div class="line">Accept  image/webp,image/*,*/*;q=0.8</div><div class="line">Referer http://www.imooc.com/</div><div class="line">Accept-Encoding gzip, deflate, sdch</div><div class="line">Accept-Language zh-CN,zh;q=0.8</div><div class="line"></div><div class="line">// POST请求</div><div class="line">POST / HTTP1.1</div><div class="line">Host:www.wrox.com</div><div class="line">User-Agent:Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 2.0.50727; .NET CLR 3.0.04506.648; .NET CLR 3.5.21022)</div><div class="line">Content-Type:application/x-www-form-urlencoded</div><div class="line">Content-Length:40</div><div class="line">Connection: Keep-Alive</div><div class="line"></div><div class="line">name=Professional%20Ajax&amp;publisher=Wiley</div><div class="line"></div><div class="line">第一部分：请求行，第一行明了是post请求，以及http1.1版本。</div><div class="line">第二部分：请求头部，第二行至第六行。</div><div class="line">第三部分：空行，第七行的空行。</div><div class="line">第四部分：请求数据，第八行。</div></pre></td></tr></table></figure></p>
+<p>6.HTTP之响应消息Response：<br>一般情况下，服务器接收并处理客户端发过来的请求后会返回一个HTTP的响应消息。<br><strong>HTTP响应也由四个部分组成，分别是：状态行、消息报头、空行和响应正文。</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/2964446-1c4cab46f270d8ee.jpg" alt="http响应消息格式">;<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">HTTP/1.1 200 OK   </div><div class="line">Date: Fri, 22 May 2009 06:07:21 GMT</div><div class="line">Content-Type: text/html; charset=UTF-8</div><div class="line"></div><div class="line">&lt;html&gt;</div><div class="line">      &lt;head&gt;&lt;/head&gt;</div><div class="line">      &lt;body&gt;</div><div class="line">            &lt;!--body goes here--&gt;</div><div class="line">      &lt;/body&gt;</div><div class="line">&lt;/html&gt;</div><div class="line"></div><div class="line">第一部分：状态行，由HTTP协议版本号， 状态码， 状态消息 三部分组成。</div><div class="line">第一行为状态行，（HTTP/1.1）表明HTTP版本为1.1版本，状态码为200，状态消息为（ok）</div><div class="line"></div><div class="line">第二部分：消息报头，用来说明客户端要使用的一些附加信息</div><div class="line">第二行和第三行为消息报头，</div><div class="line">Date:生成响应的日期和时间；Content-Type:指定了MIME类型的HTML(text/html),编码类型是UTF-8</div><div class="line"></div><div class="line">第三部分：空行，消息报头后面的空行是必须的</div><div class="line">第四部分：响应正文，服务器返回给客户端的文本信息。</div></pre></td></tr></table></figure></p>
+<p>7.HTTP状态码：<br>1xx：指示信息–表示请求已接收，继续处理<br>2xx：成功–表示请求已被成功接收、理解、接受<br>3xx：重定向–要完成请求必须进行更进一步的操作<br>4xx：客户端错误–请求有语法错误或请求无法实现<br>5xx：服务器端错误–服务器未能实现合法的请求</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">200 OK                        //客户端请求成功</div><div class="line">400 Bad Request               //客户端请求有语法错误，不能被服务器所理解</div><div class="line">401 Unauthorized              //请求未经授权，这个状态代码必须和WWW-Authenticate报头域一起使用 </div><div class="line">403 Forbidden                 //服务器收到请求，但是拒绝提供服务</div><div class="line">404 Not Found                 //请求资源不存在，eg：输入了错误的URL</div><div class="line">500 Internal Server Error     //服务器发生不可预期的错误</div><div class="line">503 Server Unavailable        //服务器当前不能处理客户端的请求，一段时间后可能恢复正常</div></pre></td></tr></table></figure>
+<p>8.Http请求方法：<br>HTTP1.0定义了三种请求方法： GET, POST 和 HEAD方法。<br>HTTP1.1新增了五种请求方法：OPTIONS, PUT, DELETE, TRACE 和 CONNECT 方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">GET      请求指定的页面信息，并返回实体主体。</div><div class="line">HEAD     类似于get请求，只不过返回的响应中没有具体的内容，用于获取报头</div><div class="line">POST     向指定资源提交数据进行处理请求（例如提交表单或者上传文件）。数据被包含在请求体中。</div><div class="line">POST请求可能会导致新的资源的建立和/或已有资源的修改。</div><div class="line">PUT      从客户端向服务器传送的数据取代指定的文档的内容。</div><div class="line">DELETE   请求服务器删除指定的页面。</div><div class="line">CONNECT  HTTP/1.1协议中预留给能够将连接改为管道方式的代理服务器。</div><div class="line">OPTIONS  允许客户端查看服务器的性能。</div><div class="line">TRACE    回显服务器收到的请求，主要用于测试或诊断。</div></pre></td></tr></table></figure>
+<p><strong>GET和POST请求的区别</strong></p>
+<ul>
+<li>1.GET提交，请求的数据会附在URL之后（就是把数据放置在HTTP协议头中），以?分割URL和传输数据，多个参数用&amp;连接；POST提交：把提交的数据放置在是HTTP包的包体中。</li>
+<li><p>2.传输数据的大小：<br>首先声明：HTTP协议没有对传输的数据大小进行限制，HTTP协议规范也没有对URL长度进行限制。<br>而在实际开发中存在的限制主要有：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">GET:特定浏览器和服务器对URL长度有限制，例如 IE对URL长度的限制是2083字节(2K+35)。对于其他浏览器，如Netscape、FireFox等，理论上没有长度限制，</div><div class="line">其限制取决于操作系统的支持。</div><div class="line"></div><div class="line">因此对于GET提交时，传输数据就会受到URL长度的 限制。</div><div class="line"></div><div class="line">POST:由于不是通过URL传值，理论上数据不受 限。但实际各个WEB服务器会规定对post提交数据大小进行限制，</div><div class="line">Apache、IIS6都有各自的配置。</div></pre></td></tr></table></figure>
+</li>
+<li><p>3.安全性:<br>POST的安全性要比GET的安全性高。比如：通过GET提交数据，用户名和密码将明文出现在URL上，<br>因为(1)登录页面有可能被浏览器缓存；<br>(2)其他人查看浏览器的历史纪录，那么别人就可以拿到你的账号和密码了，除此之外，<br>使用GET提交数据还可能会造成Cross-site request forgery攻击</p>
+</li>
+</ul>
+<p>9.HTTP工作原理：</p>
+<blockquote>
+<p>HTTP协议定义Web客户端如何从Web服务器请求Web页面，以及服务器如何把Web页面传送给客户端。HTTP协议采用了请求/响应模型。客户端向服务器发送一个请求报文，请求报文包含请求的方法、URL、协议版本、请求头部和请求数据。服务器以一个状态行作为响应，响应的内容包括协议的版本、成功或者错误代码、服务器信息、响应头部和响应数据。</p>
+</blockquote>
+<p>10.TCP三次握手：</p>
+<p>所谓三次握手（Three-Way Handshake）即建立TCP连接，就是指建立一个TCP连接时，需要客户端和服务端总共发送3个包以确认连接的建立。在socket编程中，这一过程由客户端执行connect来触发，整个流程如下图所示：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/2964446-aa923712d5218eeb.png" alt="TCP三次握手"></p>
+<p>（1）第一次握手：Client将标志位SYN置为1，随机产生一个值seq=J，并将该数据包发送给Server，Client进入SYN_SENT状态，等待Server确认。</p>
+<p>（2）第二次握手：Server收到数据包后由标志位SYN=1知道Client请求建立连接，Server将标志位SYN和ACK都置为1，ack=J+1，随机产生一个值seq=K，并将该数据包发送给Client以确认连接请求，Server进入SYN_RCVD状态。</p>
+<p>（3）第三次握手：Client收到确认后，检查ack是否为J+1，ACK是否为1，如果正确则将标志位ACK置为1，ack=K+1，并将该数据包发送给Server，Server检查ack是否为K+1，ACK是否为1，如果正确则连接建立成功，Client和Server进入ESTABLISHED状态，完成三次握手，随后Client与Server之间可以开始传输数据了。</p>
+<p><strong>TCP四次挥手：</strong></p>
+<p>所谓四次挥手（Four-Way Wavehand）即终止TCP连接，就是指断开一个TCP连接时，需要客户端和服务端总共发送4个包以确认连接的断开。在socket编程中，这一过程由客户端或服务端任一方执行close来触发，整个流程如下图所示：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/2964446-2b9562b3a8b72fb2.png" alt="TCP四次挥手"></p>
+<p>（1）第一次挥手：Client发送一个FIN，用来关闭Client到Server的数据传送，Client进入FIN_WAIT_1状态。</p>
+<p>（2）第二次挥手：Server收到FIN后，发送一个ACK给Client，确认序号为收到序号+1（与SYN相同，一个FIN占用一个序号），Server进入CLOSE_WAIT状态。</p>
+<p>（3）第三次挥手：Server发送一个FIN，用来关闭Server到Client的数据传送，Server进入LAST_ACK状态。</p>
+<p>（4）第四次挥手：Client收到FIN后，Client进入TIME_WAIT状态，接着发送一个ACK给Server，确认序号为收到序号+1，Server进入CLOSED状态，完成四次挥手。</p>
+<p>TCP协议分层：<br><img src="https://upload-images.jianshu.io/upload_images/2964446-1fd7a0f3216c0530.jpg" alt="TCP/IP协议分层"></p>
+<p><a href="https://juejin.im/post/59ba146c6fb9a00a4636d8b6" target="_blank" rel="external">深入理解Http请求、DNS劫持与解析</a></p>
+<p><img src="https://user-gold-cdn.xitu.io/2017/9/14/faff9bb6a46a8114d87de846342e3e9c?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="DNS解析过程"></p>
+<p>1.系统会检查浏览器缓存中有没有这个域名对应的解析过的IP地址，如果缓存中有，这个解析过程就将结束。浏览器缓存是受这个域名的失效时间和缓存的空间大小控制的。</p>
+<p>2.如果用户的浏览器缓存中没有，浏览器会查找操作系统缓存中即为本地的Host文件。</p>
+<p>3.如果本地Host文件中没有那么操作系统会把这个域名发送给这里设置的LocalDNS，也就是本地区的域名服务器。这个DNS通常都提供给你本地互联网接入的一个DNS解析服务。这个专门的域名解析服务器性能都会很好，它们一般都会缓存域名解析结果，当然缓存时间是受域名的失效时间控制的，一般缓存空间不是影响域名失效的主要因素。大约90%的域名解析都到这里就已经完成了，所以LDNS主要承担了域名的解析工作。</p>
+<p>4.如果LDNS仍然没有命中，就直接到Root Server域名服务器请求解析</p>
+<p>5.根域名服务器返回给本地域名服务器一个所查询的域的主域名服务器（gTLD Server）地址。gTLD是国际顶级域名服务器，如.com，.cn、.org等。全球只有13台左右。</p>
+<p>6.本地域名服务器（Local DNS Server）再向上一步返回的gTLD服务器发送请求。</p>
+<p>7.接受请求的gTLD服务器查找并返回此域名对应的Name Server域名服务器的地址，这个Name Server通常就是你注册的域名服务器，例如你在某个域名服务提供商申请的域名，那么这个域名解析任务就由这个域名提供商的服务器来完成</p>
+<p>8.Name Server域名服务器会查询存储的域名和IP的映射关系表，正常情况下都根据域名得到目标IP记录，连同一个TTL值返回给DNS Server域名服务器。</p>
+<p>9.返回该域名对应的IP和TTL值，Local DNS Server会缓存这个域名和IP的对应关系，缓存的时间由TTL值控制。</p>
+<p>10.把解析的结果返回给用户，用户根据TTL值缓存在本地系统缓存中，域名解析过程结束。</p>
+<ul>
+<li>CDN:<br>CDN，全称Content Delivery Network，根本的作用是将网站的内容发布到最接近用户的网络“边缘”，使用户可以就近取得所需的内容，提高用户访问网站的响应速度。他-有别于镜像，它比镜像更智能，可以这样做一个比喻：CDN=镜像（Mirror） + 缓存（cache） + 整体负载均衡（GSLB），因而，CDN可以明显提高Internet中信息流动的效率。目前CDN都以缓存网站中的静态数据为主，如CSS、JS、图片和静态网页等数据。用户在从主站服务器请求到动态内容后再从CDN上下载这些静态数据，从而加速网页数据内容的下载速度，如淘宝有90%以上的数据都是由CDN来提供的。这里引用一个网上比较形象的例子：A家的网速 100M的，但他只用了10M的速度，B家的网速是10M的，但是他需要15M的速度才行。怎么办呢。 C是一家CDN服务商，在A家有个节点（就像A是一个赞助商一样）B在C家买了CDN加速服务。当B的速度不够的时候，CDN加速就会选择有节余的节点来帮B，提高B的速度。这样B的速度就能达到或超过15M ，皆大欢喜。A没浪费，B速度有了，C赚了钱。 当C的节点在全国都有，非常多的时候。那么你用C家的CDN加速服务，你就会健步如飞了。</li>
+</ul>
+<p>负载均衡就是对工作任务进行平衡、分摊到多个操作单元上执行，如图片服务器、应用服务器等，共同完成工作任务。它可以提高服务器响应速度及利用效率，避免软件或者硬件模块出现单点失效，解决网络拥塞问题，实现地理位置无关性，为用户提供较一致的访问质量。<br><img src="https://user-gold-cdn.xitu.io/2017/9/14/1d9dc24ad200fb1e8e08a628c028928a?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt=""></p>
+<hr>
+<h2 id="MarkDown-常用样式汇总"><a href="#MarkDown-常用样式汇总" class="headerlink" title="MarkDown 常用样式汇总"></a>MarkDown 常用样式汇总</h2><blockquote>
+<font color="#ff00ff"> 托尔斯泰曾这样说：“成功的人都是相似的，不成功的人，却各有各的失败。”  </font>
+
+</blockquote>
+<p>1.图片引用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">1.引用网络图片： ![](url) </div><div class="line">2.引用本地吐图片：![](/images/图片文件名) </div><div class="line"></div><div class="line">代码块设置： normal，night， night blue， night bright， night eighties</div><div class="line"></div><div class="line"># Code Highlight theme</div><div class="line"># Available value: normal | night | night eighties | night blue | night bright</div><div class="line"># https://github.com/chriskempson/tomorrow-theme</div><div class="line">highlight_theme: normal</div></pre></td></tr></table></figure></p>
+<p>2.添加背景音乐;</p>
+<p>参考：</p>
+<ul>
+<li><a href="https://www.jianshu.com/p/c8259702a22e" target="_blank" rel="external">常用字体设置</a></li>
+<li><a href="https://www.jianshu.com/p/b8c9beb07d1c" target="_blank" rel="external">Hexo博客搭建全攻略(四)高级应用</a></li>
+<li><a href="https://juejin.im/post/5a6ee00ef265da3e4b770ac1" target="_blank" rel="external">关于HEXO搭建个人博客的点点滴滴</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/06/30/PHP后端开发系列——基础学习/" rel="next" title="PHP后端开发系列——基础学习">
+                <i class="fa fa-chevron-left"></i> PHP后端开发系列——基础学习
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/01/08/Android-NDK开发汇总篇/" rel="prev" title="Android NDK开发汇总篇">
+                Android NDK开发汇总篇 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1502346421&di=d5dddcc8504e58a709921075437056f6&imgtype=jpg&er=1&src=http%3A%2F%2Fww2.sinaimg.cn%2Fmw1024%2F64b5b174jw1esy5043qmtg206t07i7ol.gif"
+               alt="dehao@yang" />
+          <p class="site-author-name" itemprop="name">dehao@yang</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">22</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#深入理解Http请求和DNS解析"><span class="nav-number">1.</span> <span class="nav-text">深入理解Http请求和DNS解析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MarkDown-常用样式汇总"><span class="nav-number">2.</span> <span class="nav-text">MarkDown 常用样式汇总</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dehao@yang</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Gemini
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("SQRi8Ar8YCn4c3G97nJ9JsoK-gzGzoHsz", "Hu3hKNQdfDQNJ6zYikQwidIj");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

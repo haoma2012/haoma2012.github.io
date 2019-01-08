@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="android," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="NDK 全称 Native Development Kit，可以让您在 Android 应用中调用 C 或 C++ 代码的工具。 1、NDK 可以生成 .so 文件, 方便代码共享；2、增加反编译的难度；3、提高性能。">
+<meta name="keywords" content="android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android NDK开发汇总篇">
+<meta property="og:url" content="http://yoursite.com/2019/01/08/Android-NDK开发汇总篇/index.html">
+<meta property="og:site_name" content="紫阳的博客">
+<meta property="og:description" content="NDK 全称 Native Development Kit，可以让您在 Android 应用中调用 C 或 C++ 代码的工具。 1、NDK 可以生成 .so 文件, 方便代码共享；2、增加反编译的难度；3、提高性能。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4267785-04482f5534b2e5bf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4267785-af1635af300713ae.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4267785-a7735976b4ed6d14.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/340">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4267785-018d07eb1e8d3b3a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4267785-3ee16d0e71d89142.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2019-01-08T10:06:49.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android NDK开发汇总篇">
+<meta name="twitter:description" content="NDK 全称 Native Development Kit，可以让您在 Android 应用中调用 C 或 C++ 代码的工具。 1、NDK 可以生成 .so 文件, 方便代码共享；2、增加反编译的难度；3、提高性能。">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/4267785-04482f5534b2e5bf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/01/08/Android-NDK开发汇总篇/"/>
+
+
+
+
+
+  <title>Android NDK开发汇总篇 | 紫阳的博客</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">紫阳的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/08/Android-NDK开发汇总篇/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dehao@yang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1502346421&di=d5dddcc8504e58a709921075437056f6&imgtype=jpg&er=1&src=http%3A%2F%2Fww2.sinaimg.cn%2Fmw1024%2F64b5b174jw1esy5043qmtg206t07i7ol.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="紫阳的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android NDK开发汇总篇</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-08T18:05:11+08:00">
+                2019-01-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2019/01/08/Android-NDK开发汇总篇/" class="leancloud_visitors" data-flag-title="Android NDK开发汇总篇">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>NDK 全称 Native Development Kit，可以让您在 Android 应用中调用 C 或 C++ 代码的工具。</p>
+<p>1、NDK 可以生成 .so 文件, 方便代码共享；<br>2、增加反编译的难度；<br>3、提高性能。</p>
+<a id="more"></a>
+<h2 id="1-NDK简介"><a href="#1-NDK简介" class="headerlink" title="1.NDK简介"></a>1.NDK简介</h2><blockquote>
+<p>NDK 全称 Native Development Kit，可以让您在 Android 应用中调用 C 或 C++ 代码的工具。</p>
+</blockquote>
+<p><strong>NDK的好处</strong></p>
+<ul>
+<li>1.Android底层是Linux，Linux本身就是使用C/C++语言，Android使用了一个Dalvik虚拟机才使得应用程序开发使用Java语言； </li>
+<li>2.Dalvik支持JNI编程方式，第三方应用完全可以通过JNI调用自己的C/C++动态库（so文件），使用“Java+C”编程方式； </li>
+<li>3.NDK（Native Development Kit）是“Java+C”开发的工具库，保证程序的兼容性、调试性和调用API方便性，也避免Java的不足，如安全性； </li>
+</ul>
+<p>1、NDK 可以生成 .so 文件, 方便代码共享；<br>2、增加反编译的难度；<br>3、提高性能。</p>
+<p><strong>目前ndk开发有三种编译手段:</strong></p>
+<ul>
+<li><ol>
+<li>ndk-build。这是从eclipse时代就存在的一种编译方式，ndk-build是ndk开发包中的一个可执行文件，在这里不赘述，因为目前Android Studio已经普及，新带来的编译方式十分便捷。</li>
+</ol>
+</li>
+<li><ol>
+<li><a href="https://link.jianshu.com?t=http://tools.android.com/tech-docs/new-build-system/gradle-experimental" target="_blank" rel="external">gradle-experimental</a>。这是一款Android Gradle插件，跟我们常用的<code>classpath &#39;com.android.tools.build:gradle:2.3.0&#39;</code>是同一个概念的东西，截至写作时，已经发展到了<code>0.10.0</code>版本，以后可能取代现有的gradle插件。</li>
+</ol>
+</li>
+<li><ol>
+<li>CMake。CMake是个开源的跨平台的自动化构建系统，也是目前Studio默认集成的构建系统。<code>CMakeLists.txt</code>的配置这里不详细讲解了，在创建include c++的新项目时，Studio会帮你做好默认配置。</li>
+</ol>
+</li>
+<li><p><a href="https://blog.csdn.net/afei__/article/details/84069876" target="_blank" rel="external">Android.mk 语法和变量介绍</a></p>
+</li>
+<li><a href="https://blog.csdn.net/afei__/article/details/81201039" target="_blank" rel="external">CMakeLists.txt 语法介绍与实例演练</a></li>
+</ul>
+<h4 id="1-NDK简单构建"><a href="#1-NDK简单构建" class="headerlink" title="1.NDK简单构建"></a>1.NDK简单构建</h4><blockquote>
+<p>一开始我们需要在 jni 目录下新建 Android.mk、Application.mk、HelloCPP.cpp 文件。</p>
+</blockquote>
+<p><img src="https://upload-images.jianshu.io/upload_images/4267785-04482f5534b2e5bf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="创建jni目录"></p>
+<h5 id="1-创建Android-mk"><a href="#1-创建Android-mk" class="headerlink" title="1.创建Android.mk"></a>1.创建Android.mk</h5><p>必须在 jni 文件夹内创建 Android.mk 配置文件， ndk-build 脚本将查看此文件，其中定义了模块及其名称、要编译的源文件、版本标志以及要链接的库。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"># 构建系统提供的宏函数 my-dir 将返回当前目录（包含 Android.mk 文件本身的目录）的路径，基本上是固定的，不需要去动</div><div class="line">LOCAL_PATH := $(call my-dir)</div><div class="line"># 会清除很多 LOCAL_XXX 变量，不会清除 LOCAL_PATH，基本上是固定的，不需要去动</div><div class="line">include $(CLEAR_VARS)</div><div class="line"># 需要构建模块的名称，会自动生成相应的 libNDKSample.so 文件，每个模块名称必须唯一，且不含任何空格</div><div class="line">LOCAL_MODULE := NDKSample</div><div class="line"># 包含要构建到模块中的 C 或 C++ 源文件列表</div><div class="line">LOCAL_SRC_FILES := HelloCPP.cpp</div><div class="line"># 指定这个模块里会用到哪些原生 API，详见：https://developer.android.google.cn/ndk/guides/stable_apis.html</div><div class="line">LOCAL_LDLIBS := -llog</div><div class="line"># 帮助系统将所有内容连接到一起，固定的，不需要去动</div><div class="line">include $(BUILD_SHARED_LIBRARY)</div></pre></td></tr></table></figure>
+<h5 id="2-创建Application-mk"><a href="#2-创建Application-mk" class="headerlink" title="2.创建Application.mk"></a>2.创建Application.mk</h5><p>用于描述应用需要的原生模块，模块可以是静态库、共享库或可执行文件。Application.mk 通常也位于 jni 目录下。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"># 选择不同的 ABI，多个使用空格作为分隔符，全部是all</div><div class="line">APP_ABI := all</div><div class="line"># 指定要使用的运行时</div><div class="line">APP_STL := gnustl_static</div></pre></td></tr></table></figure>
+<h5 id="3-调用-C-或-C-”-调用-C-或-C"><a href="#3-调用-C-或-C-”-调用-C-或-C" class="headerlink" title="3.调用 C 或 C++”)调用 C 或 C++"></a>3.调用 C 或 C++”)调用 C 或 C++</h5><p>配置好 Android.mk 和 Application.mk，有两种方法可以调用 C 或 C++ 代码。现在我们写个方法，然后演示下 Android 这边的调用。</p>
+<h5 id="3-HelloCPP-cpp"><a href="#3-HelloCPP-cpp" class="headerlink" title="3.HelloCPP.cpp"></a>3.HelloCPP.cpp</h5><p>简单返回一个字符串，C 或 C++ 这块我也不是很懂，能看懂大概意思，会调用就好了。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">#include &lt;jni.h&gt;</div><div class="line"></div><div class="line">extern &quot;C&quot;</div><div class="line">JNIEXPORT jstring JNICALL Java_com_ebmob_testluaview_jni_TestJniDemoActivity_sayHello(JNIEnv *env, jobject instance) &#123;</div><div class="line">    //从 C++ 传字符串到 Java</div><div class="line">    return env-&gt;NewStringUTF(&quot;Hello from C++&quot;);</div><div class="line">&#125;</div><div class="line"></div><div class="line">//extern &quot;C&quot;</div><div class="line">//JNIEXPORT void JNICALL</div><div class="line">//Java_com_ebmob_testluaview_jni_TestJniDemoActivity_sayHello(JNIEnv *env, jobject instance) &#123;</div><div class="line">//</div><div class="line">//    // TODO</div><div class="line">//</div><div class="line">//&#125;</div></pre></td></tr></table></figure></p>
+<p>说明：</p>
+<ul>
+<li>1、extern “C”：实现 C 和 C++ 的混合编程，用于 C++ 代码调用 C 的函数；</li>
+<li>2、JNIEXPORT 和 JNICALL，用于标识函数用途的两个宏；</li>
+<li>3、jstring，JNI 中的数据类型，对应 Java 中 String 类型，还有 8 种基本数据类型 jbyte、jchar、jshort、jint、jlong、jfloat、jdouble、jboolean，引用数据类型 jintArray、jshortArray、jlongArray 等。</li>
+<li>4、函数命名规则：Java<em>类全路径</em>方法名，这里的类是那个调用 C 或 C++ 的类，像这里的 Java_com_ebmob_testluaview_jni_TestJniDemoActivity_sayHello ；</li>
+<li>5、函数至少有两个参数，第一个参数 ：JNIEnv* 是定义任意 native 函数的第一个参数（包括调用 JNI 的 RegisterNatives 函数注册的函数），指向 JVM 函数表的指针，函数表中的每一个入口指向一个 JNI 函数，每个函数用于访问 JVM 中特定的数据结构；第二个参数：调用 Java 中 native 方法的实例或 Class 对象，如果这个 native 方法是实例方法，则该参数是 jobject，如果是静态方法，则是 jclass。</li>
+</ul>
+<h5 id="4-配置app下的build-gradle-执行sync-project"><a href="#4-配置app下的build-gradle-执行sync-project" class="headerlink" title="4.配置app下的build.gradle,执行sync project"></a>4.配置app下的build.gradle,执行sync project</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">android &#123;</div><div class="line">    compileSdkVersion 27</div><div class="line">    defaultConfig &#123;</div><div class="line">        //……</div><div class="line">        externalNativeBuild &#123;</div><div class="line">            ndkBuild &#123;</div><div class="line">                //指定 Application.mk 的路径</div><div class="line">                arguments &quot;NDK_APPLICATION_MK:=src/main/jni/Application.mk&quot;</div><div class="line">                //指定生成哪些平台的 so 文件</div><div class="line">                //abiFilters &quot;armeabi-v7a&quot;, &quot;armeabi&quot;</div><div class="line">                //cFlags 和 cppFlags 是用来设置环境变量的, 一般不需要动</div><div class="line">                cFlags &quot;-DTEST_C_FLAG1&quot;, &quot;-DTEST_C_FLAG2&quot;</div><div class="line">                cppFlags &quot;-DTEST_CPP_FLAG2&quot;, &quot;-DTEST_CPP_FLAG2&quot;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    externalNativeBuild &#123;</div><div class="line">        ndkBuild &#123;</div><div class="line">            //指定 Android.mk 的路径</div><div class="line">            path &quot;src/main/jni/Android.mk&quot;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><img src="https://upload-images.jianshu.io/upload_images/4267785-af1635af300713ae.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="效果"></p>
+<h4 id="2-使用CMake构建脚本"><a href="#2-使用CMake构建脚本" class="headerlink" title="2.使用CMake构建脚本"></a>2.使用CMake构建脚本</h4><p><strong>1.安装 CMake；</strong></p>
+<blockquote>
+<p>Tools &gt; Android &gt; SDK Manager，点击 SDK Tools 标签，选中 CMake，点击 Apply 安装；</p>
+</blockquote>
+<p><strong>2.新建 CMakeLists.txt</strong></p>
+<p>CMakeLists.txt 主要用于声明CMake使用版本、so库名称、C/CPP文件路径等信息。</p>
+<ul>
+<li>1、从 IDE 的左侧打开 Project 窗格并从下拉菜单中选择 Project 视图；</li>
+<li>2、右键点击 您的模块 的根目录并选择 New &gt; File；</li>
+<li>3、输入“CMakeLists.txt”作为文件名并点击 OK；</li>
+</ul>
+<p>CMakeLists.txt 示例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"># 设置构建本地库所需的最小版本</div><div class="line">cmake_minimum_required(VERSION 3.4.1)</div><div class="line"># 编译出一个动态库 HelloCPP，源文件只有 src/main/cpp/HelloCPP.cpp</div><div class="line">add_library( # 设置库的名称，即 SO 文件的名称</div><div class="line">        NDKSample</div><div class="line">        # STATIC：静态库，是目标文件的归档文件，在链接其它目标的时候使用。</div><div class="line">        # SHARED：动态库，会被动态链接，在运行时被加载。</div><div class="line">        # MODULE：模块库，是不会被链接到其它目标中的插件，但是可能会在运行时使用dlopen-系列的函数动态链接。</div><div class="line">        SHARED</div><div class="line">        # 要编译的源代码文件</div><div class="line">        src/main/cpp/HelloCPP.cpp )</div><div class="line"># 指定的是头文件的目录</div><div class="line"># include_directories(src/main/cpp/include/)</div><div class="line"># 添加 NDK API，Android NDK 提供了一套实用的原生 API 和库，通过将 NDK 库包含到项目的 CMakeLists.txt 脚本文件中。</div><div class="line">find_library( # 定位 Android 特定的日志支持库并将其路径存储在 log-lib 中</div><div class="line">        log-lib</div><div class="line">        # Specifies the name of the NDK library that</div><div class="line">        # CMake needs to locate.</div><div class="line">        log )</div><div class="line"># 为了确保您的原生库可以在 log 库中调用函数，您需要使用 CMake 构建脚本中的 target_link_libraries() 命令关联库。</div><div class="line">target_link_libraries( # Specifies the target library.</div><div class="line">        NDKSample</div><div class="line">        # Links the log library to the target library.</div><div class="line">        $&#123;log-lib&#125; )</div></pre></td></tr></table></figure></p>
+<p><strong>3.配置build.gradle</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">android &#123;</div><div class="line">    defaultConfig &#123;</div><div class="line">        //……</div><div class="line">        externalNativeBuild &#123;</div><div class="line">            cmake &#123;</div><div class="line">                //设置 C++ flag，可选配置，-frtti 表示项目支持RTTI；-fexceptions 表示当前项目支持C++异常处理</div><div class="line">                cppFlags &quot;-frtti -fexceptions&quot;</div><div class="line">                //arguments 语法：-D + 变量，更多变量：https://developer.android.com/ndk/guides/cmake.html</div><div class="line">                arguments &quot;-DANDROID_ARM_NEON=TRUE&quot;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        // 指定 ABI</div><div class="line">        ndk &#123;</div><div class="line">            // Specifies the ABI configurations of your native</div><div class="line">            // libraries Gradle should build and package with your APK.</div><div class="line">            abiFilters &apos;armeabi&apos;, &apos;armeabi-v7a&apos;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    externalNativeBuild &#123;</div><div class="line">        cmake &#123;</div><div class="line">            //指明 CMakeList.txt 路径</div><div class="line">            path &quot;CMakeLists.txt&quot;</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<ul>
+<li><a href="http://wuxiaolong.me/2017/12/27/AndroidNDK/" target="_blank" rel="external">Android NDK 入门与实践</a></li>
+<li><a href="https://developer.android.com/training/articles/perf-jni" target="_blank" rel="external">https://developer.android.com/training/articles/perf-jni</a></li>
+<li><a href="https://juejin.im/post/5a5ff12951882573351a58a8" target="_blank" rel="external">Android NDK开发（一） 使用CMake构建工具进行NDK开发</a></li>
+<li><a href="https://blog.csdn.net/column/details/25320.html" target="_blank" rel="external">Android NDK 开发，从入门到精通</a></li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/4267785-a7735976b4ed6d14.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/340" alt="效果"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line">static &#123;</div><div class="line">        // load lib</div><div class="line">        try &#123;</div><div class="line">            System.loadLibrary(&quot;NDKSample&quot;);</div><div class="line">        &#125; catch (Throwable e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125;</div><div class="line">    // 定义Native方法</div><div class="line">    public native String sayHello();</div><div class="line">    public native int getTheSum(int x, int y);</div><div class="line"></div><div class="line">// 简单使用：</div><div class="line"> mTvHello.setText(sayHello());</div><div class="line">mSumTv.setText(getTheSum(100, 100) + &quot;&quot;);</div><div class="line"></div><div class="line">// HelloCpp.cpp</div><div class="line">#include &lt;jni.h&gt;</div><div class="line">#include &quot;HelloCpp.h&quot;</div><div class="line">#include&lt;android/log.h&gt;</div><div class="line"></div><div class="line">jstring</div><div class="line">Java_com_ebmob_testluaview_jni_TestJniDemoActivity_sayHello(JNIEnv *env, jobject thiz) &#123;</div><div class="line"></div><div class="line">    //测试代码, 没有任何意义</div><div class="line">    char *app_key = &quot;5465465416948&quot;;</div><div class="line">    char *hello = &quot;Hello from C++&quot;;</div><div class="line"></div><div class="line">    //生成 Java 中的字符串对象</div><div class="line">    // 指针的指针</div><div class="line">    // env &lt;=&gt; JNINativeInterface** C语言</div><div class="line">    return env-&gt;NewStringUTF(hello);</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">jint</div><div class="line">Java_com_ebmob_testluaview_jni_TestJniDemoActivity_getTheSum(JNIEnv *env, jobject instance, jint x,</div><div class="line">                                                             jint y) &#123;</div><div class="line">    // TODO</div><div class="line">    // 输出日志</div><div class="line">    __android_log_print(ANDROID_LOG_DEBUG, &quot;输入的x = %d &quot; + x, &quot;输入的 y = %d &quot;, y);</div><div class="line">    return x + y;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="3-JNI知识"><a href="#3-JNI知识" class="headerlink" title="3.JNI知识"></a>3.JNI知识</h4><ul>
+<li><a href="https://blog.csdn.net/afei__/article/details/80899758" target="_blank" rel="external">JNI 数据类型和类型描述符</a></li>
+<li><a href="https://blog.csdn.net/afei__/article/details/80986203" target="_blank" rel="external">JNIEnv 和 JavaVM</a></li>
+<li><a href="https://blog.csdn.net/afei__/article/details/81016413" target="_blank" rel="external">JNI 接口大全</a></li>
+<li><a href="https://blog.csdn.net/afei__/article/details/81031965" target="_blank" rel="external">JNI 静态注册和动态注册</a></li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/4267785-018d07eb1e8d3b3a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="基本数据类型"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4267785-3ee16d0e71d89142.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="数据类型描述符"></p>
+<ul>
+<li>1.表示一个String类<br>Java 类型：java.lang.String<br>JNI 描述符：Ljava/lang/String;<br>即一个 Java 类对应的描述符，就是 L 加上类的全名，其中 . 要换成 / ，最后 不要忘掉末尾的分号。</li>
+<li><p>2.表示数组：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Java 类型：String[]</div><div class="line">JNI 描述符：[Ljava/lang/String;</div><div class="line">Java 类型：int[][]</div><div class="line">JNI 描述符：[[I</div><div class="line">数组就是简单的在类型描述符前加 [ 即可，二维数组就是两个 [ ，以此类推。</div></pre></td></tr></table></figure>
+</li>
+<li><p>3.表示方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">    Java 方法：long f (int n, String s, int[] arr);</div><div class="line">    JNI 描述符：(ILjava/lang/String;[I)J</div><div class="line">    Java 方法：void f ();</div><div class="line">    JNI 描述符：()V</div><div class="line">    括号内是每个参数的类型符，括号外就是返回值的类型符。</div></pre></td></tr></table></figure>
+</li>
+<li><p>4.开发使用语言</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">C风格：(*env)-&gt;NewStringUTF(env, &quot;Hellow World!&quot;);</div><div class="line">C++风格：env-&gt;NewStringUTF(&quot;Hellow World!&quot;);</div></pre></td></tr></table></figure>
+</li>
+<li><p>5.JNI 静态注册和动态注册<br><strong>静态注册:</strong></p>
+<blockquote>
+<p>通过 JNIEXPORT 和 JNICALL 两个宏定义声明，在虚拟机加载 so 时发现上面两个宏定义的函数时就会链接到对应的 native 方法。</p>
+</blockquote>
+</li>
+</ul>
+<p><strong>动态注册:</strong></p>
+<blockquote>
+<p> 通过 RegisterNatives 方法手动完成 native 方法和 so 中的方法的绑定，这样虚拟机就可以通过这个函数映射表直接找到相应的方法了。</p>
+</blockquote>
+<h2 id="2-利用NDK-保存敏感数据到so库"><a href="#2-利用NDK-保存敏感数据到so库" class="headerlink" title="2.利用NDK 保存敏感数据到so库"></a>2.利用NDK 保存敏感数据到so库</h2><p> <a href="http://www.520monkey.com/archives/625" target="_blank" rel="external">Android逆向之旅—Android应用的安全的攻防之战</a></p>
+<ul>
+<li><a href="https://github.com/shwenzhang/AndResGuard" target="_blank" rel="external">资源混淆</a></li>
+</ul>
+<blockquote>
+<p>1、混淆策略<br>不仅是为了防护，也是为了减小应用安装包的大小, 1.包含代码混淆&amp;资源混淆</p>
+<p>2、应用的签名<br>Android中的每个应用都是有一个唯一的签名，如果一个应用没有被签名是不允许安装到设备中的;<br>我们为了防止应用被二次打包，或者是需要破解我们的apk的操作，在入口处<br>添加签名验证，如果发现应用的签名不正确就立即退出程序<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">3、修改Native函数名</div><div class="line">4、反调试异常检测</div><div class="line">5、应用的加固策略</div></pre></td></tr></table></figure></p>
+</blockquote>
+<ul>
+<li>1、为了应对与低级破解小白，同时也是为了减小apk包的大小，我们会对代码和资源的一个混淆，增加破解难度</li>
+<li>2、为了应对与初级破解小白，我们将手动的注册我们的native方法，让破解者找不到对应的native方法，同时解决一些重要的native方法的被调用问题，增加破解难度</li>
+<li>3、为了应对与中级破解小白，我们会利用应用的签名，来防止应用的二次签名打包，同时防止动态调试问题，增加破解难度</li>
+<li>4、为了应对与高级破解小白，我们会增加应用的反调试功能，来防止应用被动态调试和进程注入问题，增加破解难度</li>
+<li>5、为了应对与资深破解小白，我们会采用应用的加固策略，对dex，so，资源文件进行加固，增加反编译工作了和调试难度</li>
+</ul>
+<p><a href="https://www.jianshu.com/p/2576d064baf1" target="_blank" rel="external">Android安全系列之：如何在native层保存关键信息</a><br><a href="https://zhuanlan.zhihu.com/p/34902225" target="_blank" rel="external">Android安全——JNI初探之敏感信息保护</a><br><a href="https://bbs.pediy.com/thread-226667.htm" target="_blank" rel="external">Android SO加固</a><br><a href="https://www.anquanke.com/post/id/86956" target="_blank" rel="external">Android SO自动化逆向探究</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">1.IDA Pro载入SO，完成第一次的反编译。</div><div class="line"></div><div class="line">2.导入jni.h头文件，引入JNINativeInterface与JNIInvokeInterface结构体信息。</div><div class="line"></div><div class="line">3.设置Java_com_xxx_yyy()类型方法的前两个参数为JNIEnv* env与jobject thiz。</div><div class="line"></div><div class="line">4.如果有F5插件，则进行一次Force call type。</div></pre></td></tr></table></figure></p>
+<h2 id="3-遇到的问题"><a href="#3-遇到的问题" class="headerlink" title="3.遇到的问题"></a>3.遇到的问题</h2><h5 id="More-than-one-file-was-found-with-OS-independent-path-‘lib-x86-libusb-so’"><a href="#More-than-one-file-was-found-with-OS-independent-path-‘lib-x86-libusb-so’" class="headerlink" title="More than one file was found with OS independent path ‘lib/x86/libusb.so’"></a><a href="https://stackoverflow.com/questions/44954122/more-than-one-file-was-found-with-os-independent-path-lib-x86-libusb-so" target="_blank" rel="external">More than one file was found with OS independent path ‘lib/x86/libusb.so’</a></h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">sourceSets.main &#123;</div><div class="line">    jniLibs.srcDir &apos;src/main/libs&apos;</div><div class="line">    jni.srcDirs = [] //disable automatic ndk-build call</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="4-面试知识详解"><a href="#4-面试知识详解" class="headerlink" title="4.面试知识详解"></a>4.面试知识详解</h2><h4 id="1-谈谈你对-JNI-和-NDK-的理解"><a href="#1-谈谈你对-JNI-和-NDK-的理解" class="headerlink" title="1.谈谈你对 JNI 和 NDK 的理解"></a>1.谈谈你对 JNI 和 NDK 的理解</h4><ul>
+<li><p>JNI：<br>JNI 是 <code>Java Native Interface</code> 的缩写，即 Java 的本地接口。<br>目的是使得 Java 与本地其他语言（如 C/C++）进行交互。<br>JNI 是属于 Java 的，与 Android 无直接关系。</p>
+</li>
+<li><p>NDK：<br>NDK 是<code>Native Development Kit</code> 的缩写，是 Android 的工具开发包。<br>作用是更方便和快速开发 C/C++ 的动态库，并自动将动态库与应用一起打包到 apk。NDK 是属于 Android 的，与 Java 无直接关系。<br>总结：</p>
+<blockquote>
+<p>JNI 是实现的目的，NDK 是 Android 中实现 JNI 的手段。</p>
+</blockquote>
+</li>
+</ul>
+<h4 id="2-谈谈你对-JNIEnv-和-JavaVM-理解"><a href="#2-谈谈你对-JNIEnv-和-JavaVM-理解" class="headerlink" title="2.谈谈你对 JNIEnv 和 JavaVM 理解"></a>2.谈谈你对 JNIEnv 和 JavaVM 理解</h4><p><code>javaVM</code>：JavaVM 是虚拟机在 JNI 层的代表。一个进程只有一个 JavaVM。所有的线程共用一个 JavaVM。</p>
+<p><code>JNIEnv</code>： 表示 Java 调用 native 语言的环境，封装了几乎全部 JNI 方法的指针。JNIEnv 只在创建它的线程生效，不能跨线程传递，不同线程的 JNIEnv 彼此独立。</p>
+<blockquote>
+<p>在 native 环境下创建的线程，要想和 java 通信，即需要获取一个 JNIEnv 对象。我们通过 <code>AttachCurrentThread</code>和 <code>DetachCurrentThread</code> 方法将 native 的线程与 JavaVM 关联和解除关联。</p>
+</blockquote>
+<h4 id="3-解释一下-JNI-中全局引用和局部引用的区别和使用"><a href="#3-解释一下-JNI-中全局引用和局部引用的区别和使用" class="headerlink" title="3.解释一下 JNI 中全局引用和局部引用的区别和使用"></a>3.解释一下 JNI 中全局引用和局部引用的区别和使用</h4><p><strong>全局引用</strong></p>
+<blockquote>
+<p>通过 <code>NewGlobalRef</code> 和 <code>DeleteGlobalRef</code> 方法创建和释放一个全局引用。<br>全局引用能在多个线程中被使用，且不会被 GC 回收，只能手动释放。</p>
+</blockquote>
+<p><strong>局部引用</strong></p>
+<blockquote>
+<p>通过 <code>NewLocalRef</code> 和 <code>DeleteLocalRef</code> 方法创建和释放一个局部引用。<br>局部引用只在创建它的 native 方法中有效，包括其调用的其它函数中有效。因此我们不能寄望于将一个局部引用直接保存在全局变量中下次使用（请使用全局引用实现该需求）。</p>
+</blockquote>
+<p>我们可以不用删除局部引用，它们会在 native 方法返回时全部自动释放，但是建议对于不再使用的局部引用手动释放，避免内存过度使用。</p>
+<h4 id="4-NDK错误定位"><a href="#4-NDK错误定位" class="headerlink" title="4.NDK错误定位"></a>4.NDK错误定位</h4><p>一般在开发阶段的话，我们可以通过 log 来定位和分析问题。线上环境一般借助 NDK 提供的<code>addr2line</code> 工具和 <code>objdump</code> 工具来定位错误<br><a href="https://blog.csdn.net/afei__/article/details/81181827" target="_blank" rel="external">so 动态库崩溃问题定位（addr2line与objdump）</a></p>
+<h4 id="5-静态注册和动态注册"><a href="#5-静态注册和动态注册" class="headerlink" title="5.静态注册和动态注册"></a>5.静态注册和动态注册</h4><p><strong>静态注册：</strong><br>通过 <code>JNIEXPORT</code> 和 <code>JNICALL</code>两个宏定义声明，Java + 包名 + 类名 + 方法名 形式的函数名。不好的地方就是方法名太长了。</p>
+<p><strong>动态注册：</strong><br>通常在 <code>JNI_OnLoad</code>方法中通过 <code>RegisterNatives</code> 方法注册，可以不再遵从固定的命名写法（当然为了代码容易理解，名称还是尽量和 Java 中保持一致）。</p>
+<ul>
+<li><a href="https://blog.csdn.net/afei__/article/details/84889135" target="_blank" rel="external">android JNI面试题</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/android/" rel="tag"># android</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/17/Android开发技术周报（一）/" rel="next" title="Android开发技术周报(一)">
+                <i class="fa fa-chevron-left"></i> Android开发技术周报(一)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1502346421&di=d5dddcc8504e58a709921075437056f6&imgtype=jpg&er=1&src=http%3A%2F%2Fww2.sinaimg.cn%2Fmw1024%2F64b5b174jw1esy5043qmtg206t07i7ol.gif"
+               alt="dehao@yang" />
+          <p class="site-author-name" itemprop="name">dehao@yang</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">22</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-NDK简介"><span class="nav-number">1.</span> <span class="nav-text">1.NDK简介</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-NDK简单构建"><span class="nav-number">1.0.1.</span> <span class="nav-text">1.NDK简单构建</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-创建Android-mk"><span class="nav-number">1.0.1.1.</span> <span class="nav-text">1.创建Android.mk</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-创建Application-mk"><span class="nav-number">1.0.1.2.</span> <span class="nav-text">2.创建Application.mk</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-调用-C-或-C-”-调用-C-或-C"><span class="nav-number">1.0.1.3.</span> <span class="nav-text">3.调用 C 或 C++”)调用 C 或 C++</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-HelloCPP-cpp"><span class="nav-number">1.0.1.4.</span> <span class="nav-text">3.HelloCPP.cpp</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4-配置app下的build-gradle-执行sync-project"><span class="nav-number">1.0.1.5.</span> <span class="nav-text">4.配置app下的build.gradle,执行sync project</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-使用CMake构建脚本"><span class="nav-number">1.0.2.</span> <span class="nav-text">2.使用CMake构建脚本</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-JNI知识"><span class="nav-number">1.0.3.</span> <span class="nav-text">3.JNI知识</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-利用NDK-保存敏感数据到so库"><span class="nav-number">2.</span> <span class="nav-text">2.利用NDK 保存敏感数据到so库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-遇到的问题"><span class="nav-number">3.</span> <span class="nav-text">3.遇到的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#More-than-one-file-was-found-with-OS-independent-path-‘lib-x86-libusb-so’"><span class="nav-number">3.0.0.1.</span> <span class="nav-text">More than one file was found with OS independent path ‘lib/x86/libusb.so’</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-面试知识详解"><span class="nav-number">4.</span> <span class="nav-text">4.面试知识详解</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-谈谈你对-JNI-和-NDK-的理解"><span class="nav-number">4.0.1.</span> <span class="nav-text">1.谈谈你对 JNI 和 NDK 的理解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-谈谈你对-JNIEnv-和-JavaVM-理解"><span class="nav-number">4.0.2.</span> <span class="nav-text">2.谈谈你对 JNIEnv 和 JavaVM 理解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-解释一下-JNI-中全局引用和局部引用的区别和使用"><span class="nav-number">4.0.3.</span> <span class="nav-text">3.解释一下 JNI 中全局引用和局部引用的区别和使用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-NDK错误定位"><span class="nav-number">4.0.4.</span> <span class="nav-text">4.NDK错误定位</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-静态注册和动态注册"><span class="nav-number">4.0.5.</span> <span class="nav-text">5.静态注册和动态注册</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dehao@yang</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Gemini
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("SQRi8Ar8YCn4c3G97nJ9JsoK-gzGzoHsz", "Hu3hKNQdfDQNJ6zYikQwidIj");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
