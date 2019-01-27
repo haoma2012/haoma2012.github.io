@@ -78,7 +78,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Android进阶," />
 
 
 
@@ -94,14 +94,25 @@
 
 
 
+<meta name="description" content="1.有关线程使用的API分析 12341.AsyncTask：处理耗时短的多任务，内部使用线程池2.Thread &amp;amp; Handler &amp;amp; HandlerThread：线程，消息处理机制 更新UI3.Executor &amp;amp;FutureTask&amp;amp; ThreadPoolExecutor：线程池 有返回结果的Thread处理方式4.IntentService:可以处理耗时操作">
+<meta name="keywords" content="Android进阶">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android多线程汇总篇">
 <meta property="og:url" content="http://yoursite.com/2019/01/21/Android多线程汇总篇/index.html">
 <meta property="og:site_name" content="紫阳的博客">
+<meta property="og:description" content="1.有关线程使用的API分析 12341.AsyncTask：处理耗时短的多任务，内部使用线程池2.Thread &amp;amp; Handler &amp;amp; HandlerThread：线程，消息处理机制 更新UI3.Executor &amp;amp;FutureTask&amp;amp; ThreadPoolExecutor：线程池 有返回结果的Thread处理方式4.IntentService:可以处理耗时操作">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-01-21T11:45:26.000Z">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4267785-f24ae09978d8ca05.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4267785-8446447fd1a6fe6d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4267785-af52b2b83bad7b65.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4267785-1344ede181b056f2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4267785-032979f819b45ec3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2017/6/2/409b18810bd69db227867b560be3e5c2?imageView2/0/w/1280/h/960/format/webp/ignore-error/1">
+<meta property="og:updated_time" content="2019-01-27T17:35:37.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android多线程汇总篇">
+<meta name="twitter:description" content="1.有关线程使用的API分析 12341.AsyncTask：处理耗时短的多任务，内部使用线程池2.Thread &amp;amp; Handler &amp;amp; HandlerThread：线程，消息处理机制 更新UI3.Executor &amp;amp;FutureTask&amp;amp; ThreadPoolExecutor：线程池 有返回结果的Thread处理方式4.IntentService:可以处理耗时操作">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/4267785-f24ae09978d8ca05.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
 
@@ -299,6 +310,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -337,7 +370,196 @@
       
 
       
-        
+        <p>1.有关线程使用的API分析</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">1.AsyncTask：处理耗时短的多任务，内部使用线程池</div><div class="line">2.Thread &amp; Handler &amp; HandlerThread：线程，消息处理机制 更新UI</div><div class="line">3.Executor &amp;FutureTask&amp; ThreadPoolExecutor：线程池 有返回结果的Thread处理方式</div><div class="line">4.IntentService:可以处理耗时操作的后台服务,内部是HandlerThread，Handler</div></pre></td></tr></table></figure>
+<a id="more"></a>
+<h2 id="1-有关线程使用的API分析"><a href="#1-有关线程使用的API分析" class="headerlink" title="1.有关线程使用的API分析"></a>1.有关线程使用的API分析</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">1.AsyncTask：处理耗时短的多任务，内部使用线程池</div><div class="line">2.Thread &amp; Handler &amp; HandlerThread：线程，消息处理机制 更新UI</div><div class="line">3.Executor &amp;FutureTask&amp; ThreadPoolExecutor：线程池 有返回结果的Thread处理方式</div><div class="line">4.IntentService:可以处理耗时操作的后台服务,内部是HandlerThread，Handler</div></pre></td></tr></table></figure>
+<ul>
+<li>AsyncTask，它封装了线程池和Handler，主要为我们在子线程中更新UI提供便利。 </li>
+<li>HandlerThread，它是个具有消息队列的线程，可以方便我们在子线程中处理不同的事务。 </li>
+<li>IntentService，我们可以将它看做为HandlerThread的升级版，它是服务，优先级更高。</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/4267785-f24ae09978d8ca05.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="多线程知识架构"></p>
+<h4 id="1-AsyncTask源码分析"><a href="#1-AsyncTask源码分析" class="headerlink" title="1.AsyncTask源码分析"></a>1.AsyncTask源码分析</h4><p><a href="http://liuwangshu.cn/application/multithreading/asynctask-soucecode.html" target="_blank" rel="external">AsyncTask源码分析</a><br><a href="https://www.jianshu.com/p/e60c3bb03d61" target="_blank" rel="external">AsyncTask各版本源码分析</a><br><a href="https://blog.csdn.net/lmj623565791/article/details/38614699" target="_blank" rel="external">Android AsyncTask 源码解析</a></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4267785-8446447fd1a6fe6d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="AsyncTask执行流程"></p>
+<ul>
+<li><strong>Android 3.0版本之前的AsyncTask</strong><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">public abstract class AsyncTask&lt;Params, Progress, Result&gt; &#123;</div><div class="line">  private static final String LOG_TAG = &quot;AsyncTask&quot;;</div><div class="line">  private static final int CORE_POOL_SIZE = 5;</div><div class="line">  private static final int MAXIMUM_POOL_SIZE = 128;</div><div class="line">  private static final int KEEP_ALIVE = 1;</div><div class="line">  private static final BlockingQueue&lt;Runnable&gt; sWorkQueue =</div><div class="line">           new LinkedBlockingQueue&lt;Runnable&gt;(10);</div><div class="line">  private static final ThreadFactory sThreadFactory = new ThreadFactory() &#123;</div><div class="line">      private final AtomicInteger mCount = new AtomicInteger(1);</div><div class="line">      public Thread newThread(Runnable r) &#123;</div><div class="line">            return new Thread(r, &quot;AsyncTask #&quot; + mCount.getAndIncrement());</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line">  private static final ThreadPoolExecutor sExecutor = new ThreadPoolExecutor(CORE_POOL_SIZE,</div><div class="line">            MAXIMUM_POOL_SIZE, KEEP_ALIVE, TimeUnit.SECONDS, sWorkQueue, sThreadFactory);</div><div class="line">  ...         </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>在这里又看到了ThreadPoolExecutor，它的核心线程数是5个，线程池允许创建的最大线程数为128，非核心线程空闲等待新任务的最长时间为10秒。采用的阻塞队列是LinkedBlockingQueue，它的容量为10。3.0版本之前的AsyncTask有一个缺点就是，线程池最大的线程数为128，加上阻塞队列的10个任务，所以AsyncTask最多能同时容纳138个任务，当提交第139任务时就会执行饱和策略，默认抛出RejectedExecutionException异常。</p>
+<p><strong> AsyncTask源码分析：</strong></p>
+<ul>
+<li><ol>
+<li>AsyncTask构造函数内部:<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">mHandler = callbackLooper == null || callbackLooper == Looper.getMainLooper()</div><div class="line">            ? getMainHandler()</div><div class="line">            : new Handler(callbackLooper);// 1.获取Handler</div><div class="line">mWorker = new WorkerRunnable&lt;Params, Result&gt;() &#123;// 2.创建WorkerRunnable</div><div class="line">Result result = null;</div><div class="line">                try &#123;</div><div class="line">                    Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);</div><div class="line">                    //noinspection unchecked</div><div class="line">                    result = doInBackground(mParams);</div><div class="line">                    Binder.flushPendingCommands();</div><div class="line">                &#125; catch (Throwable tr) &#123;</div><div class="line">                    mCancelled.set(true);</div><div class="line">                    throw tr;</div><div class="line">                &#125; finally &#123;</div><div class="line">                    postResult(result);</div><div class="line">                &#125;</div><div class="line">                return result;</div><div class="line">&#125;</div><div class="line">mFuture = new FutureTask&lt;Result&gt;(mWorker) &#123;//3.创建FutureTask</div></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+</ul>
+<p>从注释2处看这个WorkerRunnable实现了Callable接口，并实现了它的call方法，在call方法中调用了doInBackground(mParams)来处理任务并得到结果，并最终调用postResult将结果投递出去。注释3处的FutureTask是一个可管理的异步任务，它实现了Runnable和Futrue这两个接口。因此它可以包装Runnable和Callable,并提供给Executor执行。也可以调用线程直接执行（FutureTask.run()）。在这里WorkerRunnable作为参数传递给了FutureTask。这两个变量会暂时保存在内存中</p>
+<ul>
+<li><ol>
+<li><code>AsyncTask.execute()</code>当要执行AsyncTask时，需要调用它的execute方法</li>
+</ol>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">public final AsyncTask&lt;Params, Progress, Result&gt; execute(Params... params) &#123;</div><div class="line">      return executeOnExecutor(sDefaultExecutor, params);</div><div class="line">  &#125;</div><div class="line">sDefaultExecutor = new SerialExecutor();</div></pre></td></tr></table></figure>
+<p>sDefaultExecutor实际上就是SerialExecutor对象，SerialExecutor实现了Executor接口，在SerialExecutor内部定义了一个双端队列ArrayDeque，ArrayDeque的内部是使用数组形式来实现双端队列的，我们知道队列是FIFO的，只能在队头删除元素，队尾添加元素，而双端队列是在队头和队尾都能够删除和添加元素。需要注意的是ArrayDeque没有容量的限制，队列满了以后会自动进行扩充。</p>
+<ul>
+<li>3.<code>AsyncTask.doInBackground(mParams)</code>执行我们重写的异步执行耗时操作</li>
+<li>4.<code>AsyncTask.postResult(result)</code> 把结果使用Handle机制发送处理<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line">private Result postResult(Result result) &#123;</div><div class="line">        @SuppressWarnings(&quot;unchecked&quot;)</div><div class="line">        Message message = sHandler.obtainMessage(MESSAGE_POST_RESULT,</div><div class="line">                new AsyncTaskResult&lt;Result&gt;(this, result));</div><div class="line">        message.sendToTarget();</div><div class="line">        return result;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">private static final InternalHandler sHandler = new InternalHandler();</div><div class="line">private static class InternalHandler extends Handler</div><div class="line">    &#123;</div><div class="line">        @SuppressWarnings(&#123;&quot;unchecked&quot;, &quot;RawUseOfParameterizedType&quot;&#125;)</div><div class="line">        @Override</div><div class="line">        public void handleMessage(Message msg)</div><div class="line">        &#123;</div><div class="line">            AsyncTaskResult result = (AsyncTaskResult) msg.obj;</div><div class="line">            switch (msg.what)</div><div class="line">            &#123;</div><div class="line">                case MESSAGE_POST_RESULT:</div><div class="line">                    // There is only one result</div><div class="line">                    result.mTask.finish(result.mData[0]);</div><div class="line">                    break;</div><div class="line">                case MESSAGE_POST_PROGRESS:</div><div class="line">                    result.mTask.onProgressUpdate(result.mData);</div><div class="line">                    break;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">// finish</div><div class="line">private void finish(Result result) &#123;</div><div class="line">    if (isCancelled()) &#123;</div><div class="line">        onCancelled(result);</div><div class="line">    &#125; else &#123;</div><div class="line">        onPostExecute(result);</div><div class="line">    &#125;</div><div class="line">    mStatus = Status.FINISHED;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>如果AsyncTask任务被取消了则执行onCancelled方法，否则就调用onPostExecute方法。而正是通过onPostExecute方法我们才能够得到异步任务执行后的结果。</p>
+<p><strong>AsyncTask使用总结：</strong></p>
+<blockquote>
+<p>AsyncTask是替代Thread + Handler 的一种方式,适合处理耗时短的多任务；内部实现包含线程池ThreadPoolExecutor、SerialExecutor处理双端队列ArrayDeque每次执行一个任务，执行结果使用Handler机制发送处理</p>
+<hr>
+<p>####2.Thread &amp; Handler &amp; HandlerThread</p>
+</blockquote>
+<p><a href="https://www.cnblogs.com/whoislcj/p/5603277.html" target="_blank" rel="external">Android 线程Thread Handler 线程池汇总</a></p>
+<p><strong>Thread简介</strong></p>
+<blockquote>
+<p>A thread is a thread of execution in a program. The Java<br>  Virtual Machine allows an application to have multiple threads of<br>  execution running concurrently.线程是处理任务最小单位，JVM运行应用有多个线程同时运行</p>
+</blockquote>
+<p>实现Thread两种方式: 1.继承Thread实现run方法 2.实现Runnable接口<br>Thread主要函数:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">run()//包含线程运行时所执行的代码 </div><div class="line"></div><div class="line">start()//用于启动线程</div><div class="line"></div><div class="line">sleep()/sleep(long millis)//线程休眠，交出CPU，让CPU去执行其他的任务，然后线程进入阻塞状态，sleep方法不会释放锁</div><div class="line"></div><div class="line">yield()//使当前线程交出CPU，让CPU去执行其他的任务，但不会是线程进入阻塞状态，而是重置为就绪状态，yield方法不会释放锁</div><div class="line"></div><div class="line">join()/join(long millis)/join(long millis,int nanoseconds)//等待线程终止，直白的说 就是发起该子线程的线程 只有等待该子线程运行结束才能继续往下运行</div><div class="line"></div><div class="line">wait()//交出cpu，让CPU去执行其他的任务，让线程进入阻塞状态，同时也会释放锁</div><div class="line"></div><div class="line">interrupt()//中断线程，自stop函数过时之后，我们通过interrupt方法和isInterrupted()方法来停止正在运行的线程，注意只能中断已经处于阻塞的线程</div><div class="line"></div><div class="line">getId()//获取当前线程的ID</div><div class="line"></div><div class="line">getName()/setName()//获取和设置线程的名字</div><div class="line"></div><div class="line">getPriority()/setPriority()//获取和这是线程的优先级 一般property用1-10的整数表示，默认优先级是5，优先级最高是10，优先级高的线程被执行的机率高</div><div class="line"></div><div class="line">setDaemon()/isDaemo()//设置和判断是否是守护线程</div><div class="line"></div><div class="line">currentThread()//静态函数获取当前线程</div><div class="line"></div><div class="line">Thread线程主要状态</div><div class="line">（1） New  一旦被实例化之后就处于new状态</div><div class="line"></div><div class="line">（2） Runnable 调用了start函数之后就处于Runnable状态</div><div class="line"></div><div class="line">（3） Running 线程被cpu执行 调用run函数之后 就处于Running状态</div><div class="line"></div><div class="line"> (4)   Blocked 调用join()、sleep()、wait()使线程处于Blocked状态</div><div class="line"></div><div class="line"> (5)   Dead    线程的run()方法运行完毕或被中断或被异常退出，线程将会到达Dead状态</div></pre></td></tr></table></figure></p>
+<p><strong>同步 锁机制</strong><br>线程的同步是为了防止多个线程访问一个数据对象时，造成数据不一致的问题。</p>
+<ul>
+<li>1.synchronized：同函数&amp;步代码块</li>
+<li><p>2.使用特殊域变量(volatile)实现线程同步</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">　　a.volatile关键字为域变量的访问提供了一种免锁机制， </div><div class="line">　　b.使用volatile修饰域相当于告诉虚拟机该域可能会被其他线程更新， </div><div class="line">　　c.因此每次使用该域就要重新计算，而不是使用寄存器中的值 </div><div class="line">　　d.volatile不会提供任何原子操作，它也不能用来修饰final类型的变量</div></pre></td></tr></table></figure>
+</li>
+<li><p>3.使用重入锁实现线程同步<br>ReentrantLock() : 创建一个ReentrantLock实例<br>lock() : 获得锁<br>unlock() : 释放锁 </p>
+</li>
+<li>4.ThreadLocal管理变量。如果一个变量使用ThreadLocal进行管理，每一个使用该变量的线程都会获得该变量的副本，副本之间相互独立，所以每个线程都可以修改变量而不会对其它线程造成影响。</li>
+</ul>
+<p><a href="https://blog.csdn.net/lmj623565791/article/details/38377229" target="_blank" rel="external">Android 异步消息处理机制 让你深入理解 Looper、Handler、Message三者关系</a></p>
+<p><a href="https://www.jianshu.com/p/9631eebadd5c" target="_blank" rel="external">Handler详细知识</a><br><img src="https://upload-images.jianshu.io/upload_images/4267785-af52b2b83bad7b65.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Android 异步消息处理机制"></p>
+<blockquote>
+<p>Looper负责的就是创建一个MessageQueue，然后进入一个无限循环体不断从该MessageQueue中读取消息，而消息的创建者就是一个或多个Handler 。</p>
+</blockquote>
+<p>Looper主要作用：<br>1、    与当前线程绑定，保证一个线程只会有一个Looper实例，同时一个Looper实例也只有一个MessageQueue。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">private static void prepare(boolean quitAllowed) &#123;</div><div class="line">       if (sThreadLocal.get() != null) &#123;</div><div class="line">           throw new RuntimeException(&quot;Only one Looper may be created per thread&quot;);</div><div class="line">       &#125;</div><div class="line">       sThreadLocal.set(new Looper(quitAllowed));</div><div class="line">   &#125;</div></pre></td></tr></table></figure></p>
+<p>2、    loop()方法，不断从MessageQueue中去取消息，交给消息的target属性的dispatchMessage去处理。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">public Handler(Callback callback, boolean async) &#123;</div><div class="line">....</div><div class="line">// 获取Looper对象</div><div class="line"> mLooper = Looper.myLooper();</div><div class="line">        if (mLooper == null) &#123;</div><div class="line">            throw new RuntimeException(</div><div class="line">                &quot;Can&apos;t create handler inside thread that has not called Looper.prepare()&quot;);</div><div class="line">        &#125;</div><div class="line">// 获取MessageQueue队列</div><div class="line">        mQueue = mLooper.mQueue;</div><div class="line">        mCallback = callback;</div><div class="line">        mAsynchronous = async;</div><div class="line">....</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>3.Handler的构造方法，会首先得到当前线程中保存的Looper实例，进而与Looper实例中的MessageQueue想关联。<br>4、Handler的sendMessage方法，会给msg的target赋值为handler自身，然后加入MessageQueue中。<br>5、在构造Handler实例时，我们会重写handleMessage方法，也就是msg.target.dispatchMessage(msg)最终调用的方法。<br><img src="https://upload-images.jianshu.io/upload_images/4267785-1344ede181b056f2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Handle Looper MessageQueue关系"></p>
+<ul>
+<li>MessageQueue的next方法可能会阻塞线程，但不会造成ANR。<br>当MessageQueue没有消息时，next方法中调用nativePollOnce导致线程阻塞，直到有新消息加入MesssageQueue时调用nativeWake来唤醒线程<br>当MessageQueue有消息时且队头消息为延时消息时，next方法调用nativePollOnce导致线程阻塞nextPollTimeoutMillis的时间，中途有新消息加入MessageQueue时调用nativeWake可以唤醒线程，也可以等nextPollTimeoutMillis后自动唤醒线程</li>
+</ul>
+<p><a href="https://blog.csdn.net/lmj623565791/article/details/47079737" target="_blank" rel="external">Android HandlerThread 完全解析</a><br><a href="http://androidtrainningcenter.blogspot.com/2013/12/handler-vs-timer-fixed-period-execution.html" target="_blank" rel="external">Handler and Timer use</a><br><a href="https://droidyue.com/blog/2015/11/08/make-use-of-handlerthread/" target="_blank" rel="external">详解 Android 中的 HandlerThread</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">/* Handy class for starting a new thread that has a looper. The looper can then be </div><div class="line"> * used to create handler classes. Note that start() must still be called.</div><div class="line">*/</div><div class="line">public class HandlerThread extends Thread &#123;</div><div class="line"></div><div class="line">public HandlerThread(String name) &#123;</div><div class="line">        super(name);</div><div class="line">     // default priority</div><div class="line">        mPriority = Process.THREAD_PRIORITY_DEFAULT;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">@Override</div><div class="line">    public void run() &#123;</div><div class="line">        mTid = Process.myTid();</div><div class="line">        // 新建Looper保存在ThreadLocal中，Looper内部维护Messagequeue消息队列</div><div class="line">        Looper.prepare();</div><div class="line">        synchronized (this) &#123;</div><div class="line">            mLooper = Looper.myLooper();</div><div class="line">            notifyAll();</div><div class="line">        &#125;</div><div class="line">        Process.setThreadPriority(mPriority);</div><div class="line">        onLooperPrepared();</div><div class="line">       // 不断的循环从MessageQueue中取消息处理了，当没有消息的时候会阻塞,线程挂起；有就会唤醒</div><div class="line">        Looper.loop();</div><div class="line">        mTid = -1;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>阻塞时间段是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"> Message next() &#123; </div><div class="line">...</div><div class="line">// 1.无线循环取消息队列内的消息</div><div class="line">for (;;) &#123;</div><div class="line">            if (nextPollTimeoutMillis != 0) &#123;</div><div class="line">                Binder.flushPendingCommands();</div><div class="line">            &#125;</div><div class="line">            // 2.调用native方法检测是否挂起线程</div><div class="line">            nativePollOnce(ptr, nextPollTimeoutMillis);</div><div class="line"></div><div class="line">            if (pendingIdleHandlerCount &lt;= 0) &#123;</div><div class="line">                    // No idle handlers to run.  Loop and wait some more.</div><div class="line">                    mBlocked = true;</div><div class="line">                    continue;</div><div class="line">                &#125;</div><div class="line">&#125;</div><div class="line">...</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>唤醒时机：在Handler的sendMessageAtTime，发送消息到MessageQueue队列中enqueueMessage(msg, when)调用native方法，Linux的管道pipe：nativeWake(mPtr);<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">boolean enqueueMessage(Message msg, long when) &#123;</div><div class="line">....</div><div class="line">// We can assume mPtr != 0 because mQuitting is false.</div><div class="line">            if (needWake) &#123;</div><div class="line">                nativeWake(mPtr);</div><div class="line">            &#125;</div><div class="line">....</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>通知UI线程更新：</p>
+<ul>
+<li>1.handler.post(Runnable r)</li>
+<li>2.Activity.runOnUiThread(Runnable r)</li>
+<li>3.view.post(Runnable r)</li>
+<li>4.Handler+Message+MessageQueue+Looper</li>
+</ul>
+<hr>
+<h4 id="3-Android-线程池详解"><a href="#3-Android-线程池详解" class="headerlink" title="3.Android 线程池详解"></a>3.Android 线程池详解</h4><p><a href="https://blog.csdn.net/nugongahou110/article/details/49967495" target="_blank" rel="external">Android并发编程之白话文详解Future,FutureTask和Callable
+</a></p>
+<blockquote>
+<p>说到并发编程，就一定是多个线程并发执行任务。那么并发编程的基础是什么呢？没错那就是Thread了。一个Thread可以执行一个Runnable类型的对象。那么Runnable是什么呢？其实Runnable是一个接口，他只定义了一个方法run（），这个run（）方法里就是我们要执行的任务，并且是要被Thread调用的。因此，一个Runnable就可以理解为一个要被执行的任务，而Thread就是一个执行任务的工人！ </p>
+</blockquote>
+<p><a href="https://www.cnblogs.com/whoislcj/p/5811989.html" target="_blank" rel="external">Android线程管理之ThreadLocal理解及应用场景</a></p>
+<p>ThreadLocal：线程本地变量</p>
+<blockquote>
+<p>ThreadLocal.set() 到线程中的对象是该线程自己使用的对象，其他线程是不需要访问的，也访问不到的。各个线程中访问的是不同的对象，改变的也是自己独立的对象，本身就不属于同一个对象，没有共享的概念，更加不可能是解决共享对象的多线程访问的。</p>
+</blockquote>
+<ul>
+<li>1.每个线程都拥有自己的局部变量<br>每个线程都有一个独立于其他线程的上下文来保存这个变量，一个线程的本地变量对其他线程是不可见的</li>
+<li>2.独立于变量的初始化副本，或者初始化一个属于自己的变量<br>ThreadLocal可以给一个初始值，而每个线程都会获得这个初始化值的一个副本，这样才能保证不同的线程都有一份拷贝，同样也可以new的方式为线程创建一个变量</li>
+<li>3.变量改变只与当前线程关联，线程之间互不干扰<br>ThreadLocal 不是用于解决共享变量的问题的，不是为了协调线程同步而存在，而是为了方便每个线程处理自己的状态而引入的一个机制。</li>
+</ul>
+<p><code>所以ThreadLocal既不是为了解决共享多线程的访问问题，更不是为了解决线程同步问题，ThreadLocal的设计初衷就是为了提供线程内部的局部变量，方便在本线程内随时随地的读取，并且与其他线程隔离。</code></p>
+<p><a href="https://juejin.im/entry/593109e72f301e005830cd76" target="_blank" rel="external">Android 线程和线程池一篇就够了</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">public interface Runnable &#123;</div><div class="line">    public void run();</div><div class="line">&#125;</div><div class="line"></div><div class="line">public interface Callable&lt;V&gt; &#123;</div><div class="line">    V call() throws Exception;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public interface Future&lt;V&gt; &#123;</div><div class="line">    boolean cancel(boolean mayInterruptIfRunning);</div><div class="line">    boolean isCancelled();</div><div class="line">    boolean isDone();</div><div class="line">    V get() throws InterruptedException, ExecutionException;</div><div class="line">    V get(long timeout, TimeUnit unit)</div><div class="line">        throws InterruptedException, ExecutionException, TimeoutException;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>Runnable 和 Callable 都代表那些要在不同的线程中执行的任务。Runnable 从 JDK1.0 开始就有了，Callable 是在 JDK1.5 增加的。它们的主要区别是 Callable 的 call() 方法可以返回值和抛出异常，而 Runnable 的 run() 方法没有这些功能。Callable 可以返回装载有计算结果的 Future 对象。</p>
+<ul>
+<li>Callable 接口下的方法是 call()，Runnable 接口的方法是 run()；</li>
+<li>Callable 的任务执行后可返回值，而 Runnable 的任务是不能返回值的；</li>
+<li>call() 方法可以抛出异常，run()方法不可以的；</li>
+<li>运行 Callable 任务可以拿到一个 Future 对象，表示异步计算的结果。它提供了检查计算是否完成的方法，以等待计算的完成，并检索计算的结果。通过 Future 对象可以了解任务执行情况，可取消任务的执行，还可获取执行结果；</li>
+</ul>
+<p><strong>Future</strong></p>
+<blockquote>
+<p>Future是一个接口，他提供给了我们方法来检测当前的任务是否已经结束，还可以等待任务结束并且拿到一个结果，通过调用Future的get（）方法可以当任务结束后返回一个结果值，如果工作没有结束，则会阻塞当前线程，直到任务执行完毕，我们可以通过调用cancel（）方法来停止一个任务，如果任务已经停止，则cancel（）方法会返回true；如果任务已经完成或者已经停止了或者这个任务无法停止，则cancel（）会返回一个false。当一个任务被成功停止后，他无法再次执行。isDone（）和isCancel（）方法可以判断当前工作是否完成和是否取消。</p>
+</blockquote>
+<p><strong> FutureTask:</strong><br>FutureTask 实现了 Runnable 和 Future，所以兼顾两者优点，既可以在 Thread 中使用，又可以在 ExecutorService 中使用。</p>
+<blockquote>
+<p>使用 FutureTask 的好处是 FutureTask 是为了弥补 Thread 的不足而设计的，它可以让程序员准确地知道线程什么时候执行完成并获得到线程执行完成后返回的结果。FutureTask 是一种可以取消的异步的计算任务，它的计算是通过 Callable 实现的，它等价于可以携带结果的 Runnable，并且有三个状态：等待、运行和完成。完成包括所有计算以任意的方式结束，包括正常结束、取消和异常。</p>
+</blockquote>
+<p><a href="https://blog.csdn.net/u010687392/article/details/49850803" target="_blank" rel="external">Android性能优化之使用线程池处理异步任务</a></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4267785-032979f819b45ec3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="线程池结构"></p>
+<p><strong>大量使用线程的坏处</strong></p>
+<ul>
+<li>1、线程的创建和销毁都需要时间，当有大量的线程创建和销毁时，那么这些时间的消耗则比较明显，将导致性能上的缺失</li>
+<li>2、大量的线程创建、执行和销毁是非常耗cpu和内存的，这样将直接影响系统的吞吐量，导致性能急剧下降，如果内存资源占用的比较多，还很可能造成OOM</li>
+<li>3、大量的线程的创建和销毁很容易导致GC频繁的执行，从而发生内存抖动现象，而发生了内存抖动，对于移动端来说，最大的影响就是造成界面卡顿</li>
+</ul>
+<p><strong>使用线程池的好处</strong></p>
+<ul>
+<li>1、线程的创建和销毁由线程池维护，一个线程在完成任务后并不会立即销毁，而是由后续的任务复用这个线程，从而减少线程的创建和销毁，节约系统的开销</li>
+<li>2、线程池旨在线程的复用，这就可以节约我们用以往的方式创建线程和销毁所消耗的时间，减少线程频繁调度的开销，从而节约系统资源，提高系统吞吐量</li>
+<li>3、在执行大量异步任务时提高了性能</li>
+<li>4、Java内置的一套ExecutorService线程池相关的api，可以更方便的控制线程的最大并发数、线程的定时任务、单线程的顺序执行等</li>
+</ul>
+<p><strong>ExecutorService简介</strong><br>通常来说我们说到线程池第一时间想到的就是它：ExecutorService，它是一个接口，其实如果要从真正意义上来说，它可以叫做线程池的服务，因为它提供了众多接口api来控制线程池中的线程，而真正意义上的线程池就是：ThreadPoolExecutor，它实现了ExecutorService接口，并封装了一系列的api使得它具有线程池的特性，其中包括工作队列、核心线程数、最大线程数等。</p>
+<p>五种线程池方法：</p>
+<ul>
+<li><p>1、newFixedThreadPool() ：<br>作用：该方法返回一个固定线程数量的线程池，该线程池中的线程数量始终不变，即不会再创建新的线程，也不会销毁已经创建好的线程，自始自终都是那几个固定的线程在工作，所以该线程池可以控制线程的最大并发数。<br>栗子：假如有一个新任务提交时，线程池中如果有空闲的线程则立即使用空闲线程来处理任务，如果没有，则会把这个新任务存在一个任务队列中，一旦有线程空闲了，则按FIFO方式处理任务队列中的任务。</p>
+</li>
+<li><p>2、newCachedThreadPool() ：<br>作用：该方法返回一个可以根据实际情况调整线程池中线程的数量的线程池。即该线程池中的线程数量不确定，是根据实际情况动态调整的。<br>栗子：假如该线程池中的所有线程都正在工作，而此时有新任务提交，那么将会创建新的线程去处理该任务，而此时假如之前有一些线程完成了任务，现在又有新任务提交，那么将不会创建新线程去处理，而是复用空闲的线程去处理新任务。那么此时有人有疑问了，那这样来说该线程池的线程岂不是会越集越多？其实并不会，因为线程池中的线程都有一个“保持活动时间”的参数，通过配置它，如果线程池中的空闲线程的空闲时间超过该“保存活动时间”则立刻停止该线程，而该线程池默认的“保持活动时间”为60s。</p>
+</li>
+<li><p>3、newSingleThreadExecutor() ：<br>作用：该方法返回一个只有一个线程的线程池，即每次只能执行一个线程任务，多余的任务会保存到一个任务队列中，等待这一个线程空闲，当这个线程空闲了再按FIFO方式顺序执行任务队列中的任务。</p>
+</li>
+<li><p>4、newScheduledThreadPool() ：<br>作用：该方法返回一个可以控制线程池内线程定时或周期性执行某任务的线程池。</p>
+</li>
+<li><p>5、newSingleThreadScheduledExecutor() ：<br>作用：该方法返回一个可以控制线程池内线程定时或周期性执行某任务的线程池。只不过和上面的区别是该线程池大小为1，而上面的可以指定线程池的大小。</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">public ThreadPoolExecutor(int corePoolSize,</div><div class="line">                             int maximumPoolSize,</div><div class="line">                             long keepAliveTime,</div><div class="line">                             TimeUnit unit,</div><div class="line">                             BlockingQueue&lt;Runnable&gt; workQueue,</div><div class="line">                             ThreadFactory threadFactory,</div><div class="line">                             RejectedExecutionHandler handler) &#123;//...&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">corePoolSize：线程池中的核心线程数量 </div><div class="line">maximumPoolSize：线程池中的最大线程数量 </div><div class="line">keepAliveTime：这个就是上面说到的“保持活动时间“，上面只是大概说明了一下它的作用，不过它起作用必须在一个前提下，就是当线程池中的线程数量超过了corePoolSize时，它表示多余的空闲线程的存活时间，即：多余的空闲线程在超过keepAliveTime时间内没有任务的话则被销毁。而这个主要应用在缓存线程池中 </div><div class="line">unit：它是一个枚举类型，表示keepAliveTime的单位，常用的如：TimeUnit.SECONDS（秒）、TimeUnit.MILLISECONDS（毫秒） </div><div class="line">workQueue：任务队列，主要用来存储已经提交但未被执行的任务，不同的线程池采用的排队策略不一样</div><div class="line">threadFactory：线程工厂，用来创建线程池中的线程，通常用默认的即可 </div><div class="line">handler：通常叫做拒绝策略，</div><div class="line">1、在线程池已经关闭的情况下 </div><div class="line">2、任务太多导致最大线程数和任务队列已经饱和，无法再接收新的任务 。</div><div class="line">在上面两种情况下，只要满足其中一种时，在使用execute()来提交新的任务时</div><div class="line">将会拒绝，而默认的拒绝策略是抛一个RejectedExecutionException异常</div></pre></td></tr></table></figure>
+<p>上面的参数理解起来都比较简单，不过workQueue这个任务队列却要再次说明一下，它是一个BlockingQueue<runnable>对象，而泛型则限定它是用来存放Runnable对象的，刚刚上面讲了，不同的线程池它的任务队列实现肯定是不一样的，所以，保证不同线程池有着不同的功能的核心就是这个workQueue的实现了，细心的会发现在刚刚的用来创建线程池的工厂方法中，针对不同的线程池传入的workQueue也不一样，下面我总结一下这五种线程池分别用的是什么BlockingQueue：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">LinkedBlockingQueue：无界的队列 </div><div class="line">SynchronousQueue：直接提交的队列 </div><div class="line">DelayedWorkQueue：等待队列</div><div class="line">1、newFixedThreadPool()—&gt;LinkedBlockingQueue </div><div class="line">2、newSingleThreadExecutor()—&gt;LinkedBlockingQueue </div><div class="line">3、newCachedThreadPool()—&gt;SynchronousQueue </div><div class="line">4、newScheduledThreadPool()—&gt;DelayedWorkQueue </div><div class="line">5、newSingleThreadScheduledExecutor()—&gt;DelayedWorkQueue</div></pre></td></tr></table></figure></runnable></p>
+<p>优化线程池ThreadPoolExecutor<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">// 获取CPU数</div><div class="line">Runtime.getRuntime().availableProcessors();</div><div class="line"></div><div class="line">1、shutdown()方法在终止前允许执行以前提交的任务。 </div><div class="line">2、shutdownNow()方法则是阻止正在任务队列中等待任务的启动并试图停止当前正在执行的任务。</div></pre></td></tr></table></figure></p>
+<p><strong>线程创建规则</strong><br>     ThreadPoolExecutor对象初始化时，不创建任何执行线程，当有新任务进来时，才会创建执行线程。构造ThreadPoolExecutor对象时，需要配置该对象的核心线程池大小和最大线程池大小</p>
+<ul>
+<li><ol>
+<li>当目前执行线程的总数小于核心线程大小时，所有新加入的任务，都在新线程中处理。</li>
+</ol>
+</li>
+<li><ol>
+<li>当目前执行线程的总数大于或等于核心线程时，所有新加入的任务，都放入任务缓存队列中。</li>
+</ol>
+</li>
+<li><ol>
+<li>当目前执行线程的总数大于或等于核心线程，并且缓存队列已满，同时此时线程总数小于线程池的最大大小，那么创建新线程，加入线程池中，协助处理新的任务。</li>
+</ol>
+</li>
+<li><ol>
+<li>当所有线程都在执行，线程池大小已经达到上限，并且缓存队列已满时，就rejectHandler拒绝新的任务。</li>
+</ol>
+</li>
+</ul>
+<p><strong>默认的RejectExecutionHandler拒绝执行策略</strong><br>　　1. AbortPolicy 直接丢弃新任务，并抛出RejectedExecutionException通知调用者，任务被丢弃<br>　　2. CallerRunsPolicy 用调用者的线程，执行新的任务，如果任务执行是有严格次序的，请不要使用此policy<br>　　3. DiscardPolicy 静默丢弃任务，不通知调用者，在处理网络报文时，可以使用此任务，静默丢弃没有几乎处理的报文<br>　　4. DiscardOldestPolicy 丢弃最旧的任务，处理网络报文时，可以使用此任务，因为报文处理是有时效的，超过时效的，都必须丢弃</p>
+<p>   我们也可以写一些自己的RejectedExecutionHandler，例如拒绝时，直接将线程加入缓存队列，并阻塞调用者，或根据任务的时间戳，丢弃超过限制的任务。</p>
+<hr>
+<h4 id="4-IntentService详解"><a href="#4-IntentService详解" class="headerlink" title="4.IntentService详解"></a>4.IntentService详解</h4><p><a href="https://blog.csdn.net/lmj623565791/article/details/47143563" target="_blank" rel="external">Android IntentService完全解析 当Service遇到Handler</a><br><a href="https://juejin.im/entry/57ccb3f1a22b9d006ba29670" target="_blank" rel="external">Android IntentService 详解</a></p>
+<blockquote>
+<p>IntentService是一个基于Service的一个类，用来处理异步的请求。你可以通过startService(Intent)来提交请求，该Service会在需要的时候创建，当完成所有的任务以后自己关闭，且请求是在工作线程处理的。</p>
+</blockquote>
+<p><strong>IntentService特点</strong></p>
+<ul>
+<li>它本质是一种特殊的Service,继承自Service并且本身就是一个抽象类</li>
+<li>它可以用于在后台执行耗时的异步任务，当任务完成后会自动停止</li>
+<li>它拥有较高的优先级，不易被系统杀死（继承自Service的缘故），因此比较适合执行一些高优先级的异步任务</li>
+<li>它内部通过HandlerThread和Handler实现异步操作</li>
+<li>创建IntentService时，只需实现onHandleIntent和构造方法，onHandleIntent为异步方法，可以执行耗时操作<br><img src="https://user-gold-cdn.xitu.io/2017/6/2/409b18810bd69db227867b560be3e5c2?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt=""></li>
+</ul>
+<p><strong>源码分析</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">   public void onCreate() &#123;</div><div class="line">       // TODO: It would be nice to have an option to hold a partial wakelock</div><div class="line">       // during processing, and to have a static startService(Context, Intent)</div><div class="line">       // method that would launch the service &amp; hand off a wakelock.</div><div class="line"></div><div class="line">       super.onCreate();</div><div class="line">       // 1.创建HandlerThread，可以处理异步任务的Thread，里面维护了Handler</div><div class="line">       HandlerThread thread = new HandlerThread(&quot;IntentService[&quot; + mName + &quot;]&quot;);</div><div class="line">       thread.start();</div><div class="line">     // 获取HandlerThread的异步Looper传递给内部类ServiceHandler【Handler】</div><div class="line">       mServiceLooper = thread.getLooper();</div><div class="line">       mServiceHandler = new ServiceHandler(mServiceLooper);</div><div class="line">   &#125;</div></pre></td></tr></table></figure></p>
+<p>当第一启动IntentService时，它的onCreate方法将会被调用，其内部会去创建一个HandlerThread并启动它，接着创建一个ServiceHandler（继承Handler），传入HandlerThread的Looper对象，这样ServiceHandler就变成可以处理异步线程的执行类了（因为Looper对象与HandlerThread绑定，而HandlerThread又是一个异步线程，我们把HandlerThread持有的Looper对象传递给Handler后，ServiceHandler内部就持有异步线程的Looper，自然就可以执行异步任务了），那么IntentService是怎么启动异步任务的呢？其实IntentService启动后还会去调用onStartCommand方法，而onStartCommand方法又会去调用onStart方法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">     * You should not override this method for your IntentService. Instead,</div><div class="line">     * override &#123;@link #onHandleIntent&#125;, which the system calls when the IntentService</div><div class="line">     * receives a start request.</div><div class="line">     * @see android.app.Service#onStartCommand</div><div class="line">     */</div><div class="line">    @Override</div><div class="line">    public int onStartCommand(@Nullable Intent intent, int flags, int startId) &#123;</div><div class="line">        // 调用onStart方法</div><div class="line">        onStart(intent, startId);</div><div class="line">        return mRedelivery ? START_REDELIVER_INTENT : START_NOT_STICKY;</div><div class="line">    &#125;</div><div class="line"></div><div class="line"> @Override</div><div class="line">    public void onStart(@Nullable Intent intent, int startId) &#123;</div><div class="line">        Message msg = mServiceHandler.obtainMessage();</div><div class="line">        msg.arg1 = startId;</div><div class="line">        msg.obj = intent;</div><div class="line">        // 使用ServiceHandler发送消息</div><div class="line">        mServiceHandler.sendMessage(msg);</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<p>从源码我们可以看出，在onStart方法中，IntentService通过mServiceHandler的sendMessage方法发送了一个消息，这个消息将会发送到HandlerThread中进行处理（因为HandlerThread持有Looper对象，所以其实是Looper从消息队列中取出消息进行处理，然后调用mServiceHandler的handleMessage方法）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">    private final class ServiceHandler extends Handler &#123;</div><div class="line">        public ServiceHandler(Looper looper) &#123;</div><div class="line">            super(looper);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        @Override</div><div class="line">        public void handleMessage(Message msg) &#123;</div><div class="line">            // 执行onStart()方法后：发送消息到Looper，里面的无限循环获取到msg，</div><div class="line">            //由Handler处理，</div><div class="line">            onHandleIntent((Intent)msg.obj);</div><div class="line">            stopSelf(msg.arg1);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">// 抽象的方法，并且一定是执行在工作线程的方法 需要重写这个方法处理耗时任务</div><div class="line">@WorkerThread</div><div class="line"> protected abstract void onHandleIntent(@Nullable Intent intent);</div></pre></td></tr></table></figure></p>
+<hr>
+
       
     </div>
     
@@ -351,6 +573,12 @@
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android进阶/" rel="tag"># Android进阶</a>
+          
+        </div>
       
 
       
@@ -421,8 +649,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1502346421&di=d5dddcc8504e58a709921075437056f6&imgtype=jpg&er=1&src=http%3A%2F%2Fww2.sinaimg.cn%2Fmw1024%2F64b5b174jw1esy5043qmtg206t07i7ol.gif"
@@ -484,6 +721,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-有关线程使用的API分析"><span class="nav-number">1.</span> <span class="nav-text">1.有关线程使用的API分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-AsyncTask源码分析"><span class="nav-number">1.0.1.</span> <span class="nav-text">1.AsyncTask源码分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-Android-线程池详解"><span class="nav-number">1.0.2.</span> <span class="nav-text">3.Android 线程池详解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-IntentService详解"><span class="nav-number">1.0.3.</span> <span class="nav-text">4.IntentService详解</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
