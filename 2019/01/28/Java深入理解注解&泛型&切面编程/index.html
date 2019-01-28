@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java知识总结," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="12341.注解是什么？自定义注解；2.泛型是什么？泛型的作用；3.依赖注入、依赖反转IOC；4.AOP是什么？解决了什么？和OOP区别；">
+<meta name="keywords" content="java知识总结">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java:深入理解注解&amp;泛型&amp;切面编程">
+<meta property="og:url" content="http://yoursite.com/2019/01/28/Java深入理解注解&泛型&切面编程/index.html">
+<meta property="og:site_name" content="紫阳的博客">
+<meta property="og:description" content="12341.注解是什么？自定义注解；2.泛型是什么？泛型的作用；3.依赖注入、依赖反转IOC；4.AOP是什么？解决了什么？和OOP区别；">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4267785-1e3a5709ca50669b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://img-blog.csdn.net/20170629213938736?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYnJpYmx1ZQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="https://img-blog.csdn.net/20170629220323673?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYnJpYmx1ZQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1787010-ad867955b97996e0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1000/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1787010-826bc659e29d4063.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1000/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1787010-05c4dd97edf10421.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1000/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1787010-2e74c3b6641d985b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1000/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1787010-fe1f90f50376cbb1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1000/format/webp">
+<meta property="og:updated_time" content="2019-01-28T02:34:46.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java:深入理解注解&amp;泛型&amp;切面编程">
+<meta name="twitter:description" content="12341.注解是什么？自定义注解；2.泛型是什么？泛型的作用；3.依赖注入、依赖反转IOC；4.AOP是什么？解决了什么？和OOP区别；">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/4267785-1e3a5709ca50669b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/01/28/Java深入理解注解&泛型&切面编程/"/>
+
+
+
+
+
+  <title>Java:深入理解注解&泛型&切面编程 | 紫阳的博客</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">紫阳的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/28/Java深入理解注解&泛型&切面编程/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dehao@yang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1502346421&di=d5dddcc8504e58a709921075437056f6&imgtype=jpg&er=1&src=http%3A%2F%2Fww2.sinaimg.cn%2Fmw1024%2F64b5b174jw1esy5043qmtg206t07i7ol.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="紫阳的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java:深入理解注解&泛型&切面编程</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-28T09:53:08+08:00">
+                2019-01-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2019/01/28/Java深入理解注解&泛型&切面编程/" class="leancloud_visitors" data-flag-title="Java:深入理解注解&泛型&切面编程">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">1.注解是什么？自定义注解；</div><div class="line">2.泛型是什么？泛型的作用；</div><div class="line">3.依赖注入、依赖反转IOC；</div><div class="line">4.AOP是什么？解决了什么？和OOP区别；</div></pre></td></tr></table></figure>
+<a id="more"></a>
+<h2 id="1-注解"><a href="#1-注解" class="headerlink" title="1.注解"></a>1.注解</h2><blockquote>
+<p>能够添加到 Java 源代码的语法元数据。类、方法、变量、参数、包都可以被注解，可用来将信息元数据与程序元素进行关联。Annotation 中文常译为“注解”。</p>
+</blockquote>
+<p><strong>1.作用</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">a. 标记，用于告诉编译器一些信息</div><div class="line">b. 编译时动态处理，如动态生成代码</div><div class="line">c. 运行时动态处理，如得到注解信息</div></pre></td></tr></table></figure></p>
+<p><strong>2.Annotation 分类</strong></p>
+<ul>
+<li><p>1 标准 Annotation，<code>Override</code>, <code>Deprecated</code>, <code>SuppressWarnings</code><br>标准 Annotation 是指 Java 自带的几个 Annotation，上面三个分别表示重写函数，不鼓励使用(有更好方式、使用有风险或已不在维护)，忽略某项 Warning</p>
+</li>
+<li><p>2 元 Annotation，<code>@Retention</code>, <code>@Target</code>, <code>@Inherited</code>, <code>@Documented</code><br>元 Annotation 是指用来定义 Annotation 的 Annotation，在后面 Annotation 自定义部分会详细介绍含义</p>
+</li>
+<li>3 自定义 Annotation<br>自定义 Annotation 表示自己根据需要定义的 Annotation，定义时需要用到上面的元 Annotation<br>这里是一种分类而已，也可以根据作用域分为源码时、编译时、运行时 Annotation，后面在自定义 Annotation 时会具体介绍</li>
+</ul>
+<p><strong>3.自定义Annotation</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">@Documented // 保存JavaDoc文档</div><div class="line">@Retention(RetentionPolicy.RUNTIME) // 保留时间</div><div class="line">@Target(ElementType.METHOD) // 修饰哪些元素</div><div class="line">@Inherited // 是否可以被继承 默认false</div><div class="line">public @interface MethodInfo &#123;</div><div class="line">    String author() default &quot;xiaoyouzi&quot;;</div><div class="line"></div><div class="line">    String data();</div><div class="line"></div><div class="line">    double version() default 1.0;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>@Documented 是否会保存到 Javadoc 文档中<br>@Retention 保留时间，可选值 SOURCE（源码时），CLASS（编译时），RUNTIME（运行时），默认为 CLASS，SOURCE 大都为 Mark Annotation，这类 Annotation 大都用来校验，比如 Override, SuppressWarnings</p>
+<ul>
+<li>RetentionPolicy.SOURCE 注解只在源码阶段保留，在编译器进行编译时它将被丢弃忽视。 </li>
+<li>RetentionPolicy.CLASS 注解只被保留到编译进行的时候，它并不会被加载到 JVM 中。 </li>
+<li>RetentionPolicy.RUNTIME 注解可以保留到程序运行的时候，它会被加载进入到 JVM 中，所以在程序运行时可以获取到它们。</li>
+</ul>
+<p>@Target 可以用来修饰哪些程序元素，如 TYPE, METHOD, CONSTRUCTOR, FIELD, PARAMETER 等，未标注则表示可修饰所有<br>@Inherited 是否可以被继承，默认为 false<br>@Repeatable<br>Repeatable 自然是可重复的意思。@Repeatable 是 Java 1.8 才加进来的，所以算是一个新的特性。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">@MethodInfo(</div><div class="line">        author = &quot;xiaoyouzilaile&quot;,</div><div class="line">        data = &quot;2019/1/8&quot;,</div><div class="line">        version = 1.0)</div><div class="line">public class TestAnimationDemo &#123;</div><div class="line"></div><div class="line"></div><div class="line">    public static void main(String[] args) &#123;</div><div class="line"></div><div class="line">        // 反射获取注解</div><div class="line">        boolean hasAnotation = TestAnimationDemo.class.isAnnotationPresent(MethodInfo.class);</div><div class="line">        System.out.println(&quot;hasAnotation:&quot; + hasAnotation);</div><div class="line">        if (hasAnotation) &#123;</div><div class="line">            MethodInfo methodInfo = TestAnimationDemo.class.getAnnotation(MethodInfo.class);</div><div class="line"></div><div class="line">            System.out.println(&quot;author:&quot; + methodInfo.author());</div><div class="line">            System.out.println(&quot;data:&quot; + methodInfo.data());</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>注解总结</p>
+</blockquote>
+<ul>
+<li>如果注解难于理解，你就把它类同于标签，标签为了解释事物，注解为了解释代码。</li>
+<li>注解的基本语法，创建如同接口，但是多了个 @ 符号。</li>
+<li>注解的元注解。</li>
+<li>注解的属性。</li>
+<li>注解主要给编译器及工具类型的软件用的。</li>
+<li>注解的提取需要借助于 Java 的反射技术，反射比较慢，所以注解使用时也需要谨慎计较时间成本。</li>
+</ul>
+<h2 id="2-泛型"><a href="#2-泛型" class="headerlink" title="2.泛型"></a>2.泛型</h2><p>使用泛型的好处：<br>泛型的用法是在容器后面添加<type><br>Type可以是类，抽象类，接口</type></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">泛型表示这种容器，只能存放&quot;APHero&quot;，&quot;ADHero就放不进去了。</div><div class="line">假设容器的泛型是Hero,那么Hero的子类APHero,ADHero都可以放进去 </div><div class="line">和Hero无关的类型Item还是放不进去&quot;</div><div class="line"></div><div class="line">&apos;?extends 通配符&apos;</div><div class="line">ArrayList heroList&lt;? extends Hero&gt; 表示这是一个Hero泛型或者其子类泛型</div><div class="line">heroList 的泛型可能是Hero</div><div class="line">heroList 的泛型可能是APHero</div><div class="line">heroList 的泛型可能是ADHero</div><div class="line">所以 可以确凿的是，从heroList取出来的对象，一定是可以转型成Hero的</div><div class="line">&apos;?super&apos;</div><div class="line">ArrayList heroList&lt;? super Hero&gt; 表示这是一个Hero泛型或者其父类泛型</div><div class="line">heroList的泛型可能是Hero</div><div class="line">heroList的泛型可能是Object</div><div class="line"></div><div class="line">可以往里面插入Hero以及Hero的子类</div><div class="line">但是取出来有风险，因为不确定取出来是Hero还是Object</div><div class="line">子类泛型不可以转换为父类泛型</div></pre></td></tr></table></figure>
+<p><a href="https://blog.csdn.net/harvic880925/article/details/49872903" target="_blank" rel="external">夯实JAVA基本之一 —— 泛型详解系列</a></p>
+<ul>
+<li>定义泛型：Point<t>即在类名后面加一个尖括号，括号里是一个大写字母。这里写的是T，其实这个字母可以是任何大写字母，大家这里先记着，可以是任何大写字母，意义是相同的。</t></li>
+<li>类中使用泛型：T表示派生自Object类的任何类，比如String,Integer,Double等等</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">//定义变量</div><div class="line">private T x ; </div><div class="line">//作为返回值</div><div class="line">public T getX()&#123; </div><div class="line">    return x ;  </div><div class="line">&#125;  </div><div class="line">//作为参数</div><div class="line">public void setX(T x)&#123;  </div><div class="line">    this.x = x ;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>使用泛型类:</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">//IntegerPoint使用</div><div class="line">Point&lt;Integer&gt; p = new Point&lt;Integer&gt;() ; </div><div class="line">p.setX(new Integer(100)) ; </div><div class="line">System.out.println(p.getX());  </div><div class="line"></div><div class="line">//FloatPoint使用</div><div class="line">Point&lt;Float&gt; p = new Point&lt;Float&gt;() ; </div><div class="line">p.setX(new Float(100.12f)) ; </div><div class="line">System.out.println(p.getX());</div></pre></td></tr></table></figure>
+<ul>
+<li>使用泛型实现的优势:</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">1.不用强制转换</div><div class="line">2.在settVar()时如果传入类型不对，编译时会报错</div></pre></td></tr></table></figure>
+<ul>
+<li>无边界通配符：？它是一个未知的符号，可以是代表任意的类；通配符？的extends绑定利用&lt;? extends Number&gt;，extends通配符，能取不能存；通配符？的super绑定，能存不能取；能存又能取使用通配符？；</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">// 构造泛型实例时，如果省略了填充类型，则默认填充为无边界通配符！</div><div class="line">Point point3 = new Point(new Integer(23),new Integer(23));</div><div class="line">Point&lt;?&gt; point3 = new Point(new Integer(23),new Integer(23));</div></pre></td></tr></table></figure>
+<hr>
+<p>Java 软件代码是在虚拟机中运行的，所以在这里可以把 jvm 当作战场。<br>Piccso、Logger、sweet-alert-dialog 等等，这些开源库都是在程序运行过程中拿来就用的。</p>
+<blockquote>
+<p>而 GreenDao、Butterknife、Dagger2 这些因为涉及到了反射处理，而反射处理相对于正常开发速度很慢，所以它们通常在编译时产生一些新的代码，然后才能在程序运行过程中使用，也就是说它们都把反射处理移动到编译器编译代码时的阶段，而程序运行时并不涉及到反射，这就是这些框架运用了反射技术，但是仍然高效的秘诀所在。</p>
+</blockquote>
+<hr>
+<h2 id="3-依赖注入"><a href="#3-依赖注入" class="headerlink" title="3.依赖注入"></a>3.依赖注入</h2><p><a href="https://blog.csdn.net/briblue/article/details/73824058" target="_blank" rel="external">秒懂，Java 注解 （Annotation）你可以这样学</a><br><a href="http://p.codekk.com/blogs/detail/54cfab086c4761e5001b253c" target="_blank" rel="external">公共技术点之依赖注入</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">public class Human &#123;</div><div class="line">    ...</div><div class="line">    Father father;</div><div class="line">    ...</div><div class="line">    public Human(Father father) &#123;</div><div class="line">        this.father = father;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">// 使用注解实现依赖注入：</div><div class="line">public class Human &#123;</div><div class="line">    ...</div><div class="line">    @Inject Father father;</div><div class="line">    ...</div><div class="line">    public Human() &#123;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>我们将 father 对象作为构造函数的一个参数传入。在调用 Human 的构造方法之前外部就已经初始化好了 Father 对象。<strong>像这种非自己主动初始化依赖，而通过外部来传入依赖的方式，我们就称为依赖注入。</strong></p>
+</blockquote>
+<p>如果你只是写了一个 @Inject 注解，Father 并不会被自动注入。你还需要使用一个依赖注入框架，并进行简单的配置。现在 Java 语言中较流行的依赖注入框架有 <a href="https://github.com/google/guice" target="_blank" rel="external">Google Guice</a>、<a href="http://projects.spring.io/spring-framework/" target="_blank" rel="external">Spring</a> 等，而在 Android 上比较流行的有 <a href="https://github.com/roboguice/roboguice" target="_blank" rel="external">RoboGuice</a>、<a href="http://square.github.io/dagger/" target="_blank" rel="external">Dagger</a> 等</p>
+<p><a href="http://blog.csdn.net/briblue/article/details/75093382" target="_blank" rel="external">轻松学，浅析依赖倒置（DIP）、控制反转(IOC)和依赖注入(DI)</a>。</p>
+<p><strong>依赖倒置：设计原则之一</strong></p>
+<blockquote>
+<p>依赖倒置 (Dependency inversion principle):<br>1.上层模块不应该依赖底层模块，它们都应该依赖于抽象。<br>2.抽象不应该依赖于细节，细节应该依赖于抽象。</p>
+</blockquote>
+<p><strong>IOC:控制反转设计模式的一种</strong></p>
+<blockquote>
+<p>IoC 是一种新的设计模式，它对上层模块与底层模块进行了更进一步的解耦。控制反转的意思是反转了上层模块对于底层模块的依赖控制。<br>IoC 模式最核心的地方就是在于依赖方与被依赖方之间，也就是上层模块与底层模块之间引入了第三方，这个第三方统称为 IoC 容器，因为 IoC 容器的介入，导致上层模块对于它的依赖的实例化控制权发生变化，也就是所谓的控制反转的意思。</p>
+</blockquote>
+<p><img src="https://upload-images.jianshu.io/upload_images/4267785-1e3a5709ca50669b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="依赖倒置实质上是面向接口编程的体现"></p>
+<blockquote>
+<p>表达通俗一点就是：我不想自己实例化依赖，你（injector）创建它们，然后在合适的时候注入给我吧。</p>
+</blockquote>
+<p><strong>实现依赖注入有 3 种方式：</strong> </p>
+<ul>
+<li><ol>
+<li>构造函数中注入 </li>
+</ol>
+</li>
+<li><ol>
+<li>setter 方式注入 </li>
+</ol>
+</li>
+<li><ol>
+<li>接口注入</li>
+</ol>
+</li>
+</ul>
+<blockquote>
+<p>依赖倒置总结：</p>
+</blockquote>
+<p>1.依赖倒置是面向对象开发领域中的软件设计原则，它倡导上层模块不依赖于底层模块，抽象不依赖细节。<br>2.依赖反转是遵守依赖倒置这个原则而提出来的一种设计模式，它引入了 IoC 容器的概念。<br>3.依赖注入是为了实现依赖反转的一种手段之一。</p>
+<h2 id="4-它们的本质是为了代码更加的“高内聚-低耦合”。"><a href="#4-它们的本质是为了代码更加的“高内聚-低耦合”。" class="headerlink" title="4.它们的本质是为了代码更加的“高内聚,低耦合”。"></a>4.它们的本质是为了代码更加的“高内聚,低耦合”。</h2><p><a href="http://p.codekk.com/blogs/detail/54cfab086c4761e5001b253b" target="_blank" rel="external">公共技术点之 Java 注解 Annotation</a><br>注解实例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">public void onCreate(Bundle savedInstanceState);</div><div class="line"></div><div class="line">@GET(&quot;/users/&#123;username&#125;&quot;)</div><div class="line">User getUser(@Path(&quot;username&quot;) String username);</div><div class="line"></div><div class="line">Butter Knife Annotation</div><div class="line">@InjectView(R.id.user) EditText username;</div><div class="line"></div><div class="line">ActiveAndroid Annotation</div><div class="line">@Column(name = “Name&quot;) public String name;</div></pre></td></tr></table></figure></p>
+<p><a href="https://blog.csdn.net/briblue/article/details/73928350" target="_blank" rel="external">轻松学，Java 中的代理模式及动态代理</a></p>
+<p><img src="https://img-blog.csdn.net/20170629213938736?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYnJpYmx1ZQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt=""><br>代理可以分为静态代理和动态代理两种:</p>
+<blockquote>
+<p>代理模式可以在不修改被代理对象的基础上，通过扩展代理类，进行一些功能的附加与增强。值得注意的是，代理类和被代理类应该共同实现一个接口，或者是共同继承某个类。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">public class Cinema implements Movice &#123;</div><div class="line"></div><div class="line">    private RealMovice mRealMovice;</div><div class="line"></div><div class="line">    public Cinema(RealMovice movice) &#123;</div><div class="line">        this.mRealMovice = movice;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void play() &#123;</div><div class="line">        // 插入广告</div><div class="line">        guanggao(true);</div><div class="line">        mRealMovice.play();</div><div class="line">        guanggao(false);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void guanggao(boolean isStart) &#123;</div><div class="line">        if (isStart) &#123;</div><div class="line">            System.out.println(&quot;电影马上开始了，爆米花、可乐、口香糖9.8折，快来买啊！&quot;);</div><div class="line">        &#125; else &#123;</div><div class="line">            System.out.println(&quot;电影马上结束了，爆米花、可乐、口香糖9.8折，买回家吃吧！&quot;);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>动态代理：</strong><br> Cinema 类是代理，我们需要手动编写代码让 Cinema 实现 Movie 接口，而在动态代理中，我们可以让程序在运行的时候自动在内存中创建一个实现 Movie 接口的代理，而不需要去定义 Cinema 这个类。这就是它被称为动态的原因。</p>
+<blockquote>
+<p>动态代码涉及了一个非常重要的类 Proxy。正是通过 Proxy 的静态方法 newProxyInstance 才会动态创建代理。</p>
+</blockquote>
+<p>Proxy<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">public static Object newProxyInstance(ClassLoader loader,</div><div class="line">                                          Class&lt;?&gt;[] interfaces,</div><div class="line">                                          InvocationHandler h)</div><div class="line"></div><div class="line">loader表示类加载器</div><div class="line">interfaces表示委托类的接口，生成代理类时需要实现这些接口</div><div class="line">h是InvocationHandler实现类对象，负责连接代理类和委托类的中间类</div></pre></td></tr></table></figure></p>
+<p><img src="https://img-blog.csdn.net/20170629220323673?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYnJpYmx1ZQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="动态代理设计的类"></p>
+<ul>
+<li>红框中 $Proxy0 就是通过 Proxy 动态生成的。 </li>
+<li>$Proxy0 实现了要代理的接口。 </li>
+<li>$Proxy0 通过调用 InvocationHandler 来执行任务。</li>
+</ul>
+<p><a href="http://a.codekk.com/detail/Android/Caij/%E5%85%AC%E5%85%B1%E6%8A%80%E6%9C%AF%E7%82%B9%E4%B9%8B%20Java%20%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86" target="_blank" rel="external">公共技术点之 Java 动态代理</a></p>
+<p>动态代理总结：</p>
+<blockquote>
+<p>代理分为静态代理和动态代理两种。<br>静态代理，代理类需要自己编写代码写成。<br>动态代理，代理类通过 Proxy.newInstance() 方法生成。<br>不管是静态代理还是动态代理，代理与被代理者都要实现两样接口，它们的实质是面向接口编程。<br>静态代理和动态代理的区别是在于要不要开发者自己定义 Proxy 类。<br>动态代理通过 Proxy 动态生成 proxy class，但是它也指定了一个 InvocationHandler 的实现类。<br>代理模式本质上的目的是为了增强现有代码的功能。</p>
+</blockquote>
+<h2 id="4-AOP面向切面编程"><a href="#4-AOP面向切面编程" class="headerlink" title="4.AOP面向切面编程"></a><strong>4.AOP面向切面编程</strong></h2><blockquote>
+<p>在软件业，AOP为Aspect Oriented Programming的缩写，意为：面向切面编程，通过预编译方式和运行期<code>动态代理</code>实现程序功能的统一维护的一种技术。AOP是OOP的延续，是软件开发中的一个热点，也是Spring框架中的一个重要内容，是函数式编程的一种衍生范型。利用AOP可以对业务逻辑的各个部分进行隔离，从而使得业务逻辑各部分之间的耦合度降低，提高程序的可重用性，同时提高了开发的效率。<br>主要功能 :<br>日志记录，性能统计，安全控制，事务处理，异常处理、权限管理等等。</p>
+<p>AOP是一种：可以在不改变原来代码的基础上，通过“动态注入”代码，来改变原来执行结果的技术。</p>
+</blockquote>
+<p><strong>AspectJ使用配置</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line">buildscript &#123;</div><div class="line">    ...</div><div class="line">    dependencies &#123;        </div><div class="line">        classpath &apos;org.aspectj:aspectjtools:1.8.9&apos;</div><div class="line">        ...</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">可以单独定一个module用于编写aspect的切面代码，在该module的build.gradle目录中添加如下配置:</div><div class="line"></div><div class="line">apply plugin: &apos;com.android.library&apos;</div><div class="line"></div><div class="line">android &#123;</div><div class="line">    ...</div><div class="line">&#125;</div><div class="line"></div><div class="line">android.libraryVariants.all &#123; variant -&gt;</div><div class="line">    JavaCompile javaCompile = variant.javaCompile</div><div class="line">    javaCompile.doLast &#123;</div><div class="line">        //下面的1.8是指我们兼容的jdk的版本</div><div class="line">        String[] args = [&quot;-showWeaveInfo&quot;,</div><div class="line">                         &quot;-1.8&quot;,</div><div class="line">                         &quot;-inpath&quot;, javaCompile.destinationDir.toString(),</div><div class="line">                         &quot;-aspectpath&quot;, javaCompile.classpath.asPath,</div><div class="line">                         &quot;-d&quot;, javaCompile.destinationDir.toString(),</div><div class="line">                         &quot;-classpath&quot;, javaCompile.classpath.asPath,</div><div class="line">                         &quot;-bootclasspath&quot;, android.bootClasspath.join(File.pathSeparator)]</div><div class="line"></div><div class="line">        MessageHandler handler = new MessageHandler(true);</div><div class="line">        new Main().run(args, handler)</div><div class="line"></div><div class="line">        def log = project.logger</div><div class="line">        for (IMessage message : handler.getMessages(null, true)) &#123;</div><div class="line">            switch (message.getKind()) &#123;</div><div class="line">                case IMessage.ABORT:</div><div class="line">                case IMessage.ERROR:</div><div class="line">                case IMessage.FAIL:</div><div class="line">                    log.error message.message, message.thrown</div><div class="line">                    break;</div><div class="line">                case IMessage.WARNING:</div><div class="line">                case IMessage.INFO:</div><div class="line">                    log.info message.message, message.thrown</div><div class="line">                    break;</div><div class="line">                case IMessage.DEBUG:</div><div class="line">                    log.debug message.message, message.thrown</div><div class="line">                    break;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">dependencies &#123;</div><div class="line">    ...</div><div class="line">   implementation &apos;org.aspectj:aspectjrt:1.8.13&apos;</div><div class="line">    ...</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>AspectJ 术语</strong></p>
+<ul>
+<li>JPoint：代码可注入的点，比如一个方法的调用处或者方法内部、“读、写”变量等。</li>
+<li>Pointcut：用来描述 JPoint 注入点的一段表达式，比如：调用 Animal 类 fly 方法的地方，call(* Animal.fly(..))。</li>
+<li>Advice：常见的有 Before、After、Around 等，表示代码执行前、执行后、替换目标代码，也就是在 Pointcut 何处注入代码。</li>
+<li>Aspect：Pointcut 和 Advice 合在一起称作 Aspect。</li>
+<li>Weaving 编织：主要是在编译期使用AJC将切面的代码注入到目标中, 并生成出代码混合过的.class的过程.</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/1787010-ad867955b97996e0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1000/format/webp" alt="JPoint 的分类和对应的 Pointcut "></p>
+<blockquote>
+<p>execution是在被切入的方法中，call是在调用被切入的方法前或者后。</p>
+</blockquote>
+<p>Pointcut 中的 Signature 参考：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1787010-826bc659e29d4063.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1000/format/webp" alt="Pointcut 中的 Signature "></p>
+<p>以上的 Signature 都是由一段表达式组成，且每个关键词之间都有“空格”，下面是对关键词的解释：<br><img src="https://upload-images.jianshu.io/upload_images/1787010-05c4dd97edf10421.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1000/format/webp" alt=""></p>
+<p>Pointcut 语法熟悉了之后，Advice 就显得很简单了，它包含以下几个：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1787010-2e74c3b6641d985b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1000/format/webp" alt="Advice"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1787010-fe1f90f50376cbb1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1000/format/webp" alt="高级用法"></p>
+<p><strong>Hugo 实例：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">@Aspect</div><div class="line">public class Hugo &#123;</div><div class="line">  private static volatile boolean enabled = true;</div><div class="line"></div><div class="line">  @Pointcut(&quot;within(@hugo.weaving.DebugLog *)&quot;)</div><div class="line">  public void withinAnnotatedClass() &#123;&#125;</div><div class="line"></div><div class="line">  @Pointcut(&quot;execution(!synthetic * *(..)) &amp;&amp; withinAnnotatedClass()&quot;)</div><div class="line">  public void methodInsideAnnotatedType() &#123;&#125;</div><div class="line"></div><div class="line">  @Pointcut(&quot;execution(!synthetic *.new(..)) &amp;&amp; withinAnnotatedClass()&quot;)</div><div class="line">  public void constructorInsideAnnotatedType() &#123;&#125;</div><div class="line"></div><div class="line">  @Pointcut(&quot;execution(@hugo.weaving.DebugLog * *(..)) || methodInsideAnnotatedType()&quot;)</div><div class="line">  public void method() &#123;&#125;</div><div class="line"></div><div class="line">  @Pointcut(&quot;execution(@hugo.weaving.DebugLog *.new(..)) || constructorInsideAnnotatedType()&quot;)</div><div class="line">  public void constructor() &#123;&#125;</div><div class="line"></div><div class="line">  public static void setEnabled(boolean enabled) &#123;</div><div class="line">    Hugo.enabled = enabled;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  @Around(&quot;method() || constructor()&quot;)</div><div class="line">  public Object logAndExecute(ProceedingJoinPoint joinPoint) throws Throwable &#123;</div><div class="line">    enterMethod(joinPoint);</div><div class="line"></div><div class="line">    long startNanos = System.nanoTime();</div><div class="line">    Object result = joinPoint.proceed();</div><div class="line">    long stopNanos = System.nanoTime();</div><div class="line">    long lengthMillis = TimeUnit.NANOSECONDS.toMillis(stopNanos - startNanos);</div><div class="line"></div><div class="line">    exitMethod(joinPoint, result, lengthMillis);</div><div class="line"></div><div class="line">    return result;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>AspectJ、JavaAssit、ASMDex、Dynamic Proxy等等。关于这些技术的实践的对比，可以参考这篇文章。<a href="https://link.juejin.im?target=https%3A%2F%2Fwww.javacodegeeks.com%2F2011%2F09%2Fpractical-introduction-into-code.html" target="_blank" rel="external">Practical Introduction into Code Injection with AspectJ, Javassist, and Java Proxy</a></p>
+<blockquote>
+<ol>
+<li>AspectJ中各种类型的JoinPoint，JPoint是一个程序的关键执行点，也是我们关注的重点。</li>
+<li>pointcuts：提供了一种方法来选择目标JPoint。程序有很多JPoint，但是需要一种方法来让我们选择我们关注的JPoint。这个方法就是利用pointcuts来完成的。<br>3.通过pointcuts选择了目标JPoint后，我们总得干点什么吧？这就用上了advice。advice包括好几种类型，一般情况下都够我们用了。</li>
+</ol>
+</blockquote>
+<ul>
+<li><a href="https://www.jianshu.com/p/80a1e70598fe" target="_blank" rel="external">AOP之AspectJ在Android中的应用</a></li>
+<li><a href="https://www.jianshu.com/p/f90e04bcb326" target="_blank" rel="external">AOP 之 AspectJ 全面剖析 in Android
+</a></li>
+<li><a href="https://juejin.im/post/58ad3944b123db00672cdeeb" target="_blank" rel="external">Android AOP学习之：AspectJ实践</a></li>
+<li><a href="https://link.juejin.im/?target=http%3A%2F%2Fblog.csdn.net%2Finnost%2Farticle%2Fdetails%2F49387395" target="_blank" rel="external">深入理解Android之AOP</a></li>
+<li><a href="https://juejin.im/post/5b4ed9a0e51d451989052cd3" target="_blank" rel="external">面向切面编程AspectJ在Android埋点的实践</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fblog.csdn.net%2FXiNanHeiShao%2Farticle%2Fdetails%2F74082605" target="_blank" rel="external">AOP编程之AspectJ实战实现数据埋点</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fwww.jianshu.com%2Fp%2Fc4c86e75cf83" target="_blank" rel="external">AspectJ实现Android端非侵入式埋点</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/24876611" target="_blank" rel="external">https://zhuanlan.zhihu.com/p/24876611</a></li>
+<li><a href="https://github.com/JakeWharton/hugo" target="_blank" rel="external">https://github.com/JakeWharton/hugo</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java知识总结/" rel="tag"># java知识总结</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/21/Android多线程汇总篇/" rel="next" title="Android多线程汇总篇">
+                <i class="fa fa-chevron-left"></i> Android多线程汇总篇
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1502346421&di=d5dddcc8504e58a709921075437056f6&imgtype=jpg&er=1&src=http%3A%2F%2Fww2.sinaimg.cn%2Fmw1024%2F64b5b174jw1esy5043qmtg206t07i7ol.gif"
+               alt="dehao@yang" />
+          <p class="site-author-name" itemprop="name">dehao@yang</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-注解"><span class="nav-number">1.</span> <span class="nav-text">1.注解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-泛型"><span class="nav-number">2.</span> <span class="nav-text">2.泛型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-依赖注入"><span class="nav-number">3.</span> <span class="nav-text">3.依赖注入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-它们的本质是为了代码更加的“高内聚-低耦合”。"><span class="nav-number">4.</span> <span class="nav-text">4.它们的本质是为了代码更加的“高内聚,低耦合”。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-AOP面向切面编程"><span class="nav-number">5.</span> <span class="nav-text">4.AOP面向切面编程</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dehao@yang</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Gemini
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("SQRi8Ar8YCn4c3G97nJ9JsoK-gzGzoHsz", "Hu3hKNQdfDQNJ6zYikQwidIj");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
